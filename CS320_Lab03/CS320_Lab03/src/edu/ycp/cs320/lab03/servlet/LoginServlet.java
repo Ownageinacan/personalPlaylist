@@ -1,5 +1,6 @@
 package edu.ycp.cs320.lab03.servlet;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -25,17 +26,20 @@ public class LoginServlet extends HttpServlet {
 		// Decode form parameters and dispatch to controller
 		String errorMessage = null;
 		Boolean result = null;
+		String passwordInAsterix = null;
+		LoginController controller = new LoginController();
+		String Password = null;
+		String Username = null;
 		try {
 			//String Username = getStringFromParameter(req.getParameter("Username"));
 			//String Password = getStringFromParameter(req.getParameter("Password"));
-			String Username = req.getParameter("Username");
-			String Password = req.getParameter("Password");
+			Username = req.getParameter("Username");
+			Password = req.getParameter("Password");
 
 			if (Username == null || Password == null) {
 				errorMessage = "Please specify two numbers";
 			} else {
-				LoginController controller = new LoginController();
-				result = controller.add(Username, Password);
+				result = controller.Usercheck(Username, Password);
 			}
 		} catch (NumberFormatException e) {
 			errorMessage = "Invalid double";
@@ -43,7 +47,8 @@ public class LoginServlet extends HttpServlet {
 		
 		// Add parameters as request attributes
 		req.setAttribute("Username", req.getParameter("Username"));
-		req.setAttribute("Password", req.getParameter("Password"));
+		//req.setAttribute("Password", req.getParameter("Password"));
+		req.setAttribute("Password", controller.convertToAsterix(Password));
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);

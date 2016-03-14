@@ -10,8 +10,8 @@
 <style type="text/css">
 .UserPass {
 	position: absolute;
-	left: 800px;
-	top: 390px;
+	left: 30px;
+	top: 50px;
 	z-index: 3;
 }
 header {
@@ -43,8 +43,8 @@ header {
 	width: 600px;
 	background-color: #FFF;
 	position: absolute;
-	left: 760px;
-	top: 340px;
+	left: 32.6%;
+	top: 31.5%;
 	z-index: 1;
 	border-radius: 7px;
 	border-top-width: 7px;
@@ -61,11 +61,11 @@ header {
 	border-left-color: #65337E;
 }
 .logo {
-	left: 570px;
+	left: -197px;
 	z-index: 2;
 	height: 200px;
 	width: 200px;
-	top: 340px;
+	top: -7px;
 	position: absolute;
 }
 </style>
@@ -76,37 +76,38 @@ header {
 			<img src='header.png' style="height: 150px; width: 800px;" />
 		</header>
 			<div class="main_box">
-			  <div class="main_box_imprint"></div> <!-- cutout for fillet -->
+				<div class="main_box_imprint"></div> <!-- cutout for fillet -->
+			 	<div class="logo">
+					<img src='PersonalPlayerLogo.png' style="height: 200px; width: 200px;" />
+				</div> <!-- logo -->
+				<div class="UserPass">	
+					<c:if test="${! empty errorMessage}">
+						<div class="error">${errorMessage}</div>
+					</c:if>
+					<form action="${pageContext.servletContext.contextPath}/Login" method="post">
+						<table>
+							<tr>
+								<td class="label">Username:</td>
+								<td><input type="text" name="Username" size="12" value="${Username}" /></td>
+							</tr>
+							<tr>
+								<td class="label">Password:</td>
+								<td><input type="text" name="password" size="12" value="${Password}" /></td>
+							</tr>
+							<tr>
+								<td class="label">Result:</td>
+								<td>${result}</td>
+							</tr>
+						</table>
+						<input type="Submit" name="Login" value="Login">
+					</form>
+					</div>
 			</div> <!-- user and pass box -->
 			<div class="main">
 			 	<img src='maxresdefault.jpg' style="height: 100%; width: 100%;" />
 			</div> 
 			<!-- background image -->
-			<div class="logo">
-				<img src='PersonalPlayerLogo.png' style="height: 200px; width: 200px;" />
-			</div> <!-- logo -->
-		<div class="UserPass">	
-		<c:if test="${! empty errorMessage}">
-			<div class="error">${errorMessage}</div>
-		</c:if>
-	
-		<form action="${pageContext.servletContext.contextPath}/Login" method="post">
-			<table>
-				<tr>
-					<td class="label">Username:</td>
-					<td><input type="text" name="Username" size="12" value="${Username}" /></td>
-				</tr>
-				<tr>
-					<td class="label">Password:</td>
-					<td><input type="text" name="Password" size="12" value="${Password}" /></td>
-				</tr>
-				<tr>
-					<td class="label">Result:</td>
-					<td>${result}</td>
-				</tr>
-			</table>
-			<input type="Submit" name="Login" value="Login">
-		</form>
-		</div>
+			
+		
 	</body>
 </html>
