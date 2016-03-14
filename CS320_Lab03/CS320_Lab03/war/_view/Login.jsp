@@ -8,9 +8,17 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Personal Music, Personal Cloud</title>
 <style type="text/css">
+.error{
+	position: absolute;
+	left: 0px;
+	top: -35px;
+	color: red;
+	height: 40px;
+	width: 200px;
+}
 .UserPass {
 	position: absolute;
-	left: 30px;
+	left: 10px;
 	top: 50px;
 	z-index: 3;
 }
@@ -92,11 +100,7 @@ header {
 							</tr>
 							<tr>
 								<td class="label">Password:</td>
-								<td><input type="text" name="password" size="12" value="${Password}" /></td>
-							</tr>
-							<tr>
-								<td class="label">Result:</td>
-								<td>${result}</td>
+								<td><input type="password" name="Password" size="12" value="${Password}" /></td>
 							</tr>
 						</table>
 						<input type="Submit" name="Login" value="Login">
