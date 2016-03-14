@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.lab03.controller.AddNumbersController;
+import edu.ycp.cs320.lab03.controller.LoginController;
 
 public class AddNumbersAjaxServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +36,7 @@ public class AddNumbersAjaxServlet extends HttpServlet {
 		}
 		
 		// Use a controller to process the request
-		AddNumbersController controller = new AddNumbersController();
+		LoginController controller = new LoginController();
 		Double result = controller.add(first, second);
 		
 		// Send back a response

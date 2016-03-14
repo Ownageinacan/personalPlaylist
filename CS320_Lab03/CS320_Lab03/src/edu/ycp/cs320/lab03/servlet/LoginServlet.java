@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.lab03.controller.AddNumbersController;
+import edu.ycp.cs320.lab03.controller.LoginController;
 
-public class AddNumbersServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.getRequestDispatcher("/_view/addNumbers.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -24,38 +24,40 @@ public class AddNumbersServlet extends HttpServlet {
 		
 		// Decode form parameters and dispatch to controller
 		String errorMessage = null;
-		Double result = null;
+		Boolean result = null;
 		try {
-			Double first = getDoubleFromParameter(req.getParameter("first"));
-			Double second = getDoubleFromParameter(req.getParameter("second"));
+			//String Username = getStringFromParameter(req.getParameter("Username"));
+			//String Password = getStringFromParameter(req.getParameter("Password"));
+			String Username = req.getParameter("Username");
+			String Password = req.getParameter("Password");
 
-			if (first == null || second == null) {
+			if (Username == null || Password == null) {
 				errorMessage = "Please specify two numbers";
 			} else {
-				AddNumbersController controller = new AddNumbersController();
-				result = controller.add(first, second);
+				LoginController controller = new LoginController();
+				result = controller.add(Username, Password);
 			}
 		} catch (NumberFormatException e) {
 			errorMessage = "Invalid double";
 		}
 		
 		// Add parameters as request attributes
-		req.setAttribute("first", req.getParameter("first"));
-		req.setAttribute("second", req.getParameter("second"));
+		req.setAttribute("Username", req.getParameter("Username"));
+		req.setAttribute("Password", req.getParameter("Password"));
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("result", result);
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/addNumbers.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 	}
 
-	private Double getDoubleFromParameter(String s) {
+	/*private Double getStringFromParameter(String s) {
 		if (s == null || s.equals("")) {
 			return null;
 		} else {
 			return Double.parseDouble(s);
 		}
-	}
+	}*/
 }
