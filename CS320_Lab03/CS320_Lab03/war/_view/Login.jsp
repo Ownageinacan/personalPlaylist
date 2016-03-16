@@ -4,7 +4,7 @@
 
 <html>
 	<head>
-		<link rel="icon" href="PersonalPlayerLogo.png">
+		<link rel="icon" href="Assets/Icons/PersonalPlayerLogo.png">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Personal Music, Personal Cloud</title>
 <style type="text/css">
@@ -81,12 +81,12 @@ header {
 
 	<body>
 		<header>
-			<img src='header.png' style="height: 150px; width: 800px;" />
+			<img src='Assets/Text/header.png' style="height: 150px; width: 800px;" />
 		</header>
 			<div class="main_box">
 				<div class="main_box_imprint"></div> <!-- cutout for fillet -->
 			 	<div class="logo">
-					<img src='PersonalPlayerLogo.png' style="height: 200px; width: 200px;" />
+					<img src='Assets/Icons/PersonalPlayerLogo.png' style="height: 200px; width: 200px;" />
 				</div> <!-- logo -->
 				<div class="UserPass">	
 					<c:if test="${! empty errorMessage}">
@@ -108,7 +108,7 @@ header {
 					</div>
 			</div> <!-- user and pass box -->
 			<div class="main">
-			 	<img src='maxresdefault.jpg' style="height: 100%; width: 100%;" />
+			 	<img src='Assets/Pictures/maxresdefault.jpg' style="height: 100%; width: 100%;" />
 			</div> 
 			<!-- background image -->
 			
