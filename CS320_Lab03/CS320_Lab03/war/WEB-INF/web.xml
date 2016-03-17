@@ -15,8 +15,8 @@
     <servlet-class>edu.ycp.cs320.lab03.servlet.LoginServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>GuessingGameServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.lab03.servlet.GuessingGameServlet</servlet-class>
+    <servlet-name>HomeServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab03.servlet.HomeServlet</servlet-class>
   </servlet>
   
   <!-- AJAX servlets. -->
@@ -39,8 +39,8 @@
     <url-pattern>/Login</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GuessingGameServlet</servlet-name>
-    <url-pattern>/guessingGame</url-pattern>
+    <servlet-name>HomeServlet</servlet-name>
+    <url-pattern>/Home</url-pattern>
   </servlet-mapping>
   
   <!--  AJAX servlet mappings. -->

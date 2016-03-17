@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import edu.ycp.cs320.lab03.controller.GuessingGameController;
 import edu.ycp.cs320.lab03.model.GuessingGame;
 
-public class GuessingGameServlet extends HttpServlet {
+public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.getRequestDispatcher("/_view/guessingGame.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class GuessingGameServlet extends HttpServlet {
 		
 		req.setAttribute("game", model);
 		
-		req.getRequestDispatcher("/_view/guessingGame.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
 	}
 
 	private int getInteger(HttpServletRequest req, String name) {

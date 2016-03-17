@@ -48,8 +48,12 @@ public class LoginServlet extends HttpServlet {
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("result", result);
 		
-		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
+		if(result == true){
+			// Forward to view to render the result HTML document
+			req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
+		}else{
+			req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
+		}
 	}
 	/*private Double getStringFromParameter(String s) {
 		if (s == null || s.equals("")) {

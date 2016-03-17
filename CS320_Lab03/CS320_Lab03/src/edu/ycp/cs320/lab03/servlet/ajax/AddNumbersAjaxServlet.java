@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import edu.ycp.cs320.lab03.controller.LoginController;
 
 public class AddNumbersAjaxServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	/*private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -60,5 +60,5 @@ public class AddNumbersAjaxServlet extends HttpServlet {
 		resp.setContentType("text/plain");
 		resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		resp.getWriter().println(message);
-	}
+	}*/
 }
