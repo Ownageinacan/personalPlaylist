@@ -21,7 +21,7 @@
 			   -webkit-appearance: none;
 			   -moz-appearance: none;
 			   appearance: none;
-			    background: url(http://www.stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee;
+			    background: 100% no-repeat #eee;
 			} 
 			.topLogo {
 			z-index: 2;
@@ -75,12 +75,24 @@
 	</head>
 
 	<body>
-		<select style= "left: 200px;"/>
-		    <option type="button" href='http://google.com';> Login</option>
-		    <option>Pineapples</option>
-		    <option>Chocklate</option>
-		    <option>Pancakes</option>
-		</select>
+		<form name="Menus">
+		<p><select name="Account" onChange="go()" style= "left: 200px;">
+		    <option selected></option>
+			<option value="http://localhost:8081/lab03/Login">Log Out</option>
+			<option value="http://www.google.com">google</option>
+		</select></p>
+		
+		<script type="text/javascript">
+		<!--
+		function go(){
+		location=
+		document.Menus.Account.
+		options[document.Menus.Account.selectedIndex].value
+		}
+		//-->
+		</script>
+		</form>
+		
 		<div class="sideBorder"></div>
 		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>
 		<div class="topLogo">
