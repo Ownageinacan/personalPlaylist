@@ -6,7 +6,7 @@
 	<head>
 		<link rel="icon" href="Assets/Icons/PersonalPlayerLogo.png">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Personal Music, Personal Cloud</title>
+		<title>Personal Player, Person Music</title>
 <style type="text/css">
 .error{
 	position: absolute;
@@ -104,6 +104,7 @@ header {
 							</tr>
 						</table>
 						<input type="Submit" name="Login" value="Login">
+						<input type="button" onclick="location.href='http://localhost:8081/lab03/CreateAccount';" value="Create Account" style="left: 100px;" />
 					</form>
 					</div>
 			</div> <!-- user and pass box -->
@@ -111,7 +112,5 @@ header {
 			 	<img src='Assets/Pictures/maxresdefault.jpg' style="height: 100%; width: 100%;" />
 			</div> 
 			<!-- background image -->
-			
-		
 	</body>
 </html>

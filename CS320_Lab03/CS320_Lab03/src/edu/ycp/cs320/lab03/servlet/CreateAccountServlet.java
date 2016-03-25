@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class IndexServlet extends HttpServlet {
+public class CreateAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -16,6 +16,6 @@ public class IndexServlet extends HttpServlet {
 		
 		System.out.println("In the Index servlet");
 		
-		req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/CreateAccount.jsp").forward(req, resp);
 	}
 }
