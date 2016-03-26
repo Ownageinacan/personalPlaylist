@@ -7,7 +7,7 @@
 	<head>
 		<link rel="icon" href="Assets/Icons/PersonalPlayerLogo.png">
 		<style type="text/css">
-		select {
+		<!--select {
 			position: absolute;
 			z-index: 3;
 		    border: 1px solid #111;
@@ -21,8 +21,14 @@
 		   -moz-appearance: none;
 		   appearance: none;
 		   background: 100% no-repeat #eee;
-			} 
-			.topLogo {
+			} -->
+		.topButtons {
+			position: absolute;
+			z-index: 3;
+			left: 200px;	
+			top: 50px;
+		}
+		.topLogo {
 			z-index: 2;
 			position: absolute;
 			left: 0;
@@ -47,7 +53,7 @@
 			left: 8.07%;
 			height: 88.43%;
 			width: 91.93%;
-			position: absolute;
+			position: fixed;
 			z-index: 0;
 		}
 		.sideBorder {
@@ -74,24 +80,29 @@
 	</head>
 
 	<body>
+		<div class ="topButtons">
+			<input type="button" onclick="location.href='http://localhost:8081/lab03/Account';" value="My Account"/>
+			<input type="button" onclick="location.href='http://localhost:8081/lab03/Login';" value="Logout" style="left: 200px;" />
+		</div>
+		<!--
 		<form name="Menus">
 		<p><select name="Account" onChange="go()" style= "right: 10%; top: 4.5%">
 			<option value="http://localhost:8081/lab03/Login">Log Out</option>
-			<option value="http://www.google.com">google</option>
+			<option value="http://localhost:8081/lab03/Account">My Account</option>
 			<option selected></option>
 		</select></p>
 		
 		<script type="text/javascript">
-		<!--
+		
 		function go(){
 		location=
 		document.Menus.Account.
 		options[document.Menus.Account.selectedIndex].value
 		}
-		//-->
+		
 		</script>
 		</form>
-		
+		-->
 		<div class="sideBorder"></div>
 		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>
 		<div class="topLogo">

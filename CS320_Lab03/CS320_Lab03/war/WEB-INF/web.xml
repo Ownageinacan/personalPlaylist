@@ -11,6 +11,10 @@
     <servlet-class>edu.ycp.cs320.lab03.servlet.CreateAccountServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab03.servlet.AccountServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab03.servlet.LoginServlet</servlet-class>
   </servlet>
@@ -33,6 +37,11 @@
   <servlet-mapping>
     <servlet-name>CreateAccountServlet</servlet-name>
     <url-pattern>/CreateAccount</url-pattern>
+    <url-pattern>/AccountCreated</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AccountServlet</servlet-name>
+    <url-pattern>/Account</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>

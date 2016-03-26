@@ -1,11 +1,13 @@
 package edu.ycp.cs320.lab03;
 
+
 public class Account 
 {
 	private String Username;
 	private String Password;
 	
-	Account(String Username, String Password)
+	
+	public Account(String Username, String Password)
 	{										 
 		this.setUsername(Username);
 		this.setPassword(Password);
@@ -30,7 +32,7 @@ public class Account
 	}
 	public void setUsername(String username) 
 	{
-		Username = username;
+		this.Username = username;
 	}
 	public String getPassword() 
 	{
@@ -38,7 +40,7 @@ public class Account
 	}
 	public void setPassword(String password) 
 	{
-		Password = password;
+		this.Password = password;
 	}
 	
 }
