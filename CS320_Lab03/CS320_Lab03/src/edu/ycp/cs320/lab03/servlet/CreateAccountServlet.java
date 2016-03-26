@@ -34,6 +34,8 @@ public class CreateAccountServlet extends HttpServlet {
 		}
 		if(AllUsers.Users.containsValue(Username)){ //checking if there is already a username with the name
 			errorMessage = "Username is Already being used!";
+		}else if(Password.isEmpty() ||Username.isEmpty() || rePassword.isEmpty()){
+			errorMessage = "Please fill all fields.";
 		}
 		if(errorMessage == null){ //if everything is hunky dory, add the new account to the map
 			newUser = new Account(Username, Password);
