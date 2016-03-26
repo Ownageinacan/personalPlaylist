@@ -1,18 +1,12 @@
 package edu.ycp.cs320.lab03.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.jetty.server.Authentication.User;
-
 import edu.ycp.cs320.lab03.Account;
 import edu.ycp.cs320.lab03.AllUsers;
-import edu.ycp.cs320.lab03.controller.LoginController;
 
 public class CreateAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -32,16 +26,16 @@ public class CreateAccountServlet extends HttpServlet {
 		String rePassword = req.getParameter("rePassword");
 		Account newUser = new Account(Username, Password);
 		if(Password.equals(rePassword)){
-	
-		}else{
+			//do nothing
+		}else{ //the passwords are different
 			errorMessage = "Passwords do not match!";
 			System.out.print(Password);
 			System.out.print(rePassword);
 		}
-		if(AllUsers.Users.containsValue(Username)){
+		if(AllUsers.Users.containsValue(Username)){ //checking if there is already a username with the name
 			errorMessage = "Username is Already being used!";
 		}
-		if(errorMessage == null){
+		if(errorMessage == null){ //if everything is hunky dory, add the new account to the map
 			newUser = new Account(Username, Password);
 			AllUsers.Users.put(Password, newUser);
 			req.getRequestDispatcher("/_view/AccountCreated.jsp").forward(req, resp);
