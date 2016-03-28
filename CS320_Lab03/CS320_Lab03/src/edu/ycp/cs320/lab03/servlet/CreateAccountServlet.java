@@ -5,8 +5,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import edu.ycp.cs320.lab03.Account;
-import edu.ycp.cs320.lab03.AllUsers;
+
+import edu.ycp.cs320.personalPlaylist.Account;
+import edu.ycp.cs320.personalPlaylist.AllUsers;
 
 public class CreateAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

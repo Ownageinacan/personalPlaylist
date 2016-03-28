@@ -1,4 +1,4 @@
-package edu.ycp.cs320.lab03;
+package edu.ycp.cs320.personalPlaylist;
 
 public class Library
 {
