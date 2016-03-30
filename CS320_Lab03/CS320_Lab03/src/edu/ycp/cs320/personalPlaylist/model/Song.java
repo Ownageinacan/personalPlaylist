@@ -5,7 +5,8 @@ public class Song
 	
 
 	private float length;
-	private String artist;
+	private String artistFirstName;
+	private String artistLastName;
 	private String album;
 	private String title;
 	private String genre;
@@ -15,7 +16,14 @@ public class Song
 	
 	public Song()
 	{
-
+		length = 0;
+		artistFirstName = "";
+		artistLastName = "";
+		album = "";
+		title = "";
+		genre = "";
+		address = "";
+		songId = 0;
 	}
 	public boolean play()
 	{
@@ -60,13 +68,22 @@ public class Song
 	{
 		this.length = length;
 	}
-	public String getArtist() 
+	
+	public String getArtistLastName()
 	{
-		return artist;
+		return artistLastName;
 	}
-	public void setArtist(String artist) 
+	public void setArtistLastName(String lastname)
 	{
-		this.artist = artist;
+		this.artistLastName = lastname;
+	}
+	public String getArtistFirstName() 
+	{
+		return artistFirstName;
+	}
+	public void setArtistFirstName(String firstname) 
+	{
+		this.artistFirstName = firstname;
 	}
 	public String getAlbum() 
 	{

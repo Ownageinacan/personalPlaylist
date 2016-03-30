@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.ycp.cs320.booksdb.model.Author;
-import edu.ycp.cs320.booksdb.model.Book;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 
@@ -15,7 +13,7 @@ public class InitialData {
 	// reads initial song data from CSV file and returns a List of songs
 	public static List<Song> getSongs() throws IOException {
 		List<Song> songList = new ArrayList<Song>();
-		ReadCSV readSongs = new ReadCSV("songs.csv");
+		ReadCSV readSongs = new ReadCSV("songs.csv");	//Create ReadCSV object
 		try {
 			// auto-generated primary key for authors table
 			Integer songId = 1;
@@ -30,15 +28,16 @@ public class InitialData {
 				
 				song.setSongId(songId++);	//Set song ID			
 				
-				//TEMPORARY HARD CODE; ASK YOURSELF WHY WOULD WE SET ANY OF THESE?
+				//TEMPORARY HARD CODE; ASK YOURSELF WHY WE WOULD SET ANY OF THESE?
 				song.setTitle(i.next());	//Set song title
-				song.setArtist(i.next());	//Set song artist
+				song.setArtistLastName(i.next());	//Set song artist's last name
+				song.setArtistFirstName(i.next());	//Set song artist's first name
 				song.setAlbum(i.next());	//Set song album
 				
 				songList.add(song);	//Might be redundant
 			}
 			return songList;	//return the list of songs initialized
-		} finally {
+		} finally {				//Finally always runs
 			readSongs.close();	//close the song reader
 		}
 	}
@@ -48,28 +47,27 @@ public class InitialData {
 	
 	// reads initial Book data from CSV file and returns a List of Books
 	public static List<Playlist> getPlaylists() throws IOException {
-		List<Book> bookList = new ArrayList<Book>();
-		ReadCSV readBooks = new ReadCSV("books.csv");
+		List<Playlist> playList = new ArrayList<Playlist>();
+		ReadCSV readPlaylists = new ReadCSV("playlists.csv");
 		try {
 			// auto-generated primary key for table books
-			Integer bookId = 1;
+			Integer playlistId = 1;
 			while (true) {
-				List<String> tuple = readBooks.next();
+				List<String> tuple = readPlaylists.next();
 				if (tuple == null) {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-				Book book = new Book();
+				Playlist pl = new Playlist();
 //				book.setBookId(Integer.parseInt(i.next()));
-				book.setBookId(bookId++);				
-				book.setAuthorId(Integer.parseInt(i.next()));
-				book.setTitle(i.next());
-				book.setIsbn(i.next());
-				bookList.add(book);
+				pl.setPlaylistId(playlistId++);				
+				pl.setTitle(i.next());
+
+				playList.add(pl);
 			}
-			return bookList;
+			return playList;
 		} finally {
-			readBooks.close();
+			readPlaylists.close();
 		}
 	}
 }
