@@ -1,4 +1,4 @@
-package edu.ycp.cs320.personalPlaylist.servlet;
+package edu.ycp.cs320.personalPlaylist.controller;
 
 import static org.junit.Assert.assertTrue;
 

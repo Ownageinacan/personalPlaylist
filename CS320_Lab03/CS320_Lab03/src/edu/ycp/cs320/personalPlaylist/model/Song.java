@@ -11,6 +11,7 @@ public class Song
 	private String genre;
 	private boolean isPlaying;
 	private String address;
+	private int songId;
 	
 	public Song()
 	{
@@ -40,6 +41,17 @@ public class Song
 
 	
 	//getters and setters for everything else, we can probably get rid of most of the sets since we dont want to mess with some of the properties
+	
+	public void setSongId(int songId)
+	{
+		this.songId = songId;
+	}
+	
+	public int getSongId()
+	{
+		return songId;
+	}
+	
 	public float getLength() 
 	{
 		return length;

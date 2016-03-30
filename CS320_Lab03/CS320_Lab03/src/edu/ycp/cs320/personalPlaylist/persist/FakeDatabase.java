@@ -4,45 +4,83 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ycp.cs320.booksdb.model.Author;
-import edu.ycp.cs320.booksdb.model.Book;
-import edu.ycp.cs320.booksdb.model.Pair;
+import edu.ycp.cs320.personalPlaylist.model.Playlist;
+import edu.ycp.cs320.personalPlaylist.model.Song;
+import edu.ycp.cs320.personalPlaylist.model.Pair;
 
 public class FakeDatabase implements IDatabase {
-	
-	private List<Artist> authorList;
-	private List<Book> bookList;
-	
+
+	private List<Song> songList;
+	private List<Playlist> playList;
+
 	// Fake database constructor - initializes the DB
 	// the DB only consists for a List of Authors and a List of Books
 	public FakeDatabase() {
-		authorList = new ArrayList<Artist>();
-		bookList = new ArrayList<Book>();
-		
+		songList = new ArrayList<Song>();
+		playList = new ArrayList<Playlist>();
+
 		// Add initial data
 		readInitialData();
-		
-//		System.out.println(authorList.size() + " authors");
-//		System.out.println(bookList.size() + " books");
+
+		//		System.out.println(authorList.size() + " authors");
+		//		System.out.println(bookList.size() + " books");
 	}
 
 	// loads the initial data retrieved from the CSV files into the DB
 	public void readInitialData() {
 		try {
-			authorList.addAll(InitialData.getAuthors());
-			bookList.addAll(InitialData.getBooks());
+			songList.addAll(InitialData.getSongs());
+			playList.addAll(InitialData.getPlaylists());
 		} catch (IOException e) {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
 	}
-	
+
+	public List<Song> findAllSongs()	//return entire library of songs
+	{
+		return songList;
+	}
+
+	public List<Playlist> findAllPlaylists()	//return all playlists
+	{
+		return playList;
+	}
+	public List<Pair<Song,Playlist>> findAllSongInPlaylist(String playlist)	//Return songs within a given playlist (TEMP)
+	{
+		List<Pair<Song, Playlist>> result = new ArrayList<Pair<Song, Playlist>>();
+
+		for(Playlist pl : playList){
+			if(pl.getTitle().equals(playlist)){	//See: getTitle method in playlist class
+
+				for(Song song : songList){
+					Song song = findSongBySongId(song.getSongId());
+					result.add(new Pair<Song, Playlist>(song, pl));
+				}
+			}
+		}
+		return result;
+	}
+
+	private Song findSongBySongId(int songId)
+	{
+		for (Song song : songList) {
+			if (song.getSongId() == songId) {
+				return song;
+			}
+		}
+		return null;
+	}
+
+
+
+
 	// query that retrieves Book and its Author by Title
 	@Override
 	public List<Pair<Artist, Book>> findAuthorAndBookByTitle(String title) {
 		List<Pair<Artist, Book>> result = new ArrayList<Pair<Artist,Book>>();
 		for (Book book : bookList) {
-//			System.out.println("Book: <" + book.getTitle() + ">" + "  Title: <" + title + ">");
-			
+			//			System.out.println("Book: <" + book.getTitle() + ">" + "  Title: <" + title + ">");
+
 			if (book.getTitle().equals(title)) {
 				Artist author = findAuthorByAuthorId(book.getAuthorId());
 				result.add(new Pair<Artist, Book>(author, book));
@@ -50,14 +88,14 @@ public class FakeDatabase implements IDatabase {
 		}
 		return result;
 	}
-	
+
 	// query that retrieves all Books, for the Author's last name
 	@Override
 	public List<Pair<Artist, Book>> findAuthorAndBookByAuthorLastName(String lastName)
 	{
 		// create list of <Author, Book> for returning result of query
 		List<Pair<Artist, Book>> result = new ArrayList<Pair<Artist, Book>>();
-		
+
 		// search through table of Books
 		for (Book book : bookList) {
 			for (Artist author : authorList) {
@@ -72,7 +110,7 @@ public class FakeDatabase implements IDatabase {
 		return result;
 	}
 
-	
+
 	// query that retrieves all Books, with their Authors, from DB
 	@Override
 	public List<Pair<Artist, Book>> findAllBooksWithAuthors() {
@@ -83,7 +121,7 @@ public class FakeDatabase implements IDatabase {
 		}
 		return result;
 	}
-		
+
 
 	// query that retrieves all Authors from DB
 	@Override
@@ -94,8 +132,8 @@ public class FakeDatabase implements IDatabase {
 		}
 		return result;
 	}
-	
-	
+
+
 	// query that inserts a new Book, and possibly new Author, into Books and Authors lists
 	// insertion requires that we maintain Book and Author id's
 	// this can be a real PITA, if we intend to use the IDs to directly access the ArrayLists, since
@@ -107,26 +145,26 @@ public class FakeDatabase implements IDatabase {
 	{
 		int authorId = -1;
 		int bookId   = -1;
-		
+
 		// search Authors list for the Author, by first and last name, get author_id
 		for (Artist author : authorList) {
 			if (author.getLastname().equals(lastName) && author.getFirstname().equals(firstName)) {
 				authorId = author.getAuthorId();
 			}
 		}
-		
+
 		// if the Author wasn't found in Authors list, we have to add new Author to Authors list
 		if (authorId < 0) {
 			// set author_id to size of Authors list + 1 (before adding Author)
 			authorId = authorList.size() + 1;
-			
+
 			// add new Author to Authors list
 			Artist newAuthor = new Artist();			
 			newAuthor.setAuthorId(authorId);
 			newAuthor.setLastname(lastName);
 			newAuthor.setFirstname(firstName);
 			authorList.add(newAuthor);
-			
+
 			System.out.println("New author (ID: " + authorId + ") " + "added to Authors table: <" + lastName + ", " + firstName + ">");
 		}
 
@@ -140,11 +178,11 @@ public class FakeDatabase implements IDatabase {
 		newBook.setTitle(title);
 		newBook.setIsbn(isbn);
 		bookList.add(newBook);
-		
+
 		// return new Book Id
 		return bookId;
 	}
-	
+
 
 	// query that retrieves an Author based on author_id
 	private Artist findAuthorByAuthorId(int authorId) {

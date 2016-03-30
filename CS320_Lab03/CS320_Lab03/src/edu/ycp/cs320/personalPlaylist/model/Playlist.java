@@ -31,6 +31,18 @@ public class Playlist
 	}
 	
 	//getters and setters
+	
+	public void setTitle(String title)	//Might never use this method, who knows how this'll work
+	{
+		this.namePlaylist = title;
+	}
+	
+	public String getTitle()	//Definitely going to use this one; see FakeDatabase and look at findAllSongInPlaylist
+	{
+		return namePlaylist;
+	}
+
+	
 	public int getNumberSongs() 
 	{
 		return numberSongs;
