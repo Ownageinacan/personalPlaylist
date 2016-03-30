@@ -22,6 +22,12 @@
 		   appearance: none;
 		   background: 100% no-repeat #eee;
 			} -->
+		.SongPlayer{
+			position:absolute;
+			z-index:4;
+			left: 200px;	
+			top: 900px;
+		}
 		.topButtons {
 			position: absolute;
 			z-index: 3;
@@ -109,5 +115,9 @@
 			<img src='Assets/Icons/PersonalPlayerLogo.png' style="height: 100%; width: 100%;"/>
 		</div>
 		<div class="topBanner"></div>
+		<div class="SongPlayer"><audio controls>
+  <source src='Assets/Songs/song.mp3' type="audio/mpeg">
+</audio>
+</div>
 	</body>
 </html>
