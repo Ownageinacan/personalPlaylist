@@ -1,4 +1,4 @@
-package edu.ycp.cs320.personalPlaylist;
+package edu.ycp.cs320.personalPlaylist.model;
 
 public class Album 
 {

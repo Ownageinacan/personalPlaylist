@@ -1,6 +1,6 @@
-package edu.ycp.cs320.personalPlaylist;
+package edu.ycp.cs320.personalPlaylist.model;
 
-public class Song 
+public class Song <Album, Artist, Playlist>
 {
 	private float length;
 	private String artist;
@@ -8,6 +8,7 @@ public class Song
 	private String title;
 	private String genre;
 	private boolean isPlaying;
+	private String address;
 	
 	Song()
 	{
@@ -85,5 +86,14 @@ public class Song
 		this.isPlaying = isPlaying;
 	}
 	
+	public void setAddress(String address)
+	{
+		this.address = address;
+	}
+	
+	public String getAddress()
+	{
+		return this.address;
+	}
 	
 }
