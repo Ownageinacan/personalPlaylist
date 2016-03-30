@@ -1,7 +1,9 @@
 package edu.ycp.cs320.personalPlaylist.model;
 
-public class Song <Album, Artist, Playlist>
+public class Song
 {
+	
+
 	private float length;
 	private String artist;
 	private String album;
@@ -10,9 +12,9 @@ public class Song <Album, Artist, Playlist>
 	private boolean isPlaying;
 	private String address;
 	
-	Song()
+	public Song()
 	{
-		
+
 	}
 	public boolean play()
 	{
@@ -35,8 +37,9 @@ public class Song <Album, Artist, Playlist>
 		throw new UnsupportedOperationException("TODO - implement");
 	}
 	
+
 	
-	//getters and setters for everything, we can probably get rid of most of the sets since we dont want to mess with some of the properties
+	//getters and setters for everything else, we can probably get rid of most of the sets since we dont want to mess with some of the properties
 	public float getLength() 
 	{
 		return length;
