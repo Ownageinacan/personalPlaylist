@@ -84,6 +84,12 @@
 			<input type="button" onclick="location.href='http://localhost:8081/lab03/Account';" value="My Account"/>
 			<input type="button" onclick="location.href='http://localhost:8081/lab03/Login';" value="Logout" style="left: 200px;" />
 		</div>
+		<div class="sideBorder"></div>
+		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>
+		<div class="topLogo">
+			<img src='Assets/Icons/PersonalPlayerLogo.png' style="height: 100%; width: 100%;"/>
+		</div>
+		<div class="topBanner"></div>
 		<!--
 		<form name="Menus">
 		<p><select name="Account" onChange="go()" style= "right: 10%; top: 4.5%">
@@ -103,11 +109,5 @@
 		</script>
 		</form>
 		-->
-		<div class="sideBorder"></div>
-		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>
-		<div class="topLogo">
-			<img src='Assets/Icons/PersonalPlayerLogo.png' style="height: 100%; width: 100%;"/>
-		</div>
-		<div class="topBanner"></div>
 	</body>
 </html>
