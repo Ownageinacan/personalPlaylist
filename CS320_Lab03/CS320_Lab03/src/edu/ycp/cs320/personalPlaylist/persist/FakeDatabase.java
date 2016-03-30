@@ -6,18 +6,26 @@ import java.util.List;
 
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
+import edu.ycp.cs320.personalPlaylist.model.Album;
+import edu.ycp.cs320.personalPlaylist.model.Artist;
 import edu.ycp.cs320.personalPlaylist.model.Pair;
 
 public class FakeDatabase implements IDatabase {
 
 	private List<Song> songList;
 	private List<Playlist> playList;
+	private List<Album> albumList;
+	private List<Artist> artistList;
+
 
 	// Fake database constructor - initializes the DB
-	// the DB only consists for a List of Authors and a List of Books
+	// the DB currently consists of lists of songs, playlists, albums and artists
 	public FakeDatabase() {
 		songList = new ArrayList<Song>();
 		playList = new ArrayList<Playlist>();
+//		albumList = new ArrayList<Album>();		//TODO: ADD ALBUM/ARTIST
+//		artistList = new ArrayList<Artist>();		
+
 
 		// Add initial data
 		readInitialData();
@@ -31,20 +39,40 @@ public class FakeDatabase implements IDatabase {
 		try {
 			songList.addAll(InitialData.getSongs());
 			playList.addAll(InitialData.getPlaylists());
+//			albumList.addAll(InitialData.getAlbums());	//TODO: ADD ALBUM/ARTIST
+//			artistList.addAll(InitialData.getArtists());
+			
 		} catch (IOException e) {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
 	}
 
+	//getting lists
+	@Override
 	public List<Song> findAllSongs()	//return entire library of songs
 	{
 		return songList;
 	}
-
+	
+	@Override
 	public List<Playlist> findAllPlaylists()	//return all playlists
 	{
 		return playList;
 	}
+	
+//	public List<Album> findAllAlbums()	//TODO: ADD ALBUM/ARTIST
+//	{
+//		return albumList;
+//	}
+//
+//	public List<Artist> findAllArtists()
+//	{
+//		return artistList;
+//	}
+	
+	// display all songs in a playlist
+	
+	@Override
 	public List<Pair<Song,Playlist>> findAllSongInPlaylist(String playlist)	//Return songs within a given playlist (TEMP)
 	{
 		List<Pair<Song, Playlist>> result = new ArrayList<Pair<Song, Playlist>>();
@@ -61,6 +89,8 @@ public class FakeDatabase implements IDatabase {
 		return result;
 	}
 
+
+
 	private Song findSongBySongId(int songId)
 	{
 		for (Song song : songList) {
@@ -70,6 +100,17 @@ public class FakeDatabase implements IDatabase {
 		}
 		return null;
 	}
+
+	@Override
+	public Integer insertSongIntoSongsTable(String title, String artist, String album)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
+
 
 
 
@@ -193,4 +234,6 @@ public class FakeDatabase implements IDatabase {
 		}
 		return null;
 	}
+
+
 }
