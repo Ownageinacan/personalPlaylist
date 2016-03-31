@@ -22,6 +22,33 @@
 		   appearance: none;
 		   background: 100% no-repeat #eee;
 			} -->
+			.Playlist
+		{
+			position:absolute;
+			z-index:3;
+			left: 80px;
+			top: 60px;
+			font-size: 32px;
+		}
+		tr.playlistRow 
+		{
+			text-align: left;
+			color: blue;
+			font-weight: bold;
+		}
+		td.playlistCol 
+		{
+			text-align: left;
+			color: blue;
+			font-weight: bold;
+			max-width: 400px;
+			padding-left: 20px;				
+		}
+		.SongPlayer{
+			position:absolute;
+			z-index:4;
+			left: 200px;	
+			top: 900px;
 		.topButtons {
 			position: absolute;
 			z-index: 3;
@@ -84,12 +111,6 @@
 			<input type="button" onclick="location.href='http://localhost:8081/lab03/Account';" value="My Account"/>
 			<input type="button" onclick="location.href='http://localhost:8081/lab03/Login';" value="Logout" style="left: 200px;" />
 		</div>
-		<div class="sideBorder"></div>
-		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>
-		<div class="topLogo">
-			<img src='Assets/Icons/PersonalPlayerLogo.png' style="height: 100%; width: 100%;"/>
-		</div>
-		<div class="topBanner"></div>
 		<!--
 		<form name="Menus">
 		<p><select name="Account" onChange="go()" style= "right: 10%; top: 4.5%">
@@ -109,5 +130,28 @@
 		</script>
 		</form>
 		-->
+		<div class="sideBorder"></div>
+		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>
+		<div class="topLogo">
+			<img src='Assets/Icons/PersonalPlayerLogo.png' style="height: 100%; width: 100%;"/>
+		</div>
+		<div class="topBanner"></div>
+		<div class="Playlist">
+			<table>
+			    <tr>
+					<td class="Playlist">Playlist</td>
+			    </tr>
+			        
+			    <c:forEach items="${song}" var="pair">
+			        <tr class="playlistRow">
+			            <td class="playlistCol">${pair.right.Title}</td>		            
+			        </tr>
+			    </c:forEach>
+			</table>
+		</div>
+		<div class="SongPlayer"><audio controls>
+  <source src='Assets/Songs/song.mp3' type="audio/mpeg">
+</audio>
+</div>
 	</body>
 </html>

@@ -5,16 +5,25 @@ public class Song
 	
 
 	private float length;
-	private String artist;
+	private String artistFirstName;
+	private String artistLastName;
 	private String album;
 	private String title;
 	private String genre;
 	private boolean isPlaying;
 	private String address;
+	private int songId;
 	
 	public Song()
 	{
-
+		length = 0;
+		artistFirstName = "";
+		artistLastName = "";
+		album = "";
+		title = "";
+		genre = "";
+		address = "";
+		songId = 0;
 	}
 	public boolean play()
 	{
@@ -40,6 +49,17 @@ public class Song
 
 	
 	//getters and setters for everything else, we can probably get rid of most of the sets since we dont want to mess with some of the properties
+	
+	public void setSongId(int songId)
+	{
+		this.songId = songId;
+	}
+	
+	public int getSongId()
+	{
+		return songId;
+	}
+	
 	public float getLength() 
 	{
 		return length;
@@ -48,13 +68,22 @@ public class Song
 	{
 		this.length = length;
 	}
-	public String getArtist() 
+	
+	public String getArtistLastName()
 	{
-		return artist;
+		return artistLastName;
 	}
-	public void setArtist(String artist) 
+	public void setArtistLastName(String lastname)
 	{
-		this.artist = artist;
+		this.artistLastName = lastname;
+	}
+	public String getArtistFirstName() 
+	{
+		return artistFirstName;
+	}
+	public void setArtistFirstName(String firstname) 
+	{
+		this.artistFirstName = firstname;
 	}
 	public String getAlbum() 
 	{

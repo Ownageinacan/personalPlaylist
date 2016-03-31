@@ -4,10 +4,13 @@ public class Playlist
 {
 	private int numberSongs;
 	private String namePlaylist;
+	private int playlistId;
 	
-	Playlist()
+	public Playlist()
 	{
-		
+		numberSongs = 0;
+		namePlaylist = "";
+		playlistId = 0;
 	}
 	public boolean addSong(String name)//should these be file names?
 	{
@@ -31,6 +34,26 @@ public class Playlist
 	}
 	
 	//getters and setters
+	
+	public void setPlaylistId(int playlistId)	
+	{
+		this.playlistId = playlistId;
+	}
+	public int getPlaylistId()	// Get/Set playlist id are for determining which playlist to use
+	{
+		return this.playlistId;
+	}
+	
+	public void setTitle(String title)	//Might never use this method, who knows how this'll work
+	{
+		this.namePlaylist = title;
+	}
+	
+	public String getTitle()	//Definitely going to use this one; see FakeDatabase and look at findAllSongInPlaylist
+	{
+		return namePlaylist;
+	}	
+	
 	public int getNumberSongs() 
 	{
 		return numberSongs;
@@ -39,13 +62,6 @@ public class Playlist
 	{
 		this.numberSongs = numberSongs;
 	}
-	public String getNamePlaylist() 
-	{
-		return namePlaylist;
-	}
-	public void setNamePlaylist(String namePlaylist) 
-	{
-		this.namePlaylist = namePlaylist;
-	}
+
 	
 }
