@@ -7,10 +7,10 @@ public class Account
 	private String Password;
 	
 	
-	public Account(String Username, String Password)
+	public Account()	//Fixed this
 	{										 
-		this.setUsername(Username);
-		this.setPassword(Password);
+		Username = "";
+		Password = "";
 	}
 //	public boolean login(String Username, String Password)// do we need this since we have the login controller?
 //	{
