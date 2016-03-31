@@ -7,10 +7,10 @@ public class Account
 	private String Password;
 	
 	
-	public Account()	//Fixed this
+	public Account(String username, String password)	
 	{										 
-		Username = "";
-		Password = "";
+		this.Username = username;
+		this.Password = password;
 	}
 //	public boolean login(String Username, String Password)// do we need this since we have the login controller?
 //	{
