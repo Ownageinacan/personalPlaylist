@@ -22,7 +22,7 @@
 		   appearance: none;
 		   background: 100% no-repeat #eee;
 			} -->
-		.Playlist
+			.Playlist
 		{
 			position:absolute;
 			z-index:3;
@@ -49,7 +49,6 @@
 			z-index:4;
 			left: 200px;	
 			top: 900px;
-		}
 		.topButtons {
 			position: absolute;
 			z-index: 3;
