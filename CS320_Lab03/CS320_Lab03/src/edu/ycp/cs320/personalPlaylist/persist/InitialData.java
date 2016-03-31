@@ -52,16 +52,17 @@ public class InitialData {
 		try {
 			// auto-generated primary key for table books
 			Integer playlistId = 1;
+			readPlaylists.
 			while (true) {
 				List<String> tuple = readPlaylists.next();
 				if (tuple == null) {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-				Playlist pl = new Playlist();
+				Playlist pl = new Playlist(i.next(), playlistId++);			//PLAYLIST CONSTRUCTOR WAS CHANGED; THIS MAY CAUSE FUTURE PAIN
 //				book.setBookId(Integer.parseInt(i.next()));
-				pl.setPlaylistId(playlistId++);				
-				pl.setTitle(i.next());
+//				pl.setPlaylistId(playlistId++);					//Restore these if playlist constructor is changed again	
+//				pl.setTitle(i.next());							//
 
 				playList.add(pl);
 			}

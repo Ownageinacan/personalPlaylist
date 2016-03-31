@@ -24,16 +24,15 @@ public class Library
 
 	//getter and setter
 	public int getNumberSongs() {
-		
-		if(this.numberSongs > 0){	//Check to make sure number of songs is more than 0 before returning it
-			return numberSongs;
-		}else{
-			return 0;	//Return 0 if numSongs is less than 0 (which is impossible)
-		}
-		
+			return numberSongs;		
 	}
 
 	public void setNumberSongs(int numberSongs) {
-		this.numberSongs = numberSongs;
+		if(numberSongs >= 0)//Check to make sure number of songs is more than 0 before assigning it
+		{
+			this.numberSongs = numberSongs;
+		}else{
+			this.numberSongs = 0;
+		}
 	}
 }
