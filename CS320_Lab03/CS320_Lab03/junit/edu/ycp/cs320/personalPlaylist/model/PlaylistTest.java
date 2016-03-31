@@ -79,7 +79,7 @@ public class PlaylistTest {
 		assertEquals(0, playlist3.getNumberSongs());
 	}
 	@Test
-	public void testAddSong()
+	public void testAddSong()	//TODO: finish
 	{
 		playlist.addSong("Memes ahoy");
 		
