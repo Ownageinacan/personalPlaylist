@@ -28,8 +28,8 @@
 		{
 			position:absolute;
 			z-index:3;
-			left: 80px;
-			top: 60px;
+			left: 8.5%;
+			top: 12%;
 			font-size: 32px;
 		}
 		tr.playlistRow{
