@@ -5,6 +5,8 @@
 
 <html>
 	<head>
+		<title>Home</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="icon" href="Assets/Icons/PersonalPlayerLogo.png">
 		<style type="text/css">
 		<!--select {
@@ -22,7 +24,7 @@
 		   appearance: none;
 		   background: 100% no-repeat #eee;
 			} -->
-			.Playlist
+		.Playlist
 		{
 			position:absolute;
 			z-index:3;
@@ -30,14 +32,12 @@
 			top: 60px;
 			font-size: 32px;
 		}
-		tr.playlistRow 
-		{
+		tr.playlistRow{
 			text-align: left;
 			color: blue;
 			font-weight: bold;
 		}
-		td.playlistCol 
-		{
+		td.playlistCol{
 			text-align: left;
 			color: blue;
 			font-weight: bold;
@@ -45,11 +45,12 @@
 			padding-left: 20px;				
 		}
 		.SongPlayer{
-			position:absolute;
+			position: absolute;
 			z-index:4;
 			left: 200px;	
-			top: 900px;
-		.topButtons {
+			top: 675px;
+		}	
+		.topButtons{
 			position: absolute;
 			z-index: 3;
 			left: 200px;	
@@ -102,8 +103,6 @@
 			left: 0;	
 		}
 		</style>
-		<title>Home</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 
 	<body>
@@ -144,7 +143,8 @@
 			        
 			    <c:forEach items="${song}" var="pair">
 			        <tr class="playlistRow">
-			            <td class="playlistCol">${pair.right.Title}</td>		            
+			            <td class="playlistCol">${pair.right.Title}</td>
+			            		            
 			        </tr>
 			    </c:forEach>
 			</table>
