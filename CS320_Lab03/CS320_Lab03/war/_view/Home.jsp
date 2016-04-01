@@ -32,6 +32,14 @@
 			top: 12%;
 			font-size: 32px;
 		}
+		.song
+		{
+			position:absolute;
+			z-index:3;
+			left: 8.75%;
+			top: 500%;
+			font-size: 20px;
+		}
 		tr.playlistRow{
 			text-align: left;
 			color: blue;
@@ -47,9 +55,16 @@
 		.SongPlayer{
 			position: absolute;
 			z-index:4;
-			left: 10%;	
+			left: 200%;	
 			top: 90%;
 		}	
+		.HiddenSongPlayer{
+			position: absolute;
+			z-index:4;
+			left: 8.75%;	
+			top: 15%;
+			opacity: 0;
+		}
 		.topButtons{
 			position: absolute;
 			z-index: 3;
@@ -140,18 +155,23 @@
 			    <tr>
 					<td class="Playlist">Playlist</td>
 			    </tr>
-			        
+			    <tr>
+			    	<td class="song">Song</td>
+			    </tr>    
 			    <c:forEach items="${song}" var="pair">
 			        <tr class="playlistRow">
-			            <td class="playlistCol">${pair.right.namePlaylist}</td>
-			            <td class="playlistCol">${pair.left.songList}</td>		            
+			            <td class="playlistCol">${song}</td>
+			            <td class="playlistCol">${pair.left.songId}</td>		            
 			        </tr>
 			    </c:forEach>
 			</table>
 		</div>
+			<div class="HiddenSongPlayer"><audio controls>
+  				<source src='Assets/Songs/song.mp3' type="audio/mpeg">
+			</audio>
 		<div class="SongPlayer"><audio controls>
-  <source src='Assets/Songs/song.mp3' type="audio/mpeg">
-</audio>
-</div>
+  			<source src='Assets/Songs/song.mp3' type="audio/mpeg">
+			</audio>
+			</div>
 	</body>
 </html>
