@@ -47,8 +47,8 @@
 		.SongPlayer{
 			position: absolute;
 			z-index:4;
-			left: 200px;	
-			top: 675px;
+			left: 10%;	
+			top: 90%;
 		}	
 		.topButtons{
 			position: absolute;
@@ -143,8 +143,8 @@
 			        
 			    <c:forEach items="${song}" var="pair">
 			        <tr class="playlistRow">
-			            <td class="playlistCol">${pair.right.Title}</td>
-			            		            
+			            <td class="playlistCol">${pair.right.namePlaylist}</td>
+			            <td class="playlistCol">${pair.left.songList}</td>		            
 			        </tr>
 			    </c:forEach>
 			</table>
