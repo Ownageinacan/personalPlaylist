@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.personalPlaylist.model.Pair;
+import edu.ycp.cs320.personalPlaylist.model.Playlist;
+import edu.ycp.cs320.personalPlaylist.model.Song;
 
 
 public class DerbyDatabase implements IDatabase {
@@ -27,7 +29,31 @@ public class DerbyDatabase implements IDatabase {
 
 	private static final int MAX_ATTEMPTS = 10;
 
-	
+	@Override
+	public Integer insertSongIntoSongsTable(String title, String artist, String album) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Pair<Song, Playlist>> findAllSongInPlaylist(String playlist) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Playlist> findAllPlaylists() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Song> findAllSongs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
 	// transaction that retrieves a Book, and its Author by Title
 	@Override
 	public List<Pair<Artist, Book>> findAuthorAndBookByTitle(final String title) {
@@ -531,4 +557,6 @@ public class DerbyDatabase implements IDatabase {
 		
 		System.out.println("Success!");
 	}
+	*/
+	
 }
