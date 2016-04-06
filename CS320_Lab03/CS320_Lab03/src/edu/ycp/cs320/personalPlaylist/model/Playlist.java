@@ -12,14 +12,11 @@ public class Playlist
 	}
 	
 
-	/*
-	//Don't think we need a setPlaylistId() (SQL handles that, still might need a method though)
-	
-	public void setPlaylistId(String id)
+
+	public void setPlaylistId(int id)
 	{
 		this.playlistId = id;
 	}
-	*/
 	
 	public int getPlaylistId()	// Get playlist id for determining which playlist to use
 	{

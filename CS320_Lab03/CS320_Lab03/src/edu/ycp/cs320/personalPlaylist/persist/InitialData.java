@@ -10,6 +10,9 @@ import edu.ycp.cs320.personalPlaylist.model.Song;
 
 public class InitialData {
 
+	//TODO: FIX THIS CLASS
+	// IT'S PRETTY BAD
+	
 	// reads initial song data from CSV file and returns a List of songs
 	public static List<Song> getSongs() throws IOException {
 		List<Song> songList = new ArrayList<Song>();
@@ -58,7 +61,7 @@ public class InitialData {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-				Playlist pl = new Playlist(5, i.next(), playlistId++);			//PLAYLIST CONSTRUCTOR WAS CHANGED; THIS MAY CAUSE FUTURE PAIN. Each playlist contains 5 songs for now
+				Playlist pl = new Playlist();			//PLAYLIST CONSTRUCTOR WAS CHANGED; THIS MAY CAUSE FUTURE PAIN. Each playlist contains 5 songs for now
 //				book.setBookId(Integer.parseInt(i.next()));
 //				pl.setPlaylistId(playlistId++);					//Restore these if playlist constructor is changed again	
 //				pl.setTitle(i.next());							//
