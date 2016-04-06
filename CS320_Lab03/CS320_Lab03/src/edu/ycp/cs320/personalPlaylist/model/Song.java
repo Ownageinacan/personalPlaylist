@@ -3,95 +3,46 @@ package edu.ycp.cs320.personalPlaylist.model;
 public class Song
 {
 	
-
-	private float length;
-	private String artistFirstName;
-	private String artistLastName;
-	private String album;
+	private int artistId;
+	private int albumId;
 	private String title;
-	private String genre;
-	private boolean isPlaying;
-	private String address;
+	private int genreId;
 	private int songId;
 	
-	public Song()
-	{
-		length = 0;
-		artistFirstName = "";
-		artistLastName = "";
-		album = "";
-		title = "";
-		genre = "";
-		address = "";
-		songId = 0;
-	}
-	public boolean play()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	public boolean pause()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	public boolean repeat()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	public boolean rewind()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	public boolean fastForward()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
+	//private boolean isPlaying;
+	//private String address;
+	//private float length;
 	
+	public Song() //Constructor (empty)
+	{
 
+	}
 	
-	//getters and setters for everything else, we can probably get rid of most of the sets since we dont want to mess with some of the properties
+	//I promise all of these are correct
 	
 	public void setSongId(int songId)
 	{
 		this.songId = songId;
 	}
-	
 	public int getSongId()
 	{
 		return songId;
 	}
-	
-	public float getLength() 
+	public int getArtistId()
 	{
-		return length;
+		return artistId;
 	}
-	public void setLength(float length) 
+	public void setArtistId(int id)
 	{
-		this.length = length;
+		this.artistId = id;
 	}
-	
-	public String getArtistLastName()
+	public int getAlbumId() 
 	{
-		return artistLastName;
+		return albumId;
 	}
-	public void setArtistLastName(String lastname)
+	public void setAlbumId(int id) 
 	{
-		this.artistLastName = lastname;
-	}
-	public String getArtistFirstName() 
-	{
-		return artistFirstName;
-	}
-	public void setArtistFirstName(String firstname) 
-	{
-		this.artistFirstName = firstname;
-	}
-	public String getAlbum() 
-	{
-		return album;
-	}
-	public void setAlbum(String album) 
-	{
-		this.album = album;
+		this.albumId = id;
 	}
 	public String getTitle() 
 	{
@@ -101,14 +52,27 @@ public class Song
 	{
 		this.title = title;
 	}
-	public String getGenre() 
+	public int getGenreId() 
 	{
-		return genre;
+		return genreId;
 	}
-	public void setGenre(String genre) 
+	public void setGenreId(int id) 
 	{
-		this.genre = genre;
+		this.genreId = id;
 	}
+	
+	
+	/*
+	
+	//PROBABLY DON'T NEED THESE
+		public void setLength(float length) 
+	{
+		this.length = length;
+	}
+		public float getLength() 
+	{
+		return length;
+	}	
 	public boolean isPlaying() 
 	{
 		return isPlaying;
@@ -127,5 +91,5 @@ public class Song
 	{
 		return this.address;
 	}
-	
+	*/
 }

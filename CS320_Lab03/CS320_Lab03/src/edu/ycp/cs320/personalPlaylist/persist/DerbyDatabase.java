@@ -170,6 +170,8 @@ public class DerbyDatabase implements IDatabase {
 						//Clear this stmt w/ someone who knows what theyre doing
 						//Note: This might need a primary key (because there will probably be multiple
 						//"connection" tables
+						//Another note: get foreign keys of playlists & songs to finish this table
+						
 						stmt3 = conn.prepareStatement(
 								"create table memberOfPl (" +
 								"	playlist_id integer constraint playlist_id references playlists, " +

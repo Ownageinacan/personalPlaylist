@@ -1,3 +1,5 @@
+//THIS CLASS MIGHT BE USELESS BUT WE'RE KEEPING IT HERE JUST IN CASE
+
 package edu.ycp.cs320.personalPlaylist.model;
 
 public class Library
