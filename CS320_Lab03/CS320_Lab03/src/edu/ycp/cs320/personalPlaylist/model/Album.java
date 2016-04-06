@@ -3,12 +3,22 @@ package edu.ycp.cs320.personalPlaylist.model;
 public class Album 
 {
 	private String title;
+	private int albumId;
 	
-	Album(String title)
+	public Album()
 	{
-		this.setTitle(title);
+
 	}
 
+	public void setAlbumId(int id)
+	{
+		this.albumId = id;
+	}
+	public int getAlbumId()
+	{
+		return albumId;
+	}
+	
 	//getter and setter
 	public String getTitle() 
 	{

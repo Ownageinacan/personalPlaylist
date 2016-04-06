@@ -17,10 +17,10 @@ public interface IDatabase {
 	public List<Song> findAllSongs();	//list of songs
 //	public List<Album> findAllAlbums();	//list of albums
 //	public List<Artist> findAllArtists();	//list of artists
-	Integer insertPlaylistIntoPlaylistsTable(String title);
-	Integer deleteSongFromSongsTable(String title);
-	Integer deletePlaylistFromPlaylistTable(String title);
-	Integer insertSongIntoPlaylist(String title);
+	public Integer insertPlaylistIntoPlaylistsTable(String title);
+	public Integer deleteSongFromSongsTable(String title);
+	public Integer deletePlaylistFromPlaylistTable(String title);
+	public Integer insertSongIntoPlaylist(String title);
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?
 }

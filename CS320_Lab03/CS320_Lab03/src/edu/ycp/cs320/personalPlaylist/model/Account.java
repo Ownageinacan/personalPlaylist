@@ -1,3 +1,6 @@
+//Another maybe useless class? This one is probably more useful than the others
+//potentially keep it
+
 package edu.ycp.cs320.personalPlaylist.model;
 
 
