@@ -12,7 +12,14 @@ import java.util.List;
 import edu.ycp.cs320.personalPlaylist.model.Pair;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
-
+import edu.ycp.cs320.personalPlaylist.model.Artist;
+//import edu.ycp.cs320.booksdb.persist.DBUtil;
+//import edu.ycp.cs320.booksdb.persist.PersistenceException;
+//import edu.ycp.cs320.booksdb.persist.DerbyDatabase.Transaction;
+//import edu.ycp.cs320.personalPlaylist.model.Album;
+//import edu.ycp.cs320.personalPlaylist.persist.DBUtil;
+//import edu.ycp.cs320.personalPlaylist.persist.InitialData;
+//import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase.Transaction;
 
 public class DerbyDatabase implements IDatabase {
 	static {
@@ -22,38 +29,233 @@ public class DerbyDatabase implements IDatabase {
 			throw new IllegalStateException("Could not load Derby driver");
 		}
 	}
-	
 	private interface Transaction<ResultType> {
 		public ResultType execute(Connection conn) throws SQLException;
 	}
 
 	private static final int MAX_ATTEMPTS = 10;
 
-	@Override
-	public Integer insertSongIntoSongsTable(String title, String artist, String album) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public Integer insertSongIntoSongsTable(String title, String artist, String album) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public List<Pair<Song, Playlist>> findAllSongInPlaylist(String playlist) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		//TODO: Add more fields eventually to this method, for now let's just get it working
+		//Side note: Use integer or not? I don't even know mane
+		public Integer insertPlaylistIntoPlaylistsTable(String title){
+			//TODO: Implement
+			return null;
+		}
 
-	@Override
-	public List<Playlist> findAllPlaylists() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public List<Pair<Song, Playlist>> findAllSongInPlaylist(String playlist) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public List<Song> findAllSongs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public List<Playlist> findAllPlaylists() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	/*
+		@Override
+		public List<Song> findAllSongs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		//Note: Same thing as addPlaylist
+		public Integer deleteSongFromSongsTable(String title){
+			// TODO: Implement
+			return null;
+		}
+
+		@Override
+		public Integer deletePlaylistFromPlaylistTable(String title){
+			// TODO: Implement
+			return null;
+		}
+
+		@Override
+		public Integer insertSongIntoPlaylist(String title){
+			// Insert song into memberOfPl table and match it w/ a playlist
+			return null;
+		}
+
+		
+		// wrapper SQL transaction function that calls actual transaction function (which has retries)
+		public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
+			try {
+				return doExecuteTransaction(txn);
+			} catch (SQLException e) {
+				throw new PersistenceException("Transaction failed", e);
+			}
+		}
+		// SQL transaction function which retries the transaction MAX_ATTEMPTS times before failing
+		public<ResultType> ResultType doExecuteTransaction(Transaction<ResultType> txn) throws SQLException {
+			Connection conn = connect();
+			
+			try {
+				int numAttempts = 0;
+				boolean success = false;
+				ResultType result = null;
+				
+				while (!success && numAttempts < MAX_ATTEMPTS) {
+					try {
+						result = txn.execute(conn);
+						conn.commit();
+						success = true;
+					} catch (SQLException e) {
+						if (e.getSQLState() != null && e.getSQLState().equals("41000")) {
+							// Deadlock: retry (unless max retry count has been reached)
+							numAttempts++;
+						} else {
+							// Some other kind of SQLException
+							throw e;
+						}
+					}
+				}
+				
+				if (!success) {
+					throw new SQLException("Transaction failed (too many retries)");
+				}
+				
+				// Success!
+				return result;
+			} finally {
+				DBUtil.closeQuietly(conn);
+			}
+		}
+		
+		
+		// Creates Playlists, Songs, and memberOfPl table
+		// memberOfPl table is what connects songs & playlists via IDs
+		
+		public void createTables(){
+			executeTransaction(new Transaction<Boolean>()){
+				@Override
+				public Boolean execute(Connection conn) throws SQLException {
+					PreparedStatement stmt1 = null;
+					PreparedStatement stmt2 = null;
+					PreparedStatement stmt3 = null;
+
+					try{
+						//This should be correct
+						stmt1 = conn.prepareStatement(
+								"create table playlists (" +
+										"	playlist_id integer primary key " +
+										"		generated always as identity (start with 1, increment by 1), " +									
+										"	playlist_title varchar(40)," +
+										")"
+								);
+						stmt1.executeUpdate();
+						
+						//Clear this stmt w/ someone who knows what theyre doing
+						stmt2 = conn.prepareStatement(
+								"create table songs (" +
+								"	song_id integer primary key " +
+								"		generated always as identity (start with 1, increment by 1), " +
+								"	artist_id integer constraint artist_id references artists, " +
+								"	genre_id integer constraint genre_id references genres, " +
+								"	album_id integer constraint album_id reference albums, "+
+								"	title varchar(50)" +
+								")"
+								);
+						stmt2.executeUpdate();
+						
+						//Clear this stmt w/ someone who knows what theyre doing
+						//Note: This might need a primary key (because there will probably be multiple
+						//"connection" tables
+						stmt3 = conn.prepareStatement(
+								"create table memberOfPl (" +
+								"	playlist_id integer constraint playlist_id references playlists, " +
+								"	song_id integer constraint song_id references songs, " +
+								")"		
+								);
+						stmt3.executeUpdate();
+						
+						return true;					
+					}finally{
+						DBUtil.closeQuietly(stmt1);
+						DBUtil.closeQuietly(stmt2);
+						DBUtil.closeQuietly(stmt3);
+					}
+
+				}
+			//TODO: Don't worry about these errors for now
+			//Fix them if you can but i'm 98% sure these braces
+			//are required, so no deleting
+			}
+		});
+		
+		// load initial data retrieved from CSVs into DB tables
+		// (think FakeDatabase for now)
+		public void loadInitialData(){
+			executeTransaction(new Transaction<Boolean>() {
+				@Override
+				public Boolean execute(Connection conn) throws SQLException {
+					List<Playlist> playList;
+					List<Song> songList;
+					
+					try {
+						playList = InitialData.getPlaylists();
+						songList = InitialData.getSongs();
+					} catch (IOException e) {
+						throw new SQLException("Couldn't read initial data", e);
+					}
+
+					PreparedStatement insertPlaylist = null;
+					PreparedStatement insertSong = null;
+
+					try {
+						insertPlaylist = conn.prepareStatement("insert into authors (author_lastname, author_firstname) values (?, ?)");
+						for (Playlist pl : playList) {
+//							insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
+//							insertAuthor.setString(1, pl.getLastname());	// TODO: edit these to match playlist fields
+//							insertAuthor.setString(2, author.getFirstname()); // ^
+							insertPlaylist.addBatch();
+						}
+						insertPlaylist.executeBatch();
+						
+						insertSong = conn.prepareStatement("insert into books (author_id, title, isbn) values (?, ?, ?)");
+						for (Song song : songList) {
+//							insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
+//							insertBook.setInt(1, book.getAuthorId());	// TODO: edit these to match song fields
+//							insertBook.setString(2, book.getTitle());
+//							insertBook.setString(3, book.getIsbn());
+//							insertBook.addBatch();
+						}
+						insertSong.executeBatch();
+						
+						return true;
+					} finally {
+						DBUtil.closeQuietly(insertSong);
+						DBUtil.closeQuietly(insertPlaylist);
+					}
+				}
+			});
+		}
+			
+		
+		
+		// TODO: Here is where you specify the location of your Derby SQL database
+		// TODO: You will need to change this location to the same path as your workspace for this example
+		// TODO: Change it here and in SQLDemo under CS320_Lab06->edu.ycp.cs320.sqldemo	
+		private Connection connect() throws SQLException {
+			Connection conn = DriverManager.getConnection("jdbc:derby:C:/CS320/CS320_Library_Example/CS320_Lab06/library.db;create=true");		
+			
+			// Set autocommit to false to allow multiple the execution of
+			// multiple queries/statements as part of the same transaction.
+			conn.setAutoCommit(false);
+			
+			return conn;
+		}
+		
+		/*
 	// transaction that retrieves a Book, and its Author by Title
 	@Override
 	public List<Pair<Artist, Book>> findAuthorAndBookByTitle(final String title) {
@@ -62,7 +264,7 @@ public class DerbyDatabase implements IDatabase {
 			public List<Pair<Artist, Book>> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				
+
 				try {
 					stmt = conn.prepareStatement(
 							"select authors.*, books.* " +
@@ -71,30 +273,30 @@ public class DerbyDatabase implements IDatabase {
 							"   and books.title = ?"
 					);
 					stmt.setString(1, title);
-					
+
 					List<Pair<Artist, Book>> result = new ArrayList<Pair<Artist,Book>>();
-					
+
 					resultSet = stmt.executeQuery();
-					
+
 					// for testing that a result was returned
 					Boolean found = false;
-					
+
 					while (resultSet.next()) {
 						found = true;
-						
+
 						Artist author = new Artist();
 						loadAuthor(author, resultSet, 1);
 						Book book = new Book();
 						loadBook(book, resultSet, 4);
-						
+
 						result.add(new Pair<Artist, Book>(author, book));
 					}
-					
+
 					// check if the title was found
 					if (!found) {
 						System.out.println("<" + title + "> was not found in the books table");
 					}
-					
+
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
@@ -103,8 +305,8 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
-	
+
+
 	// transaction that retrieves a list of Books with their Authors, given Author's last name
 	@Override
 	public List<Pair<Artist, Book>> findAuthorAndBookByAuthorLastName(final String lastName) {
@@ -124,10 +326,10 @@ public class DerbyDatabase implements IDatabase {
 							"   order by books.title asc, books.isbn asc"
 					);
 					stmt.setString(1, lastName);
-					
+
 					// establish the list of (Author, Book) Pairs to receive the result
 					List<Pair<Artist, Book>> result = new ArrayList<Pair<Artist,Book>>();
-					
+
 					// execute the query, get the results, and assemble them in an ArrayLsit
 					resultSet = stmt.executeQuery();
 					while (resultSet.next()) {
@@ -135,10 +337,10 @@ public class DerbyDatabase implements IDatabase {
 						loadAuthor(author, resultSet, 1);
 						Book book = new Book();
 						loadBook(book, resultSet, 4);
-						
+
 						result.add(new Pair<Artist, Book>(author, book));
 					}
-					
+
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
@@ -147,8 +349,8 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
-	
+
+
 	// transaction that retrieves all Books in Library, with their respective Authors
 	@Override
 	public List<Pair<Artist, Book>> findAllBooksWithAuthors() {
@@ -157,7 +359,7 @@ public class DerbyDatabase implements IDatabase {
 			public List<Pair<Artist, Book>> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				
+
 				try {
 					stmt = conn.prepareStatement(
 							"select authors.*, books.* " +
@@ -165,30 +367,30 @@ public class DerbyDatabase implements IDatabase {
 							" where authors.author_id = books.author_id " +
 							"   order by books.title asc"
 					);
-					
+
 					List<Pair<Artist, Book>> result = new ArrayList<Pair<Artist,Book>>();
-					
+
 					resultSet = stmt.executeQuery();
-					
+
 					// for testing that a result was returned
 					Boolean found = false;
-					
+
 					while (resultSet.next()) {
 						found = true;
-						
+
 						Artist author = new Artist();
 						loadAuthor(author, resultSet, 1);
 						Book book = new Book();
 						loadBook(book, resultSet, 4);
-						
+
 						result.add(new Pair<Artist, Book>(author, book));
 					}
-					
+
 					// check if any books were found
 					if (!found) {
 						System.out.println("No books were found in the database");
 					}
-					
+
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
@@ -197,8 +399,8 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}	
-	
-	
+
+
 	// transaction that retrieves all Authors in Library
 	@Override
 	public List<Artist> findAllAuthors() {
@@ -207,34 +409,34 @@ public class DerbyDatabase implements IDatabase {
 			public List<Artist> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				
+
 				try {
 					stmt = conn.prepareStatement(
 							"select * from authors " +
 							" order by author_lastname asc, author_firstname asc"
 					);
-					
+
 					List<Artist> result = new ArrayList<Artist>();
-					
+
 					resultSet = stmt.executeQuery();
-					
+
 					// for testing that a result was returned
 					Boolean found = false;
-					
+
 					while (resultSet.next()) {
 						found = true;
-						
+
 						Artist author = new Artist();
 						loadAuthor(author, resultSet, 1);
-						
+
 						result.add(author);
 					}
-					
+
 					// check if any authors were found
 					if (!found) {
 						System.out.println("No authors were found in the database");
 					}
-					
+
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
@@ -243,8 +445,8 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
-	
+
+
 	// transaction that inserts new Book into the Books table
 	// also first inserts new Author into Authors table, if necessary
 	@Override
@@ -257,13 +459,13 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt3 = null;
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
-				
+
 				ResultSet resultSet1 = null;
 //	(unused)	ResultSet resultSet2 = null;
 				ResultSet resultSet3 = null;
 //	(unused)	ResultSet resultSet4 = null;
 				ResultSet resultSet5 = null;				
-				
+
 				// for saving author ID and book ID
 				Integer author_id = -1;
 				Integer book_id   = -1;
@@ -276,11 +478,11 @@ public class DerbyDatabase implements IDatabase {
 					);
 					stmt1.setString(1, lastName);
 					stmt1.setString(2, firstName);
-					
+
 					// execute the query, get the result
 					resultSet1 = stmt1.executeQuery();
 
-					
+
 					// if Author was found then save author_id					
 					if (resultSet1.next())
 					{
@@ -290,7 +492,7 @@ public class DerbyDatabase implements IDatabase {
 					else
 					{
 						System.out.println("Author <" + lastName + ", " + firstName + "> not found");
-				
+
 						// if the Author is new, to insert new Author into Authors table
 						if (author_id < 0) {
 							// prepare SQL insert statement to add Author to Authors table
@@ -300,12 +502,12 @@ public class DerbyDatabase implements IDatabase {
 							);
 							stmt2.setString(1, lastName);
 							stmt2.setString(2, firstName);
-							
+
 							// execute the update
 							stmt2.executeUpdate();
-							
+
 							System.out.println("New author <" + lastName + ", " + firstName + "> inserted in Authors table");						
-						
+
 							// try to retrieve author_id for new Author - DB auto-generates author_id
 							stmt3 = conn.prepareStatement(
 									"select author_id from authors " +
@@ -313,10 +515,10 @@ public class DerbyDatabase implements IDatabase {
 							);
 							stmt3.setString(1, lastName);
 							stmt3.setString(2, firstName);
-							
+
 							// execute the query							
 							resultSet3 = stmt3.executeQuery();
-							
+
 							// get the result - there had better be one							
 							if (resultSet3.next())
 							{
@@ -329,7 +531,7 @@ public class DerbyDatabase implements IDatabase {
 							}
 						}
 					}
-					
+
 					// now that we have all the information, insert new Book into Books table
 					// prepare SQL insert statement to add new Book to Books table
 					stmt4 = conn.prepareStatement(
@@ -339,10 +541,10 @@ public class DerbyDatabase implements IDatabase {
 					stmt4.setInt(1, author_id);
 					stmt4.setString(2, title);
 					stmt4.setString(3, isbn);
-					
+
 					// execute the update
 					stmt4.executeUpdate();
-					
+
 					System.out.println("New book <" + title + "> inserted into Books table");					
 
 					// now retrieve book_id for new Book, so that we can return it
@@ -358,7 +560,7 @@ public class DerbyDatabase implements IDatabase {
 
 					// execute the query
 					resultSet5 = stmt5.executeQuery();
-					
+
 					// get the result - there had better be one
 					if (resultSet5.next())
 					{
@@ -369,7 +571,7 @@ public class DerbyDatabase implements IDatabase {
 					{
 						System.out.println("New book <" + title + "> not found in Books table (ID: " + book_id);
 					}
-					
+
 					return book_id;
 				} finally {
 					DBUtil.closeQuietly(resultSet1);
@@ -385,8 +587,8 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
-	
+
+
 	// wrapper SQL transaction function that calls actual transaction function (which has retries)
 	public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
 		try {
@@ -395,16 +597,16 @@ public class DerbyDatabase implements IDatabase {
 			throw new PersistenceException("Transaction failed", e);
 		}
 	}
-	
+
 	// SQL transaction function which retries the transaction MAX_ATTEMPTS times before failing
 	public<ResultType> ResultType doExecuteTransaction(Transaction<ResultType> txn) throws SQLException {
 		Connection conn = connect();
-		
+
 		try {
 			int numAttempts = 0;
 			boolean success = false;
 			ResultType result = null;
-			
+
 			while (!success && numAttempts < MAX_ATTEMPTS) {
 				try {
 					result = txn.execute(conn);
@@ -420,11 +622,11 @@ public class DerbyDatabase implements IDatabase {
 					}
 				}
 			}
-			
+
 			if (!success) {
 				throw new SQLException("Transaction failed (too many retries)");
 			}
-			
+
 			// Success!
 			return result;
 		} finally {
@@ -437,21 +639,21 @@ public class DerbyDatabase implements IDatabase {
 	// TODO: Change it here and in SQLDemo under CS320_Lab06->edu.ycp.cs320.sqldemo	
 	private Connection connect() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:derby:C:/CS320/CS320_Library_Example/CS320_Lab06/library.db;create=true");		
-		
+
 		// Set autocommit to false to allow multiple the execution of
 		// multiple queries/statements as part of the same transaction.
 		conn.setAutoCommit(false);
-		
+
 		return conn;
 	}
-	
+
 	// retrieves Author information from query result set
 	private void loadAuthor(Artist author, ResultSet resultSet, int index) throws SQLException {
 		author.setAuthorId(resultSet.getInt(index++));
 		author.setLastname(resultSet.getString(index++));
 		author.setFirstname(resultSet.getString(index++));
 	}
-	
+
 	// retrieves Book information from query result set
 	private void loadBook(Book book, ResultSet resultSet, int index) throws SQLException {
 		book.setBookId(resultSet.getInt(index++));
@@ -459,7 +661,7 @@ public class DerbyDatabase implements IDatabase {
 		book.setTitle(resultSet.getString(index++));
 		book.setIsbn(resultSet.getString(index++));
 	}
-	
+
 	//  creates the Authors and Books tables
 	public void createTables() {
 		executeTransaction(new Transaction<Boolean>() {
@@ -467,7 +669,7 @@ public class DerbyDatabase implements IDatabase {
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
-				
+
 				try {
 					stmt1 = conn.prepareStatement(
 						"create table authors (" +
@@ -478,7 +680,7 @@ public class DerbyDatabase implements IDatabase {
 						")"
 					);	
 					stmt1.executeUpdate();
-					
+
 					stmt2 = conn.prepareStatement(
 							"create table books (" +
 							"	book_id integer primary key " +
@@ -489,7 +691,7 @@ public class DerbyDatabase implements IDatabase {
 							")"
 					);
 					stmt2.executeUpdate();
-					
+
 					return true;
 				} finally {
 					DBUtil.closeQuietly(stmt1);
@@ -498,7 +700,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
+
 	// loads data retrieved from CSV files into DB tables in batch mode
 	public void loadInitialData() {
 		executeTransaction(new Transaction<Boolean>() {
@@ -506,7 +708,7 @@ public class DerbyDatabase implements IDatabase {
 			public Boolean execute(Connection conn) throws SQLException {
 				List<Artist> authorList;
 				List<Book> bookList;
-				
+
 				try {
 					authorList = InitialData.getAuthors();
 					bookList = InitialData.getBooks();
@@ -526,7 +728,7 @@ public class DerbyDatabase implements IDatabase {
 						insertAuthor.addBatch();
 					}
 					insertAuthor.executeBatch();
-					
+
 					insertBook = conn.prepareStatement("insert into books (author_id, title, isbn) values (?, ?, ?)");
 					for (Book book : bookList) {
 //						insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
@@ -536,7 +738,7 @@ public class DerbyDatabase implements IDatabase {
 						insertBook.addBatch();
 					}
 					insertBook.executeBatch();
-					
+
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertBook);
@@ -545,18 +747,18 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
+
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
 		DerbyDatabase db = new DerbyDatabase();
 		db.createTables();
-		
+
 		System.out.println("Loading initial data...");
 		db.loadInitialData();
-		
+
 		System.out.println("Success!");
 	}
-	*/
-	
-}
+		 */
+
+	}
