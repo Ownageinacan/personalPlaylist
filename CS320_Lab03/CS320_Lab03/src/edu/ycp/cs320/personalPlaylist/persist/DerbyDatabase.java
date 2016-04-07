@@ -158,13 +158,14 @@ public class DerbyDatabase implements IDatabase {
 			executeTransaction(new Transaction<Boolean>(){
 				@Override
 				public Boolean execute(Connection conn) throws SQLException {
-					PreparedStatement stmt1 = null;
-					PreparedStatement stmt2 = null;
-					PreparedStatement stmt3 = null;
-					//add more prepared statements for more tables
-					
+					PreparedStatement stmt1 = null;	//playlists table
+					PreparedStatement stmt2 = null;	//songs table
+					PreparedStatement stmt3 = null; //memberOfPl table
+					PreparedStatement stmt4 = null;	//artists table
+					PreparedStatement stmt5 = null; //genres table
+					PreparedStatement stmt6 = null;	//albums table
 					try{
-						//This should be correct
+						// Working
 						stmt1 = conn.prepareStatement(
 								"create table playlists (" +
 										"	playlist_id integer primary key " +
@@ -174,34 +175,74 @@ public class DerbyDatabase implements IDatabase {
 								);
 						stmt1.executeUpdate();
 						
-						//TODO: Test this statement using SQLdemo in lab06
+						//TODO: 
+						stmt4 = conn.prepareStatement(
+								"create table artists (" +
+										"	artist_id integer primary key " +
+										"		generated always as identity (start with 1, increment by 1), " +									
+										"	artist_name varchar(40)," +
+										")"
+								);
+						stmt4.executeUpdate();
+						
+						
+						//TODO:
+						stmt5 = conn.prepareStatement(
+								"create table genres (" +
+										"	playlist_id integer primary key " +
+										"		generated always as identity (start with 1, increment by 1), " +									
+										"	playlist_title varchar(40)," +
+										")"
+								);
+						
+						stmt5.executeUpdate();
+						
+						//TODO:
+						stmt6 = conn.prepareStatement(
+								"create table albums (" +
+										"	playlist_id integer primary key " +
+										"		generated always as identity (start with 1, increment by 1), " +									
+										"	playlist_title varchar(40)," +
+										")"
+								);
+						
+						stmt6.executeUpdate();
+						
+						
+						// Working
+						
 						stmt2 = conn.prepareStatement(
 								"create table songs (" +
 								"	song_id integer primary key " +
 								"		generated always as identity (start with 1, increment by 1), " +
-								"	artist_id integer constraint artist_id references artists, " +
-								"	genre_id integer constraint genre_id references genres, " +
-								"	album_id integer constraint album_id reference albums, "+
-								"	song_title varchar(50)" +
+								"	artist_id integer constraint artist_id references artists, " +	//THIS LINE RELIES ON AN EXISTING TABLE
+								"	genre_id integer constraint genre_id references genres, " +	//THIS LINE RELIES ON AN EXISTING TABLE
+								"	album_id integer constraint album_id references albums, "+ //THIS LINE RELIES ON AN EXISTING TABLE
+								"	song_title varchar(50)" +									//MEANING THAT THESE TABLES DONT EXIST BUT THEY STILL RELY ON THEM
 								")"
 								);
 						stmt2.executeUpdate();
 						
-						//TODO: test this statement using SQLdemo in lab06
+						// Working
+						// TODO: FIGURE OUT HOW TO ACTUALLY INSERT IDs VIA TITLES
 						
 						stmt3 = conn.prepareStatement(
 								"create table memberOfPl (" +
-								"	playlist_id integer constraint playlist_id references playlists, " +	//these 2 lines are getting foreign key
-								"	song_id integer constraint song_id references songs, " +
+								"	playlist_id integer constraint playlist_id references playlists, " +	//these 2 lines are getting foreign keys
+								"	song_id integer constraint song_id references songs " +
 								")"		
 								);
 						stmt3.executeUpdate();
+
 						
 						return true;					
 					}finally{
 						DBUtil.closeQuietly(stmt1);
 						DBUtil.closeQuietly(stmt2);
 						DBUtil.closeQuietly(stmt3);
+						DBUtil.closeQuietly(stmt4);
+						DBUtil.closeQuietly(stmt5);
+						DBUtil.closeQuietly(stmt6);
 					}
 
 				}
@@ -225,30 +266,37 @@ public class DerbyDatabase implements IDatabase {
 						throw new SQLException("Couldn't read initial data", e);
 					}
 
-					PreparedStatement insertPlaylist = null;
-					PreparedStatement insertSong = null;
-
+					
 					//TODO: finish this and edit this stuff
 					
+					PreparedStatement insertPlaylist = null;
+					PreparedStatement insertSong = null;
+					
 					try {
-						insertPlaylist = conn.prepareStatement("insert into authors (author_lastname, author_firstname) values (?, ?)");
+						// TODO: ADD MORE FIELDS IF NECESSARY
+						// (Right now we only have the title field for playlist)
+						// (so we don't need any more fields at the moment)
+						// This statement should be working
+						insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title) values (?)");
 						for (Playlist pl : playList) {
 //							insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
-//							insertAuthor.setString(1, pl.getLastname());	// TODO: edit these to match playlist fields
-//							insertAuthor.setString(2, author.getFirstname()); // ^
+							insertPlaylist.setString(1, pl.getTitle());	
 							insertPlaylist.addBatch();
 						}
 						insertPlaylist.executeBatch();
 						
-						insertSong = conn.prepareStatement("insert into books (author_id, title, isbn) values (?, ?, ?)");
+						insertSong = conn.prepareStatement("insert into songs (song_title) values (?)");
 						for (Song song : songList) {
 //							insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
-//							insertBook.setInt(1, book.getAuthorId());	// TODO: edit these to match song fields
-//							insertBook.setString(2, book.getTitle());
-//							insertBook.setString(3, book.getIsbn());
-//							insertBook.addBatch();
+							insertSong.setString(1, song.getTitle());	
+							// TODO: ADD MORE FIELDS HERE WHEN WE ADD MORE TABLES/COLUMNS RELATED TO SONGS
+							
+							insertSong.addBatch();
 						}
 						insertSong.executeBatch();
+
+						
+						// TODO: add more things here
 						
 						return true;
 					} finally {
@@ -265,7 +313,12 @@ public class DerbyDatabase implements IDatabase {
 		// TODO: You will need to change this location to the same path as your workspace for this example
 		// TODO: Change it here and in SQLDemo under CS320_Lab06->edu.ycp.cs320.sqldemo	
 		private Connection connect() throws SQLException {
-			Connection conn = DriverManager.getConnection("jdbc:derby:C:/CS320/CS320_Library_Example/CS320_Lab06/library.db;create=true");		
+			
+			//********************************
+			//THIS CHANGES FOR EACH INDIVIDUAL
+			//********************************
+			
+			Connection conn = DriverManager.getConnection("jdbc:derby:F:/cs320/gitRepository/CS320_Lab03/CS320_Lab03/library.db;create=true");		
 			
 			// Set autocommit to false to allow multiple the execution of
 			// multiple queries/statements as part of the same transaction.

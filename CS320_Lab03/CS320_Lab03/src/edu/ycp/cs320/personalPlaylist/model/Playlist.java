@@ -32,7 +32,6 @@ public class Playlist
 	{
 		return namePlaylist;
 	}	
-
 	
 	
 	//PROBABLY DON'T NEED THIS EITHER BUT HEY WHO CARES		
