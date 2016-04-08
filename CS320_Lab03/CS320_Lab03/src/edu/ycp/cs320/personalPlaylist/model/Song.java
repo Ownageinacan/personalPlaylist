@@ -8,18 +8,25 @@ public class Song
 	private String title;
 	private int genreId;
 	private int songId;
+	private String location;
 	
 	//private boolean isPlaying;
 	//private String address;
 	//private float length;
 	
-	public Song() //Constructor (empty)
+	public Song(String title, String location) //Constructor (empty)
 	{
-
+		this.location = location;
+		this.title = title;
 	}
 	
 	//I promise all of these are correct
-	
+	public void setlocation(String location){
+		this.location = location;
+	}
+	public String getLocation(){
+		return this.location;
+	}
 	public void setSongId(int songId)
 	{
 		this.songId = songId;

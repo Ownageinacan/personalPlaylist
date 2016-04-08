@@ -6,9 +6,9 @@ public class Playlist
 	private String namePlaylist;
 	private int playlistId;
 
-	public Playlist()	
+	public Playlist(String namePlaylist)	
 	{
-
+		this.namePlaylist = namePlaylist;
 	}
 	
 
@@ -51,6 +51,12 @@ public class Playlist
 		}else{
 			this.numberSongs = 0;
 		}
+	}
+
+
+	public void addSong(String song) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

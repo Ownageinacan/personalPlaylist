@@ -13,11 +13,12 @@ public class PlaylistTest {
 	
 	@Before
 	public void setUp() {
-		playlist = new Playlist(15, "playlist1", 4);
-		playlist2 = new Playlist(22, "pl2", 15);
-		playlist3 = new Playlist(420, "bernie sanders is an abstract artist", 3);
+		playlist = new Playlist("playlist1");
+		playlist2 = new Playlist("pl2");
+		playlist3 = new Playlist("bernie sanders is an abstract artist");
+		
 	}
-	
+	/* this may not be needed until we get the database up
 	@Test
 	public void testSetPlaylistId()
 	{
@@ -29,7 +30,7 @@ public class PlaylistTest {
 		assertEquals(2, playlist2.getPlaylistId());
 		assertEquals(0, playlist3.getPlaylistId());
 	}
-	
+
 	@Test
 	public void testGetPlaylistId()
 	{
@@ -38,7 +39,7 @@ public class PlaylistTest {
 		assertEquals(15, playlist2.getPlaylistId());
 		assertEquals(3, playlist3.getPlaylistId());
 	}
-	
+	*/
 	@Test
 	public void testSetTitle()
 	{
@@ -89,6 +90,7 @@ public class PlaylistTest {
 	{
 		throw new UnsupportedOperationException("TODO - implement");
 	}
+	/* won't need these
 	@Test
 	public void testSkipSong()
 	{
@@ -99,6 +101,7 @@ public class PlaylistTest {
 	{
 		throw new UnsupportedOperationException("TODO - implement");
 	}
+	*/
 	@Test
 	public void testShuffle()
 	{
