@@ -208,23 +208,24 @@ public class DerbyDatabase implements IDatabase {
 						
 						stmt6.executeUpdate();
 						
-						
 						// Working
 						
 						stmt2 = conn.prepareStatement(
 								"create table songs (" +
 								"	song_id integer primary key " +
 								"		generated always as identity (start with 1, increment by 1), " +
-								"	artist_id integer constraint artist_id references artists, " +	//THIS LINE RELIES ON AN EXISTING TABLE
-								"	genre_id integer constraint genre_id references genres, " +	//THIS LINE RELIES ON AN EXISTING TABLE
-								"	album_id integer constraint album_id references albums, "+ //THIS LINE RELIES ON AN EXISTING TABLE
-								"	song_title varchar(50)" +									//MEANING THAT THESE TABLES DONT EXIST BUT THEY STILL RELY ON THEM
+								"	artists integer constraint artist_id references artists, " +	
+								"	genres integer constraint genre_id references genres, " +	
+								"	albums integer constraint album_id references albums, "+ 
+								"	song_title varchar(50)" +									
 								")"
 								);
 						stmt2.executeUpdate();
 						
 						// Working
 						// TODO: FIGURE OUT HOW TO ACTUALLY INSERT IDs VIA TITLES
+						// Note: Thought of this on friday, instead of typing in titles use our getters
+						// crazy i know
 						
 						stmt3 = conn.prepareStatement(
 								"create table memberOfPl (" +
@@ -285,18 +286,23 @@ public class DerbyDatabase implements IDatabase {
 						}
 						insertPlaylist.executeBatch();
 						
-						insertSong = conn.prepareStatement("insert into songs (song_title) values (?)");
+						insertSong = conn.prepareStatement("insert into songs (song_title, albums, artists, genres) values (?, ?, ?, ?)");
 						for (Song song : songList) {
 //							insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
+							
+							//TODO: Maybe test these. No guarantees that theyre correct, but a girl can hope
+							
 							insertSong.setString(1, song.getTitle());	
-							// TODO: ADD MORE FIELDS HERE WHEN WE ADD MORE TABLES/COLUMNS RELATED TO SONGS
+							insertSong.setInt(2, song.getAlbumId());
+							insertSong.setInt(3, song.getArtistId());
+							insertSong.setInt(4, song.getGenreId());							
 							
 							insertSong.addBatch();
 						}
 						insertSong.executeBatch();
 
 						
-						// TODO: add more things here
+						// TODO: add more things here as necessary
 						
 						return true;
 					} finally {
