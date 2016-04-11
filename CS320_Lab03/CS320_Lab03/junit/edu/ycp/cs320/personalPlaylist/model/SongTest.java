@@ -14,9 +14,9 @@ public class SongTest {
 	@Before
 	public void setUp()
 	{
-		Song00 = new Song("I'm not a weaboo", "http://google.com");
-		Song01 = new Song("Dance till you ded", "http:/songs/");
-		Song02 = new Song("This is not a song", "/songlocation/");
+		Song00 = new Song();
+		Song01 = new Song();
+		Song02 = new Song();
 	}
 	
 	@Test

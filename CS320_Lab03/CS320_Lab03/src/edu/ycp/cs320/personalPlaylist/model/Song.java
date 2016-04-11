@@ -14,10 +14,9 @@ public class Song
 	//private String address;
 	//private float length;
 	
-	public Song(String title, String location) //Constructor (empty)
+	public Song() //Constructor (empty)
 	{
-		this.location = location;
-		this.title = title;
+		
 	}
 	
 	//I promise all of these are correct
