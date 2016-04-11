@@ -12,6 +12,7 @@ import java.util.List;
 import edu.ycp.cs320.personalPlaylist.model.Pair;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
+import edu.ycp.cs320.booksdb.persist.DerbyDatabase;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
 //import edu.ycp.cs320.booksdb.persist.DBUtil;
 //import edu.ycp.cs320.booksdb.persist.PersistenceException;
@@ -172,7 +173,7 @@ public class DerbyDatabase implements IDatabase {
 								"create table playlists (" +
 										"	playlist_id integer primary key " +
 										"		generated always as identity (start with 1, increment by 1), " +									
-										"	playlist_title varchar(40)," +
+										"	playlist_title varchar(40)," +	//playlist title
 										")"
 								);
 						stmt1.executeUpdate();
@@ -218,10 +219,10 @@ public class DerbyDatabase implements IDatabase {
 								"create table songs (" +
 								"	song_id integer primary key " +
 								"		generated always as identity (start with 1, increment by 1), " +
-								"	artists integer constraint artist_id references artists, " +	
-								"	genres integer constraint genre_id references genres, " +	
-								"	albums integer constraint album_id references albums, "+ 
-								"	song_title varchar(50)" +									
+								"	artists integer constraint artist_id references artists, " +	//foreign key artist_id
+								"	genres integer constraint genre_id references genres, " +		//foreign key genre_id
+								"	albums integer constraint album_id references albums, "+ 		//foreign key album_id
+								"	song_title varchar(50)" +	//song title						
 								")"
 								);
 						stmt2.executeUpdate();
@@ -348,6 +349,18 @@ public class DerbyDatabase implements IDatabase {
 			conn.setAutoCommit(false);
 			
 			return conn;
+		}
+		
+		// The main method creates the database tables and loads the initial data.
+		public static void main(String[] args) throws IOException {
+			System.out.println("Creating tables...");
+			DerbyDatabase db = new DerbyDatabase();
+			db.createTables();
+			
+			System.out.println("Loading initial data...");
+			db.loadInitialData();
+			
+			System.out.println("Success!");
 		}
 		
 	}
