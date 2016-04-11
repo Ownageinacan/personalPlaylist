@@ -7,7 +7,7 @@ import edu.ycp.cs320.personalPlaylist.model.Artist;
 import edu.ycp.cs320.personalPlaylist.persist.DatabaseProvider;
 import edu.ycp.cs320.personalPlaylist.persist.IDatabase;
 
-public class AllAuthorsQuery {
+public class AllArtistsQuery {
 	public static void main(String[] args) throws Exception {
 		Scanner keyboard = new Scanner(System.in);
 
@@ -16,15 +16,15 @@ public class AllAuthorsQuery {
 		
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		List<Author> authorList = db.findAllAuthors();
+		List<Artist> artistList = db.findAllArtists;
 		
 		// check if anything was returned and output the list
-		if (authorList.isEmpty()) {
+		if (artistList.isEmpty()) {
 			System.out.println("There are no authors in the database");
 		}
 		else {
-			for (Author author : authorList) {
-				System.out.println(author.getLastname() + ", " + author.getFirstname());
+			for (Artist Artist : artistList) {
+				System.out.println(Artist.getArtistLastName() + ", " + Artist.getArtistFirstName());
 			}
 		}
 	}
