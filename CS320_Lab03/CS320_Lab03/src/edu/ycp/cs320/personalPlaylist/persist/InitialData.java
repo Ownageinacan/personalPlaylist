@@ -28,14 +28,10 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();	
 				Song song = new Song();		//Create a song object
 //				author.setAuthorId(Integer.parseInt(i.next()));
-				
-				song.setSongId(songId++);	//Set song ID			
-				
 				//TEMPORARY HARD CODE; ASK YOURSELF WHY WE WOULD SET ANY OF THESE?
+				song.setSongId(songId++); //Set song ID
 				song.setTitle(i.next());	//Set song title
-				song.setArtistLastName(i.next());	//Set song artist's last name
-				song.setArtistFirstName(i.next());	//Set song artist's first name
-				song.setAlbum(i.next());	//Set song album
+				song.setLocation(i.next());
 				
 				songList.add(song);	//Might be redundant
 			}

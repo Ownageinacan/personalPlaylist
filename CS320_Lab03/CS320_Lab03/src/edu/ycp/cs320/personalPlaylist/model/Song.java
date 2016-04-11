@@ -20,7 +20,7 @@ public class Song
 	}
 	
 	//I promise all of these are correct
-	public void setlocation(String location){
+	public void setLocation(String location){
 		this.location = location;
 	}
 	public String getLocation(){
