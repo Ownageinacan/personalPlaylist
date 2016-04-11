@@ -3,12 +3,12 @@ package edu.ycp.cs320.personalPlaylist.model;
 public class Song
 {
 	
+	private String title;
+	private String location;
 	private int artistId;
 	private int albumId;
-	private String title;
 	private int genreId;
 	private int songId;
-	private String location;
 	
 	//private boolean isPlaying;
 	//private String address;

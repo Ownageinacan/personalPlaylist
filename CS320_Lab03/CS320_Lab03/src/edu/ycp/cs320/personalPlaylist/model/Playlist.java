@@ -2,8 +2,8 @@ package edu.ycp.cs320.personalPlaylist.model;
 
 public class Playlist 
 {
-	private int numberSongs;
 	private String namePlaylist;
+	private int numberSongs;
 	private int playlistId;
 
 	public Playlist()	

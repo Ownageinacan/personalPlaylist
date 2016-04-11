@@ -311,24 +311,26 @@ public class DerbyDatabase implements IDatabase {
 						// (Right now we only have the title field for playlist)
 						// (so we don't need any more fields at the moment)
 						// This statement should be working
-						insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title) values (?)");
+						insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title, number_songs) values (?, ?)");
 						for (Playlist pl : playList) {
 //							insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
-							insertPlaylist.setString(1, pl.getTitle());	
+							insertPlaylist.setString(1, pl.getTitle());
+							insertPlaylist.setInt(2,pl.getNumberSongs());
 							insertPlaylist.addBatch();
 						}
 						insertPlaylist.executeBatch();
 						
-						insertSong = conn.prepareStatement("insert into songs (song_title, albums, artists, genres) values (?, ?, ?, ?)");
+						insertSong = conn.prepareStatement("insert into songs (song_title,song_location, artist, album, genre) values (?, ?, ?, ?, ?)");
 						for (Song song : songList) {
 //							insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
 							
 							//TODO: Maybe test these. No guarantees that they're correct, but a girl can hope
 							
-							insertSong.setString(1, song.getTitle());	
-							insertSong.setInt(2, song.getAlbumId());
+							insertSong.setString(1, song.getTitle());
+							insertSong.setString(2, song.getLocation());
 							insertSong.setInt(3, song.getArtistId());
-							insertSong.setInt(4, song.getGenreId());							
+							insertSong.setInt(4, song.getAlbumId());
+							insertSong.setInt(5, song.getGenreId());							
 							
 							insertSong.addBatch();
 						}

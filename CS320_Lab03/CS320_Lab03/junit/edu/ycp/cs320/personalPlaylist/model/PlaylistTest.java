@@ -13,9 +13,9 @@ public class PlaylistTest {
 	
 	@Before
 	public void setUp() {
-		playlist = new Playlist("playlist1");
-		playlist2 = new Playlist("pl2");
-		playlist3 = new Playlist("bernie sanders is an abstract artist");
+		playlist = new Playlist();
+		playlist2 = new Playlist();
+		playlist3 = new Playlist();
 		
 	}
 	/* this may not be needed until we get the database up
@@ -51,23 +51,6 @@ public class PlaylistTest {
 		assertEquals("Shawn says 'why is this awful'", playlist2.getTitle());
 		assertEquals("I won't tell him that junit tests aren't that bad", playlist3.getTitle());
 	}
-	
-	@Test
-	public void testGetTitle()
-	{
-		assertEquals("playlist1",playlist.getTitle());
-		assertEquals("pl2",playlist2.getTitle());
-		assertEquals("bernie sanders is an abstract artist",playlist3.getTitle());
-	}
-	
-	@Test
-	public void testGetNumberSongs()
-	{
-		assertEquals(15, playlist.getNumberSongs());
-		assertEquals(22, playlist2.getNumberSongs());
-		assertEquals(420, playlist3.getNumberSongs());
-	}
-	
 	@Test
 	public void testSetNumberSongs()
 	{
@@ -82,11 +65,16 @@ public class PlaylistTest {
 	@Test
 	public void testAddSong()	//TODO: finish
 	{
-		playlist.addSong("Memes ahoy");
+		throw new UnsupportedOperationException("TODO - implement");
 		
 	}
 	@Test
 	public void testRemoveSong()
+	{
+		throw new UnsupportedOperationException("TODO - implement");
+	}
+	@Test
+	public void testShuffle()
 	{
 		throw new UnsupportedOperationException("TODO - implement");
 	}
@@ -102,10 +90,6 @@ public class PlaylistTest {
 		throw new UnsupportedOperationException("TODO - implement");
 	}
 	*/
-	@Test
-	public void testShuffle()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
+	
 	
 }
