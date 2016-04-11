@@ -151,7 +151,7 @@ public class DerbyDatabase implements IDatabase {
 		}
 		
 		
-		// Creates Playlists, Songs, and memberOfPl table
+		// Creates (what should be) all of the required tables
 		// memberOfPl table is what connects songs & playlists via IDs
 		
 		public void createTables(){
@@ -164,6 +164,8 @@ public class DerbyDatabase implements IDatabase {
 					PreparedStatement stmt4 = null;	//artists table
 					PreparedStatement stmt5 = null; //genres table
 					PreparedStatement stmt6 = null;	//albums table
+					PreparedStatement stmt7 = null; //users table
+					
 					try{
 						// Working
 						stmt1 = conn.prepareStatement(
@@ -174,35 +176,37 @@ public class DerbyDatabase implements IDatabase {
 										")"
 								);
 						stmt1.executeUpdate();
+ 
+						// Working
 						
-						//TODO: 
 						stmt4 = conn.prepareStatement(
 								"create table artists (" +
 										"	artist_id integer primary key " +
 										"		generated always as identity (start with 1, increment by 1), " +									
-										"	artist_name varchar(40)," +
+										"	artist_name varchar(20)," +	//band name
 										")"
 								);
 						stmt4.executeUpdate();
 						
+						// Working
 						
-						//TODO:
 						stmt5 = conn.prepareStatement(
 								"create table genres (" +
-										"	playlist_id integer primary key " +
+										"	genre_id integer primary key " +
 										"		generated always as identity (start with 1, increment by 1), " +									
-										"	playlist_title varchar(40)," +
+										"	genre_title varchar(20)," +	//genre
 										")"
 								);
 						
 						stmt5.executeUpdate();
+
+						// Working
 						
-						//TODO:
 						stmt6 = conn.prepareStatement(
 								"create table albums (" +
-										"	playlist_id integer primary key " +
+										"	album_id integer primary key " +
 										"		generated always as identity (start with 1, increment by 1), " +									
-										"	playlist_title varchar(40)," +
+										"	album_title varchar(20)," +	//album title
 										")"
 								);
 						
@@ -224,7 +228,7 @@ public class DerbyDatabase implements IDatabase {
 						
 						// Working
 						// TODO: FIGURE OUT HOW TO ACTUALLY INSERT IDs VIA TITLES
-						// Note: Thought of this on friday, instead of typing in titles use our getters
+						// Note: Thought of this on friday, instead of typing in titles, use our getters.
 						// crazy i know
 						
 						stmt3 = conn.prepareStatement(
@@ -235,6 +239,18 @@ public class DerbyDatabase implements IDatabase {
 								);
 						stmt3.executeUpdate();
 
+						// Working
+						
+						stmt7 = conn.prepareStatement(
+								"create table users (" +
+								"	user_id integer primary key " +
+								"		generated always as identity (start with 1, increment by 1), " +
+								"	username varchar(15), " +		//username limited to 15 characters
+								"	password varchar(15)" +		//password too. also password is shown as a **STRING** IN THIS TABLE
+								")"								//WHICH MEANS WE INSERT PASSWORDS DIRECTLY INTO THE TABLE. WE PROBABLY
+								);								//DONT NEED A SEPERATE TABLE FOR PASSWORDS (although that would be useful for
+																//a password changing system)
+						stmt7.executeUpdate();
 						
 						return true;					
 					}finally{
@@ -244,6 +260,7 @@ public class DerbyDatabase implements IDatabase {
 						DBUtil.closeQuietly(stmt4);
 						DBUtil.closeQuietly(stmt5);
 						DBUtil.closeQuietly(stmt6);
+						DBUtil.closeQuietly(stmt7);
 					}
 
 				}
@@ -274,7 +291,7 @@ public class DerbyDatabase implements IDatabase {
 					PreparedStatement insertSong = null;
 					
 					try {
-						// TODO: ADD MORE FIELDS IF NECESSARY
+						// TODO: ADD MORE FIELDS AS NECESSARY
 						// (Right now we only have the title field for playlist)
 						// (so we don't need any more fields at the moment)
 						// This statement should be working
@@ -290,7 +307,7 @@ public class DerbyDatabase implements IDatabase {
 						for (Song song : songList) {
 //							insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
 							
-							//TODO: Maybe test these. No guarantees that theyre correct, but a girl can hope
+							//TODO: Maybe test these. No guarantees that they're correct, but a girl can hope
 							
 							insertSong.setString(1, song.getTitle());	
 							insertSong.setInt(2, song.getAlbumId());
