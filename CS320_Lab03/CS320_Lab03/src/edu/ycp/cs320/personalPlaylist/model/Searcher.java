@@ -1,3 +1,4 @@
+//THIS CLASS IS USELESS BUT WE MAY USE IT LATER
 package edu.ycp.cs320.personalPlaylist.model;
 
 import java.util.ArrayList;

@@ -8,7 +8,7 @@ public class Playlist
 
 	public Playlist()	
 	{
-
+	
 	}
 	
 
@@ -47,6 +47,12 @@ public class Playlist
 		}else{
 			this.numberSongs = 0;
 		}
+	}
+
+
+	public void addSong(String song) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

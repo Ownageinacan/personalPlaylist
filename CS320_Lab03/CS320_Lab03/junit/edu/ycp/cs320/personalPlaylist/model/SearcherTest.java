@@ -8,15 +8,11 @@ import org.junit.Test;
 public class SearcherTest {
 
 	private Searcher searcher;
-	private Searcher searcher1;
-	private Searcher searcher2;
 	
 	@Before
 	public void setUp()
 	{
-		searcher = new Searcher(/*constructor fields*/);
-		searcher1 = new Searcher(/*constructor fields*/);
-		searcher2 = new Searcher(/*constructor fields*/);
+		searcher = new Searcher(null, null, null, null); //may need this later
 	}
 	
 	@Test
