@@ -6,9 +6,9 @@ public class Playlist
 	private String namePlaylist;
 	private int playlistId;
 
-	public Playlist(String namePlaylist)	
+	public Playlist()	
 	{
-		this.namePlaylist = namePlaylist;
+	
 	}
 	
 
