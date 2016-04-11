@@ -12,7 +12,8 @@ import java.util.List;
 import edu.ycp.cs320.personalPlaylist.model.Pair;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
-import edu.ycp.cs320.booksdb.persist.DerbyDatabase;
+import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
+import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
 //import edu.ycp.cs320.booksdb.persist.DBUtil;
 //import edu.ycp.cs320.booksdb.persist.PersistenceException;
@@ -21,6 +22,7 @@ import edu.ycp.cs320.personalPlaylist.model.Artist;
 //import edu.ycp.cs320.personalPlaylist.persist.DBUtil;
 //import edu.ycp.cs320.personalPlaylist.persist.InitialData;
 //import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase.Transaction;
+import edu.ycp.cs320.personalPlaylist.model.Genre;
 
 
 
@@ -45,10 +47,23 @@ public class DerbyDatabase implements IDatabase {
 		//TODO: PLEASE LOOK AT HAKE'S DERBYDATABASE TEMPALTE BEFORE ATTEMPTING TO WRITE ANY OF THESE PLEASE
 	
 		@Override
-		public Integer insertSongIntoSongsTable(String title, String artist, String album) {
+		public Integer insertSongIntoSongsTable(String title, Artist artist, Genre genre, Album album) throws SQLException {
 			// TODO Auto-generated method stub
-			return null;
+			Connection conn = null;
+			PreparedStatement insertSong = null;
+
+			try {
+				insertSong = conn.prepareStatement("insert into songs (title, artist_id, genre_id, album_id) values (?, ?, ?, ?)");
+				insertSong.setString(1, title);
+				insertSong.setInt(2, artist.getArtistId());
+				insertSong.setInt(3, genre.getGenreId());
+				insertSong.setInt(4, album.getAlbumId());
+				return insertSong.executeUpdate();
+			} finally {
+				DBUtil.closeQuietly(insertSong);
+			}
 		}
+
 
 		@Override
 		//TODO: Add more fields eventually to this method, for now let's just get it working
@@ -342,7 +357,7 @@ public class DerbyDatabase implements IDatabase {
 			//THIS CHANGES FOR EACH INDIVIDUAL
 			//********************************
 			
-			Connection conn = DriverManager.getConnection("jdbc:derby:F:/cs320/gitRepository/CS320_Lab03/CS320_Lab03/library.db;create=true");		
+			Connection conn = DriverManager.getConnection("jdbc:derby:/cs320/gitRepository/CS320_Lab03/CS320_Lab03/library.db;create=true");		
 			
 			// Set autocommit to false to allow multiple the execution of
 			// multiple queries/statements as part of the same transaction.
