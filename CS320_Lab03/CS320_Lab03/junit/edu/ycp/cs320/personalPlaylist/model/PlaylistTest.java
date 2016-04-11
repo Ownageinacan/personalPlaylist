@@ -13,9 +13,9 @@ public class PlaylistTest {
 	
 	@Before
 	public void setUp() {
-		playlist = new Playlist("playlist1");
-		playlist2 = new Playlist("pl2");
-		playlist3 = new Playlist("bernie sanders is an abstract artist");
+		playlist = new Playlist();
+		playlist2 = new Playlist();
+		playlist3 = new Playlist();
 		
 	}
 	/* this may not be needed until we get the database up

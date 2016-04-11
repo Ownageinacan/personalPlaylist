@@ -3,7 +3,6 @@ package edu.ycp.cs320.personalPlaylistdb;
 import java.util.Scanner;
 
 import edu.ycp.cs320.personalPlaylist.persist.DatabaseProvider;
-import edu.ycp.cs320.personalPlaylist.persist.FakeDatabase;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
 
 public class InitDatabase {
@@ -12,7 +11,7 @@ public class InitDatabase {
 		int which = Integer.parseInt(keyboard.nextLine());
 		if (which == 0) {
 			System.out.print("FakeDatabase has not and will not be implemented. Goodbye.");
-			DatabaseProvider.setInstance(new FakeDatabase()); //That's ok i'll still let you start it.
+			DatabaseProvider.setInstance(null/*new FakeDatabase()*/); //lets not use the fake database since it doesn't work anyway
 		} else if (which == 1) {
 			DatabaseProvider.setInstance(new DerbyDatabase()); //Persistent database to be implemented.
 		} else {
