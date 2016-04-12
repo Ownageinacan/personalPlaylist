@@ -8,12 +8,12 @@ public class Account
 {
 	private String Username;
 	private String Password;
+	private int AccountId;
 	
 	
-	public Account(String username, String password)	
+	public Account()	
 	{										 
-		this.Username = username;
-		this.Password = password;
+		
 	}
 //	public boolean login(String Username, String Password)// do we need this since we have the login controller?
 //	{
@@ -30,11 +30,17 @@ public class Account
 	}
 	
 	//getters and setters
-	public String getUsername() 
+	public void setAccountId(int id){
+		this.AccountId = id;
+	}
+	public int getAccountId(){
+		return AccountId;
+	}
+	public String getUserName() 
 	{
 		return Username;
 	}
-	public void setUsername(String username) 
+	public void setUserName(String username) 
 	{
 		this.Username = username;
 	}

@@ -4,9 +4,9 @@ public class Genre {
 	private String genre;
 	private int genreId;
 	
-	public Genre(String genre)
+	public Genre()
 	{
-		this.genre = genre;
+		
 	}
 
 	public void setGenreId(int id)

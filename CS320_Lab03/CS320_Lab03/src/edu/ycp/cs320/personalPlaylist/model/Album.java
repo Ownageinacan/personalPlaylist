@@ -5,9 +5,9 @@ public class Album
 	private String title;
 	private int albumId;
 	
-	public Album(String title)
+	public Album()
 	{
-		this.title = title;
+
 	}
 
 	public void setAlbumId(int id)

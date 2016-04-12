@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.personalPlaylist.model.Account;
-import edu.ycp.cs320.personalPlaylist.model.AllUsers;
 
 public class CreateAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +24,7 @@ public class CreateAccountServlet extends HttpServlet {
 		String Password = req.getParameter("Password");
 		String Username = req.getParameter("Username");
 		String rePassword = req.getParameter("rePassword");
-		Account newUser = new Account(Username, Password);
+		//Account newUser = new Account();
 		if(Password.equals(rePassword)){
 			//do nothing
 		}else{ //the passwords are different
@@ -33,16 +32,17 @@ public class CreateAccountServlet extends HttpServlet {
 			System.out.print(Password);
 			System.out.print(rePassword);
 		}
-		if(AllUsers.Users.containsValue(Username)){ //checking if there is already a username with the name
+		//COMMENTED THIS STUFF OUT BECAUSE ITS ANTIQUATED
+		/*if(AllUsers.Users.containsValue(Username)){ //checking if there is already a username with the name
 			errorMessage = "Username is Already being used!";
 		}else if(Password.isEmpty() ||Username.isEmpty() || rePassword.isEmpty()){
 			errorMessage = "Please fill all fields.";
-		}
-		if(errorMessage == null){ //if everything is hunky dory, add the new account to the map
+		}*/
+		/*if(errorMessage == null){ //if everything is hunky dory, add the new account to the map
 			newUser = new Account(Username, Password);
 			AllUsers.Users.put(Password, newUser);
 			req.getRequestDispatcher("/_view/AccountCreated.jsp").forward(req, resp);
-		}
+		}*/
 		// Add parameters as request attributes
 		req.setAttribute("Username", req.getParameter("Username"));
 		
