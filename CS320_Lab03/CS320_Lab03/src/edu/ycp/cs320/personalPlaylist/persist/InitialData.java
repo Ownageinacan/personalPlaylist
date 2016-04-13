@@ -9,6 +9,7 @@ import edu.ycp.cs320.personalPlaylist.model.Account;
 import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
 import edu.ycp.cs320.personalPlaylist.model.Genre;
+import edu.ycp.cs320.personalPlaylist.model.PlayListSongs;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 
@@ -67,6 +68,7 @@ public class InitialData {
 				Playlist pl = new Playlist(); //PLAYLIST CONSTRUCTOR WAS CHANGED; THIS MAY CAUSE FUTURE PAIN. Each playlist contains 5 songs for now
 				pl.setTitle(i.next());
 				pl.setNumberSongs(Integer.parseInt(i.next()));
+				pl.setUserOwnerId(Integer.parseInt(i.next()));
 				pl.setPlaylistId(playlistId++);
 //				book.setBookId(Integer.parseInt(i.next()));
 //				pl.setPlaylistId(playlistId++);					//Restore these if playlist constructor is changed again	
@@ -187,6 +189,31 @@ public class InitialData {
 						return AccountList;	//return the list of artists initialized
 					} finally {				//Finally always runs
 						readAccounts.close();	//close the song reader
+					}
+				}
+				//reads initial PlaylistSongs data from a CSV
+				public static List<PlayListSongs> getplaylistSongs() throws IOException {
+					List<PlayListSongs> PlayListSongsList = new ArrayList<PlayListSongs>();
+					ReadCSV readPlayListSongs = new ReadCSV("PlayListSongs.csv");	//Create ReadCSV object
+					try {
+						// auto-generated primary key for authors table
+						while (true) {
+							List<String> tuple = readPlayListSongs.next();//Tuple crap that I don't understand still
+							if (tuple == null) {
+								break;
+							}
+							Iterator<String> i = tuple.iterator();	
+							PlayListSongs playlistsong = new PlayListSongs();		//Create a user object
+//							author.setAuthorId(Integer.parseInt(i.next()));
+							
+							playlistsong.setPlayListId(Integer.parseInt(i.next()));
+							playlistsong.setSongId(Integer.parseInt(i.next()));
+							
+							PlayListSongsList.add(playlistsong);	//Might be redundant
+						}
+						return PlayListSongsList;	//return the list of artists initialized
+					} finally {				//Finally always runs
+						readPlayListSongs.close();	//close the song reader
 					}
 				}
 }

@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import edu.ycp.cs320.lab03.controller.LoginController;
 import edu.ycp.cs320.personalPlaylist.model.Account;
-import edu.ycp.cs320.personalPlaylist.model.AllUsers;
+
 //TODO: FINISH THIS JAZZ
 
 public class LoginTest {
@@ -16,7 +16,7 @@ public class LoginTest {
 	@Before
 	public void setUp() {
 		controller = new LoginController();
-		benAccount = new Account("Ben", "Noodle");
+		benAccount = new Account();
 		//Need to add ben's account to the AllUsers map/key to check this
 		
 	}
@@ -24,7 +24,7 @@ public class LoginTest {
 	@Test
 	public void testUsercheck() throws Exception {
 
-		assertEquals("Ben", benAccount.getUsername());	//This says that "Ben" is equal to model.getUsername 
+		assertEquals("Ben", benAccount.getUserName());	//This says that "Ben" is equal to model.getUsername 
 		assertEquals("Noodle", benAccount.getPassword());	//Same thing as above
 		
 		assertTrue(controller.Usercheck("Ben", "Noodle")); //Asserts that usercheck is true

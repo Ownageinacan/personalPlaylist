@@ -12,15 +12,9 @@ public class AlbumTest {
 	
 	@Before
 	public void setUp() {
-		testAlbum = new Album("Alex's memer ahoy");
+		testAlbum = new Album();
 	}
 
-	@Test
-	public void testGetTitle()
-	{
-		assertEquals("Alex's memer ahoy", testAlbum.getTitle());	//test to see if the correct title is returned
-	}
-	
 	@Test
 	public void testSetTitle()
 	{

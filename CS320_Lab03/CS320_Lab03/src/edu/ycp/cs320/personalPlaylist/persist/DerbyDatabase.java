@@ -13,6 +13,9 @@ import edu.ycp.cs320.personalPlaylist.model.Pair;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
+import edu.ycp.cs320.personalPlaylist.persist.DBUtil;
+//import edu.ycp.cs320.personalPlaylist.DerbyDatabase.Transaction;
+import edu.ycp.cs320.personalPlaylist.model.Account;
 import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
 //import edu.ycp.cs320.booksdb.persist.DBUtil;
@@ -108,6 +111,50 @@ public class DerbyDatabase implements IDatabase {
 		public Integer insertSongIntoPlaylist(String title){
 			// Insert song into memberOfPl table and match it w/ a playlist
 			return null;
+		}
+		
+		@Override
+		public List<Account> findAllAccounts(){
+			return executeTransaction(new Transaction<List<Account>>() {
+				@Override
+				public List<Account> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					
+					try {
+						stmt = conn.prepareStatement(
+								"select * from users " +
+								" order by username asc, password asc"
+						);
+						
+						List<Account> result = new ArrayList<Account>();
+						
+						resultSet = stmt.executeQuery();
+						
+						// for testing that a result was returned
+						Boolean found = false;
+						
+						while (resultSet.next()) {
+							found = true;
+							
+							Account account = new Account();
+							loadAccount(account, resultSet, 1);
+							
+							result.add(account);
+						}
+						
+						// check if any authors were found
+						if (!found) {
+							System.out.println("No accounts were found in the database");
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
 		}
 
 		/********************************************************
@@ -366,6 +413,12 @@ public class DerbyDatabase implements IDatabase {
 			conn.setAutoCommit(false);
 			
 			return conn;
+		}
+		//retrieves account information from account query resultset
+		private void loadAccount(Account account, ResultSet resultSet, int index) throws SQLException {
+			account.setAccountId(resultSet.getInt(index++));
+			account.setUserName(resultSet.getString(index++));
+			account.setPassword(resultSet.getString(index++));
 		}
 		
 		// The main method creates the database tables and loads the initial data.

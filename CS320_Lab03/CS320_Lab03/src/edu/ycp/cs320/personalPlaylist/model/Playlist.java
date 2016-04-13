@@ -5,6 +5,7 @@ public class Playlist
 	private String namePlaylist;
 	private int numberSongs;
 	private int playlistId;
+	private int userOwnerId;
 
 	public Playlist()	
 	{
@@ -53,6 +54,15 @@ public class Playlist
 	public void addSong(String song) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	public void setUserOwnerId(int Id) {
+		this.userOwnerId = Id;
+	}
+	public int getUserOwnerId(){
+		return userOwnerId;
 	}
 
 
