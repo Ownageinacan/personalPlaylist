@@ -14,17 +14,9 @@ import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
 import edu.ycp.cs320.personalPlaylist.persist.DBUtil;
-//import edu.ycp.cs320.personalPlaylist.DerbyDatabase.Transaction;
 import edu.ycp.cs320.personalPlaylist.model.Account;
 import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
-//import edu.ycp.cs320.booksdb.persist.DBUtil;
-//import edu.ycp.cs320.booksdb.persist.PersistenceException;
-//import edu.ycp.cs320.booksdb.persist.DerbyDatabase.Transaction;
-//import edu.ycp.cs320.personalPlaylist.model.Album;
-//import edu.ycp.cs320.personalPlaylist.persist.DBUtil;
-//import edu.ycp.cs320.personalPlaylist.persist.InitialData;
-//import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase.Transaction;
 import edu.ycp.cs320.personalPlaylist.model.Genre;
 
 
@@ -46,13 +38,28 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	private static final int MAX_ATTEMPTS = 10;
+	
+	//creates a connection to the database, call this everytime you do a database query
+	private Connection createConnection(){
+		Connection conn = null;
+		try {
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+			conn = DriverManager.getConnection("jdbc:derby:C:/CS320/library.db;create=true");
+			conn.setAutoCommit(true);
+	
+			return conn;
+		} catch (SQLException | ClassNotFoundException e) {
+			System.out.println("Error: " + e.getMessage());
+			return null;
+		} 
+	}
 
 		//TODO: PLEASE LOOK AT HAKE'S DERBYDATABASE TEMPALTE BEFORE ATTEMPTING TO WRITE ANY OF THESE PLEASE
 	
 		@Override
 		public Integer insertSongIntoSongsTable(String title, Artist artist, Genre genre, Album album) throws SQLException {
 			// TODO Auto-generated method stub
-			Connection conn = null;
+			Connection conn = createConnection();
 			PreparedStatement insertSong = null;
 
 			try {
