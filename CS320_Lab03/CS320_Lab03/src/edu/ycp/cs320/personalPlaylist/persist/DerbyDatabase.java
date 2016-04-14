@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 import edu.ycp.cs320.personalPlaylist.model.Pair;
 import edu.ycp.cs320.personalPlaylist.model.PlayListSongs;
