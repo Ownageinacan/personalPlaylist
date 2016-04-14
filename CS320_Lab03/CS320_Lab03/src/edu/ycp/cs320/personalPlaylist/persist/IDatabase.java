@@ -13,7 +13,7 @@ import edu.ycp.cs320.personalPlaylist.model.Pair;
 
 public interface IDatabase {
 
-	public Integer insertSongIntoSongsTable(String title, Artist artist, Genre genre, Album album) throws SQLException;
+	public Integer insertSongIntoSongsTable(String title, String location, Artist artist, Genre genre, Album album) throws SQLException;
 	public List<Pair<Song, Playlist>> findAllSongInPlaylist(String playlist);
 	
 	public List<Playlist> findAllPlaylists();	//list of playlists
@@ -25,6 +25,8 @@ public interface IDatabase {
 	public Integer deletePlaylistFromPlaylistTable(String title);
 	public Integer insertSongIntoPlaylist(String title);
 	public List<Account> findAllAccounts(); //list of accounts
+	public List<Artist> findAllArtists(); //list of artists
+	public Integer deleteDatabase(); //deletes database
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?
 }

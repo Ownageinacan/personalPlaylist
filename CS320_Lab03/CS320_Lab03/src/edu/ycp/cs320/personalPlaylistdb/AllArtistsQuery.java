@@ -16,7 +16,7 @@ public class AllArtistsQuery {
 		
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		List<Artist> artistList = db.findAllArtists;
+		List<Artist> artistList = db.findAllArtists();
 		
 		// check if anything was returned and output the list
 		if (artistList.isEmpty()) {

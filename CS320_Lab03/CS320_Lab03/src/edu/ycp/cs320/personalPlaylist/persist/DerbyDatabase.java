@@ -8,8 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import edu.ycp.cs320.personalPlaylist.model.Pair;
+import edu.ycp.cs320.personalPlaylist.model.PlayListSongs;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
@@ -44,8 +46,10 @@ public class DerbyDatabase implements IDatabase {
 		Connection conn = null;
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			conn = DriverManager.getConnection("jdbc:derby:C:/CS320/library.db;create=true");
-			conn.setAutoCommit(true);
+			//conn = DriverManager.getConnection("jdbc:derby:C:/CS320/library.db;create=true");
+			conn = DriverManager.getConnection("jdbc:derby:/cs320/gitRepository/CS320_Lab03/CS320_Lab03/library.db;create=true");
+			
+			conn.setAutoCommit(false);
 	
 			return conn;
 		} catch (SQLException | ClassNotFoundException e) {
@@ -57,24 +61,38 @@ public class DerbyDatabase implements IDatabase {
 		//TODO: PLEASE LOOK AT HAKE'S DERBYDATABASE TEMPALTE BEFORE ATTEMPTING TO WRITE ANY OF THESE PLEASE
 	
 		@Override
-		public Integer insertSongIntoSongsTable(String title, Artist artist, Genre genre, Album album) throws SQLException {
+		public Integer insertSongIntoSongsTable(String title ,String location, Artist artist, Genre genre, Album album) throws SQLException {
 			// TODO Auto-generated method stub
+			System.out.println("inserting song into songs table");
 			Connection conn = createConnection();
 			PreparedStatement insertSong = null;
 
 			try {
-				insertSong = conn.prepareStatement("insert into songs (title, artist_id, genre_id, album_id) values (?, ?, ?, ?)");
+				insertSong = conn.prepareStatement("insert into songs (title, location, artist_id, genre_id, album_id) values (?, ?, ?, ?, ?)");
 				insertSong.setString(1, title);
-				insertSong.setInt(2, artist.getArtistId());
-				insertSong.setInt(3, genre.getGenreId());
-				insertSong.setInt(4, album.getAlbumId());
+				insertSong.setString(2, location);
+				insertSong.setInt(3, artist.getArtistId());
+				insertSong.setInt(4, genre.getGenreId());
+				insertSong.setInt(5, album.getAlbumId());
 				return insertSong.executeUpdate();
 			} finally {
 				DBUtil.closeQuietly(insertSong);
 			}
 		}
-
-
+		@Override
+		public Integer deleteDatabase(){
+			/*Connection conn = createConnection();
+			PreparedStatement delete = null;
+			try {
+				delete = conn.prepareStatement(
+						"drop table *"
+							);
+				return delete.executeUpdate();
+			} finally{
+				DBUtil.closeQuietly(delete);
+			}*/
+		return null;
+		}
 		@Override
 		//TODO: Add more fields eventually to this method, for now let's just get it working
 		//Side note: Use integer or not? I don't even know mane
@@ -82,7 +100,11 @@ public class DerbyDatabase implements IDatabase {
 			//TODO: Implement
 			return null;
 		}
-
+		@Override
+		public List<Artist> findAllArtists(){
+			//TODO: Implement
+			return null;
+		}
 		@Override
 		public List<Pair<Song, Playlist>> findAllSongInPlaylist(String playlist) {
 			// TODO Auto-generated method stub
@@ -129,6 +151,7 @@ public class DerbyDatabase implements IDatabase {
 					ResultSet resultSet = null;
 					
 					try {
+						System.out.println("looking for all users in db");
 						stmt = conn.prepareStatement(
 								"select * from users " +
 								" order by username asc, password asc"
@@ -228,115 +251,209 @@ public class DerbyDatabase implements IDatabase {
 			executeTransaction(new Transaction<Boolean>(){
 				@Override
 				public Boolean execute(Connection conn) throws SQLException {
+					System.out.println("creating statements");
 					PreparedStatement stmt1 = null;	//playlists table
 					PreparedStatement stmt2 = null;	//songs table
-					PreparedStatement stmt3 = null; //memberOfPl table
+					PreparedStatement stmt3 = null; //playlistsongs table
 					PreparedStatement stmt4 = null;	//artists table
 					PreparedStatement stmt5 = null; //genres table
 					PreparedStatement stmt6 = null;	//albums table
 					PreparedStatement stmt7 = null; //users table
+					PreparedStatement checkPl = null; //checking if playlist table is made
+					PreparedStatement checkSongs = null; //checking if songs table is made
+					PreparedStatement checkPlSongs = null; //checking if playlistsongs table is made
+					PreparedStatement checkArtists = null; //checking if artists table is made
+					PreparedStatement checkGenres = null; //checking if genres table is made
+					PreparedStatement checkAlbums = null; //checking if albums table is made
+					PreparedStatement checkUsers = null; //checking if users table is made
+					ResultSet checkPlResult = null; //result of checkPl
+					ResultSet checkSongsResult = null; //result of checkSongs
+					ResultSet checkPlSongsResult = null; //result of checkPlSongs
+					ResultSet checkArtistsResult = null; //result of checkArtists
+					ResultSet checkGenresResult = null; //result of checkGenres
+					ResultSet checkAlbumsResult = null; //result of checkAlbums
+					ResultSet checkUsersResult = null; //result of checkUsers
 					
-					try{
-						// Working
-						stmt1 = conn.prepareStatement(
-								"create table playlists (" +
-										"	playlist_id integer primary key " +
-										"		generated always as identity (start with 1, increment by 1), " +									
-										"	playlist_title varchar(40)," +	//playlist title
+						try{
+							// Working
+							System.out.println("creating playlists table");
+							
+							checkPl = conn.prepareStatement(
+								"select * from sys.systables where tablename = 'playlists'"	
+									);
+							checkPlResult = checkPl.executeQuery();
+							
+							if(checkPlResult.next()){
+								System.out.println("playlists table doesn't exist, creating it");
+								stmt1 = conn.prepareStatement(
+										"create table playlists (" +
+												"	playlist_id integer primary key " +
+												"		generated always as identity (start with 1, increment by 1), " +									
+												"	playlist_title varchar(40)," +	//playlist title
+												"   number_songs Integer" +
+												")"
+										);
+								stmt1.executeUpdate();
+								System.out.println("platlists table created");
+							}else{
+								System.out.println("playlists table does exist, ignoring it");
+							}
+							// Working
+							System.out.println("creating artists table");
+							
+							checkArtists = conn.prepareStatement(
+									"select * from sys.systables where tablename = 'artists'"	
+										);
+								checkArtistsResult = checkArtists.executeQuery();
+								
+							if(checkArtistsResult.next()){
+								System.out.println("artists table doesn't exist, creating it");
+								stmt4 = conn.prepareStatement(
+										"create table artists (" +
+												"	artist_id integer primary key " +
+												"		generated always as identity (start with 1, increment by 1), " +									
+												"	artist_name varchar(20)" +	//band name
+												")"
+										);
+								stmt4.executeUpdate();
+								System.out.println("artists table created");
+							}else{
+								System.out.println("artists table does exist, ignoring it");
+							}	
+							// Working
+							System.out.println("creating genres table");
+							checkGenres = conn.prepareStatement(
+									"select * from sys.systables where tablename = 'genres'"	
+										);
+							checkGenresResult = checkGenres.executeQuery();
+								
+							if(checkGenresResult.next()){
+								System.out.println("genres table doesn't exist, creating it");
+								stmt5 = conn.prepareStatement(
+										"create table genres (" +
+												"	genre_id integer primary key " +
+												"		generated always as identity (start with 1, increment by 1), " +									
+												"	genre_title varchar(20)" +	//genre
+												")"
+										);
+								stmt5.executeUpdate();
+								System.out.println("genres table created");
+							}else{
+								System.out.println("genres table does exist, ignoring it");
+							}
+							
+							// Working
+							System.out.println("creating albums table");
+							
+							checkAlbums = conn.prepareStatement(
+									"select * from sys.systables where tablename = 'albums'"	
+										);
+								checkAlbumsResult = checkAlbums.executeQuery();
+								
+							if(checkAlbumsResult.next()){
+								System.out.println("albums table doesn't exist, creating it");
+								stmt6 = conn.prepareStatement(
+										"create table albums (" +
+												"	album_id integer primary key " +
+												"		generated always as identity (start with 1, increment by 1), " +									
+												"	album_title varchar(20)" +	//album title
+												")"
+										);
+								
+								stmt6.executeUpdate();
+								System.out.println("albums table created");
+							}else{
+								System.out.println("albums table does exist, ignoring it");
+							}
+							// Working
+							System.out.println("creating songs table");
+							
+							checkSongs = conn.prepareStatement(
+									"select * from sys.systables where tablename = 'songs'"	
+										);
+								checkSongsResult = checkSongs.executeQuery();
+								
+							if(checkSongsResult.next()){
+								System.out.println("songs table doesn't exist, creating it");
+								stmt2 = conn.prepareStatement(
+										"create table songs (" +
+										"	song_id integer primary key " +
+										"		generated always as identity (start with 1, increment by 1), " +
+										"	artists integer constraint artist_id references artists, " +	//foreign key artist_id
+										"	genres integer constraint genre_id references genres, " +		//foreign key genre_id
+										"	albums integer constraint album_id references albums, "+ 		//foreign key album_id
+										"	song_title varchar(50)" +	//song title						
 										")"
-								);
-						stmt1.executeUpdate();
- 
-						// Working
-						
-						stmt4 = conn.prepareStatement(
-								"create table artists (" +
-										"	artist_id integer primary key " +
-										"		generated always as identity (start with 1, increment by 1), " +									
-										"	artist_name varchar(20)," +	//band name
-										")"
-								);
-						stmt4.executeUpdate();
-						
-						// Working
-						
-						stmt5 = conn.prepareStatement(
-								"create table genres (" +
-										"	genre_id integer primary key " +
-										"		generated always as identity (start with 1, increment by 1), " +									
-										"	genre_title varchar(20)," +	//genre
-										")"
-								);
-						
-						stmt5.executeUpdate();
-
-						// Working
-						
-						stmt6 = conn.prepareStatement(
-								"create table albums (" +
-										"	album_id integer primary key " +
-										"		generated always as identity (start with 1, increment by 1), " +									
-										"	album_title varchar(20)," +	//album title
-										")"
-								);
-						
-						stmt6.executeUpdate();
-						
-						// Working
-						
-						stmt2 = conn.prepareStatement(
-								"create table songs (" +
-								"	song_id integer primary key " +
-								"		generated always as identity (start with 1, increment by 1), " +
-								"	artists integer constraint artist_id references artists, " +	//foreign key artist_id
-								"	genres integer constraint genre_id references genres, " +		//foreign key genre_id
-								"	albums integer constraint album_id references albums, "+ 		//foreign key album_id
-								"	song_title varchar(50)" +	//song title						
-								")"
-								);
-						stmt2.executeUpdate();
-						
-						// Working
-						// TODO: FIGURE OUT HOW TO ACTUALLY INSERT IDs VIA TITLES
-						// Note: Thought of this on friday, instead of typing in titles, use our getters.
-						// crazy i know
-						
-						stmt3 = conn.prepareStatement(
-								"create table memberOfPl (" +
-								"	playlist_id integer constraint playlist_id references playlists, " +	//these 2 lines are getting foreign keys
-								"	song_id integer constraint song_id references songs " +
-								")"		
-								);
-						stmt3.executeUpdate();
-
-						// Working
-						
-						stmt7 = conn.prepareStatement(
-								"create table users (" +
-								"	user_id integer primary key " +
-								"		generated always as identity (start with 1, increment by 1), " +
-								"	username varchar(15), " +		//username limited to 15 characters
-								"	password varchar(15)" +		//password too. also password is shown as a **STRING** IN THIS TABLE
-								")"								//WHICH MEANS WE INSERT PASSWORDS DIRECTLY INTO THE TABLE. WE PROBABLY
-								);								//DONT NEED A SEPERATE TABLE FOR PASSWORDS (although that would be useful for
-																//a password changing system)
-						stmt7.executeUpdate();
-						
-						return true;					
-					}finally{
-						DBUtil.closeQuietly(stmt1);
-						DBUtil.closeQuietly(stmt2);
-						DBUtil.closeQuietly(stmt3);
-						DBUtil.closeQuietly(stmt4);
-						DBUtil.closeQuietly(stmt5);
-						DBUtil.closeQuietly(stmt6);
-						DBUtil.closeQuietly(stmt7);
+										);
+								stmt2.executeUpdate();
+								System.out.println("songs table created");
+							}else{
+								System.out.println("songs table does exist, ignoring it");
+							}
+							// Working
+							// TODO: FIGURE OUT HOW TO ACTUALLY INSERT IDs VIA TITLES
+							// Note: Thought of this on friday, instead of typing in titles, use our getters.
+							// crazy i know
+							System.out.println("creating playlistsongs table");
+							
+							checkPlSongs = conn.prepareStatement(
+									"select * from sys.systables where tablename = 'playlistsongs'"	
+										);
+								checkPlSongsResult = checkPlSongs.executeQuery();
+								
+							if(checkPlSongsResult.next()){
+								System.out.println("playlistsongs table doesn't exist, creating it");
+								stmt3 = conn.prepareStatement(
+										"create table playlistsongs (" +
+										"	playlist_id integer constraint playlist_id references playlists, " +	//these 2 lines are getting foreign keys
+										"	song_id integer constraint song_id references songs " +
+										")"		
+										);
+								stmt3.executeUpdate();
+								System.out.println("playlistsongs table created");
+							}else{
+								System.out.println("playlistsongs table does exist, ignoring it");
+							}
+							// Working
+							System.out.println("creating accounts table");
+							
+							checkUsers = conn.prepareStatement(
+									"select * from sys.systables where tablename = 'accounts'"	
+										);
+								checkUsersResult = checkUsers.executeQuery();
+								
+							if(checkUsersResult.next()){
+								System.out.println("accounts table doesn't exist, creating it");
+								stmt7 = conn.prepareStatement(
+										"create table accounts (" +
+										"	user_id integer primary key " +
+										"		generated always as identity (start with 1, increment by 1), " +
+										"	username varchar(15), " +		//username limited to 15 characters
+										"	password varchar(15)" +		//password too. also password is shown as a **STRING** IN THIS TABLE
+										")"								//WHICH MEANS WE INSERT PASSWORDS DIRECTLY INTO THE TABLE. WE PROBABLY
+										);								//DONT NEED A SEPERATE TABLE FOR PASSWORDS (although that would be useful for
+																		//a password changing system)
+								stmt7.executeUpdate();
+							}else{
+								System.out.println("accounts table does exist, ignoring it");
+							}
+							System.out.println("created accounts table");
+							conn.commit();
+							return true;					
+						}finally{
+							DBUtil.closeQuietly(stmt1);
+							DBUtil.closeQuietly(stmt2);
+							DBUtil.closeQuietly(stmt3);
+							DBUtil.closeQuietly(stmt4);
+							DBUtil.closeQuietly(stmt5);
+							DBUtil.closeQuietly(stmt6);
+							DBUtil.closeQuietly(stmt7);
+						}
+	
 					}
-
-				}
-			});
-		}
-
+				});
+			}
+			
 		
 		// load initial data retrieved from CSVs into DB tables
 		// (think FakeDatabase for now)
@@ -346,25 +463,43 @@ public class DerbyDatabase implements IDatabase {
 				public Boolean execute(Connection conn) throws SQLException {
 					List<Playlist> playList;
 					List<Song> songList;
+					List<Album> albumList;
+					List<Artist> artistList;
+					List<Genre> genreList;
+					List<PlayListSongs> playlistsongs;
+					List<Account> accountlist;
 					
 					try {
+						System.out.println("trying to access initialData class getters");
 						playList = InitialData.getPlaylists();
 						songList = InitialData.getSongs();
+						albumList = InitialData.getAblum();
+						artistList = InitialData.getArtits();
+						genreList = InitialData.getGenres();
+						playlistsongs = InitialData.getplaylistSongs();
+						accountlist = InitialData.getAccounts();
+						
 					} catch (IOException e) {
 						throw new SQLException("Couldn't read initial data", e);
 					}
 
 					
 					//TODO: finish this and edit this stuff
-					
+					System.out.println("preparing to insert data into tables");
 					PreparedStatement insertPlaylist = null;
 					PreparedStatement insertSong = null;
+					PreparedStatement insertAlbum = null;
+					PreparedStatement insertArtist = null;
+					PreparedStatement insertGenre = null;
+					PreparedStatement insertplaylistsong = null;
+					PreparedStatement insertaccount = null;
 					
 					try {
 						// TODO: ADD MORE FIELDS AS NECESSARY
 						// (Right now we only have the title field for playlist)
 						// (so we don't need any more fields at the moment)
 						// This statement should be working
+						System.out.println("inserting data into playlists table");
 						insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title, number_songs) values (?, ?)");
 						for (Playlist pl : playList) {
 //							insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
@@ -374,6 +509,7 @@ public class DerbyDatabase implements IDatabase {
 						}
 						insertPlaylist.executeBatch();
 						
+						System.out.println("inserting data into songs table");
 						insertSong = conn.prepareStatement("insert into songs (song_title,song_location, artist, album, genre) values (?, ?, ?, ?, ?)");
 						for (Song song : songList) {
 //							insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
@@ -430,6 +566,15 @@ public class DerbyDatabase implements IDatabase {
 		
 		// The main method creates the database tables and loads the initial data.
 		public static void main(String[] args) throws IOException {
+			Scanner Keyboard = new Scanner(System.in);
+			System.out.println("destroy database? press 1");
+			int which = Integer.parseInt(Keyboard.nextLine());
+			
+			if(which == 1){
+				//deleteDatabase(); I'm trying to get the database to delete without running aroung the computer's hardrive
+			}
+			Keyboard.close();
+			
 			System.out.println("Creating tables...");
 			DerbyDatabase db = new DerbyDatabase();
 			db.createTables();
@@ -439,5 +584,4 @@ public class DerbyDatabase implements IDatabase {
 			
 			System.out.println("Success!");
 		}
-		
 	}

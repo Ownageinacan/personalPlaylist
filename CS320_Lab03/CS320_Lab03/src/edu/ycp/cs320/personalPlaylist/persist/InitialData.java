@@ -15,14 +15,12 @@ import edu.ycp.cs320.personalPlaylist.model.Song;
 
 public class InitialData {
 
-	//TODO: FIX THIS CLASS
-	// IT'S PRETTY BAD
-	
 	// reads initial song data from CSV file and returns a List of songs
 	public static List<Song> getSongs() throws IOException {
 		List<Song> songList = new ArrayList<Song>();
 		ReadCSV readSongs = new ReadCSV("songs.csv");	//Create ReadCSV object
 		try {
+			System.out.println("getting songs from csv");
 			// auto-generated primary key for authors table
 			Integer songId = 1;
 			while (true) {
@@ -43,6 +41,7 @@ public class InitialData {
 				
 				songList.add(song);	//Might be redundant
 			}
+			System.out.println("returning the songs");
 			return songList;	//return the list of songs initialized
 		} finally {				//Finally always runs
 			readSongs.close();	//close the song reader
@@ -57,6 +56,7 @@ public class InitialData {
 		List<Playlist> playList = new ArrayList<Playlist>();
 		ReadCSV readPlaylists = new ReadCSV("playlists.csv");
 		try {
+			System.out.println("getting playlists from csv");
 			// auto-generated primary key for table books
 			Integer playlistId = 1;
 			while (true) {
@@ -76,6 +76,7 @@ public class InitialData {
 
 				playList.add(pl);
 			}
+			System.out.println("returning the playlists");
 			return playList;
 		} finally {
 			readPlaylists.close();
@@ -87,6 +88,7 @@ public class InitialData {
 		List<Artist> ArtistList = new ArrayList<Artist>();
 		ReadCSV readArtists = new ReadCSV("artists.csv");	//Create ReadCSV object
 		try {
+			System.out.println("getting artists from csv");
 			// auto-generated primary key for authors table
 			Integer artistId = 1;
 			while (true) {
@@ -104,6 +106,7 @@ public class InitialData {
 				
 				ArtistList.add(artist);	//Might be redundant
 			}
+			System.out.println("returning the artists");
 			return ArtistList;	//return the list of artists initialized
 		} finally {				//Finally always runs
 			readArtists.close();	//close the song reader
@@ -115,6 +118,7 @@ public class InitialData {
 			List<Genre> GenreList = new ArrayList<Genre>();
 			ReadCSV readGenres = new ReadCSV("genres.csv");	//Create ReadCSV object
 			try {
+				System.out.println("getting genres from csv");
 				// auto-generated primary key for authors table
 				Integer genreId = 1;
 				while (true) {
@@ -131,6 +135,7 @@ public class InitialData {
 					
 					GenreList.add(genre);	//Might be redundant
 				}
+				System.out.println("returning the genres");
 				return GenreList;	//return the list of artists initialized
 			} finally {				//Finally always runs
 				readGenres.close();	//close the song reader
@@ -142,6 +147,7 @@ public class InitialData {
 					List<Album> AlbumList = new ArrayList<Album>();
 					ReadCSV readAlbums = new ReadCSV("albums.csv");	//Create ReadCSV object
 					try {
+						System.out.println("getting albums from csv");
 						// auto-generated primary key for authors table
 						Integer albumId = 1;
 						while (true) {
@@ -158,7 +164,8 @@ public class InitialData {
 							
 							AlbumList.add(album);	//Might be redundant
 						}
-						return AlbumList;	//return the list of artists initialized
+						System.out.println("returning the albums");
+						return AlbumList;	//return the list of albums initialized
 					} finally {				//Finally always runs
 						readAlbums.close();	//close the song reader
 					}
@@ -169,6 +176,7 @@ public class InitialData {
 					List<Account> AccountList = new ArrayList<Account>();
 					ReadCSV readAccounts = new ReadCSV("users.csv");	//Create ReadCSV object
 					try {
+						System.out.println("getting accounts from csv");
 						// auto-generated primary key for authors table
 						Integer accountId = 1;
 						while (true) {
@@ -186,7 +194,8 @@ public class InitialData {
 							
 							AccountList.add(account);	//Might be redundant
 						}
-						return AccountList;	//return the list of artists initialized
+						System.out.println("returning the accounts");
+						return AccountList;	//return the list of accounts initialized
 					} finally {				//Finally always runs
 						readAccounts.close();	//close the song reader
 					}
@@ -196,6 +205,7 @@ public class InitialData {
 					List<PlayListSongs> PlayListSongsList = new ArrayList<PlayListSongs>();
 					ReadCSV readPlayListSongs = new ReadCSV("PlayListSongs.csv");	//Create ReadCSV object
 					try {
+						System.out.println("getting playlistSongs from csv");
 						// auto-generated primary key for authors table
 						while (true) {
 							List<String> tuple = readPlayListSongs.next();//Tuple crap that I don't understand still
@@ -211,6 +221,7 @@ public class InitialData {
 							
 							PlayListSongsList.add(playlistsong);	//Might be redundant
 						}
+						System.out.println("returning the playlistSongs");
 						return PlayListSongsList;	//return the list of artists initialized
 					} finally {				//Finally always runs
 						readPlayListSongs.close();	//close the song reader
