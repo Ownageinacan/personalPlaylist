@@ -26,7 +26,7 @@ public interface IDatabase {
 	public Integer insertSongIntoPlaylist(String title);
 	public List<Account> findAllAccounts(); //list of accounts
 	public List<Artist> findAllArtists(); //list of artists
-	public Integer deleteDatabase(); //deletes database
+
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?
 }

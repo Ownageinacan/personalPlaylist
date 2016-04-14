@@ -80,20 +80,6 @@ public class DerbyDatabase implements IDatabase {
 			}
 		}
 		@Override
-		public Integer deleteDatabase(){
-			/*Connection conn = createConnection();
-			PreparedStatement delete = null;
-			try {
-				delete = conn.prepareStatement(
-						"drop table *"
-							);
-				return delete.executeUpdate();
-			} finally{
-				DBUtil.closeQuietly(delete);
-			}*/
-		return null;
-		}
-		@Override
 		//TODO: Add more fields eventually to this method, for now let's just get it working
 		//Side note: Use integer or not? I don't even know mane
 		public Integer insertPlaylistIntoPlaylistsTable(String title){
@@ -283,7 +269,7 @@ public class DerbyDatabase implements IDatabase {
 									);
 							checkPlResult = checkPl.executeQuery();
 							
-							if(checkPlResult.next()){
+							if(!checkPlResult.next()){
 								System.out.println("playlists table doesn't exist, creating it");
 								stmt1 = conn.prepareStatement(
 										"create table playlists (" +
@@ -306,7 +292,7 @@ public class DerbyDatabase implements IDatabase {
 										);
 								checkArtistsResult = checkArtists.executeQuery();
 								
-							if(checkArtistsResult.next()){
+							if(!checkArtistsResult.next()){
 								System.out.println("artists table doesn't exist, creating it");
 								stmt4 = conn.prepareStatement(
 										"create table artists (" +
@@ -327,7 +313,7 @@ public class DerbyDatabase implements IDatabase {
 										);
 							checkGenresResult = checkGenres.executeQuery();
 								
-							if(checkGenresResult.next()){
+							if(!checkGenresResult.next()){
 								System.out.println("genres table doesn't exist, creating it");
 								stmt5 = conn.prepareStatement(
 										"create table genres (" +
@@ -350,7 +336,7 @@ public class DerbyDatabase implements IDatabase {
 										);
 								checkAlbumsResult = checkAlbums.executeQuery();
 								
-							if(checkAlbumsResult.next()){
+							if(!checkAlbumsResult.next()){
 								System.out.println("albums table doesn't exist, creating it");
 								stmt6 = conn.prepareStatement(
 										"create table albums (" +
@@ -373,16 +359,17 @@ public class DerbyDatabase implements IDatabase {
 										);
 								checkSongsResult = checkSongs.executeQuery();
 								
-							if(checkSongsResult.next()){
+							if(!checkSongsResult.next()){
 								System.out.println("songs table doesn't exist, creating it");
 								stmt2 = conn.prepareStatement(
 										"create table songs (" +
 										"	song_id integer primary key " +
 										"		generated always as identity (start with 1, increment by 1), " +
-										"	artists integer constraint artist_id references artists, " +	//foreign key artist_id
-										"	genres integer constraint genre_id references genres, " +		//foreign key genre_id
-										"	albums integer constraint album_id references albums, "+ 		//foreign key album_id
-										"	song_title varchar(50)" +	//song title						
+										"	song_title varchar(50)," +	//song title
+										"   song_location varchar(50)," +
+										"	album integer constraint album_id references albums, "+ 		//foreign key album_id
+										"	artist integer constraint artist_id references artists, " +	//foreign key artist_id
+										"	genre integer constraint genre_id references genres " +		//foreign key genre_id
 										")"
 										);
 								stmt2.executeUpdate();
@@ -401,7 +388,7 @@ public class DerbyDatabase implements IDatabase {
 										);
 								checkPlSongsResult = checkPlSongs.executeQuery();
 								
-							if(checkPlSongsResult.next()){
+							if(!checkPlSongsResult.next()){
 								System.out.println("playlistsongs table doesn't exist, creating it");
 								stmt3 = conn.prepareStatement(
 										"create table playlistsongs (" +
@@ -422,7 +409,7 @@ public class DerbyDatabase implements IDatabase {
 										);
 								checkUsersResult = checkUsers.executeQuery();
 								
-							if(checkUsersResult.next()){
+							if(!checkUsersResult.next()){
 								System.out.println("accounts table doesn't exist, creating it");
 								stmt7 = conn.prepareStatement(
 										"create table accounts (" +
@@ -499,6 +486,9 @@ public class DerbyDatabase implements IDatabase {
 						// (Right now we only have the title field for playlist)
 						// (so we don't need any more fields at the moment)
 						// This statement should be working
+						//we need to be concious of the order of initialization of tables due to foriegn keys.
+						//the last insert to do is the playlist songs, so add on top of insertplaylist
+						//DO NOT MAKE INSERT METHODS BELOW INSERTSONG EXCEPT INSERT PLAYLISTSONG
 						System.out.println("inserting data into playlists table");
 						insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title, number_songs) values (?, ?)");
 						for (Playlist pl : playList) {
@@ -514,11 +504,10 @@ public class DerbyDatabase implements IDatabase {
 						for (Song song : songList) {
 //							insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
 							
-							//TODO: Maybe test these. No guarantees that they're correct, but a girl can hope
-							
-							insertSong.setString(1, song.getTitle());
-							insertSong.setString(2, song.getLocation());
-							insertSong.setInt(3, song.getArtistId());
+							//TODO: Maybe test these. No guarantees that they're correct, but a girl can hope						
+							insertSong.setString(1, song.getTitle());							
+							insertSong.setString(2, song.getLocation());						
+							insertSong.setInt(3, song.getArtistId());						
 							insertSong.setInt(4, song.getAlbumId());
 							insertSong.setInt(5, song.getGenreId());							
 							
@@ -566,14 +555,6 @@ public class DerbyDatabase implements IDatabase {
 		
 		// The main method creates the database tables and loads the initial data.
 		public static void main(String[] args) throws IOException {
-			Scanner Keyboard = new Scanner(System.in);
-			System.out.println("destroy database? press 1");
-			int which = Integer.parseInt(Keyboard.nextLine());
-			
-			if(which == 1){
-				//deleteDatabase(); I'm trying to get the database to delete without running aroung the computer's hardrive
-			}
-			Keyboard.close();
 			
 			System.out.println("Creating tables...");
 			DerbyDatabase db = new DerbyDatabase();
