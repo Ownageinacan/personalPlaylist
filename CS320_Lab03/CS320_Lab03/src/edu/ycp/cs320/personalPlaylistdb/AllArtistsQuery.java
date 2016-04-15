@@ -24,7 +24,7 @@ public class AllArtistsQuery {
 		}
 		else {
 			for (Artist Artist : artistList) {
-				System.out.println(Artist.getArtistLastName() + ", " + Artist.getArtistFirstName());
+				System.out.println(Artist.getArtistName());
 			}
 		}
 	}

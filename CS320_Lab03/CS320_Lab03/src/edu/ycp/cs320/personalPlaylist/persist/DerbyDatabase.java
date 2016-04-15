@@ -422,7 +422,7 @@ public class DerbyDatabase implements IDatabase {
 										"create table albums (" +
 												"	album_id integer primary key " +
 												"		generated always as identity (start with 1, increment by 1), " +									
-												"	album_title varchar(20)" +	//album title
+												"	album_title varchar(50)" +	//album title
 												")"
 										);
 								
@@ -558,8 +558,8 @@ public class DerbyDatabase implements IDatabase {
 					PreparedStatement insertAlbum = null;
 					PreparedStatement insertArtist = null;
 					PreparedStatement insertGenre = null;
-					PreparedStatement insertplaylistsong = null;
-					PreparedStatement insertaccount = null;
+					PreparedStatement insertPlaylistSong = null;
+					PreparedStatement insertAccount = null;
 					
 					try {
 						// TODO: ADD MORE FIELDS AS NECESSARY
@@ -569,10 +569,26 @@ public class DerbyDatabase implements IDatabase {
 						//we need to be concious of the order of initialization of tables due to foriegn keys.
 						//the last insert to do is the playlist songs, so add on top of insertplaylist
 						//DO NOT MAKE INSERT METHODS BELOW INSERTSONG EXCEPT INSERT PLAYLISTSONG
+						System.out.println("inserting data into albums table");
+						insertAlbum = conn.prepareStatement("insert into albums (album_title) values (?)");
+						for (Album al : albumList) {
+							insertAlbum.setString(1, al.getTitle());
+							insertAlbum.addBatch();
+						}
+						insertAlbum.executeBatch();
+						
+						System.out.println("inserting data into Accounts table");
+						insertAccount = conn.prepareStatement("insert into accounts (username, password) values (?, ?)");
+						for (Account ac : accountlist) {
+							insertAccount.setString(1, ac.getUserName());
+							insertAccount.setString(2,ac.getPassword());
+							insertAccount.addBatch();
+						}
+						insertAccount.executeBatch();
+						
 						System.out.println("inserting data into playlists table");
 						insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title, number_songs) values (?, ?)");
 						for (Playlist pl : playList) {
-//							insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
 							insertPlaylist.setString(1, pl.getTitle());
 							insertPlaylist.setInt(2,pl.getNumberSongs());
 							insertPlaylist.addBatch();
