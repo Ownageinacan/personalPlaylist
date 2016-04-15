@@ -130,9 +130,9 @@ public class DerbyDatabase implements IDatabase {
 							result.add(playlist);
 						}
 						
-						// check if any authors were found
+						// check if any playlists were found
 						if (!found) {
-							System.out.println("No authors were found in the database");
+							System.out.println("No playlists were found in the database");
 						}
 						
 						return result;
@@ -145,9 +145,48 @@ public class DerbyDatabase implements IDatabase {
 		}
 
 		@Override
-		public List<Song> findAllSongs() {
-			// TODO Auto-generated method stub
-			return null;
+		public List<Song> findAllSongs() 
+		{
+			return executeTransaction(new Transaction<List<Song>>() {
+				@Override
+				public List<Song> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					
+					try {
+						stmt = conn.prepareStatement(
+								"select * from songs " +
+								" order by song_title asc"
+						);
+						
+						List<Song> result = new ArrayList<Song>();
+						
+						resultSet = stmt.executeQuery();
+						
+						// for testing that a result was returned
+						Boolean found = false;
+						
+						while (resultSet.next()) {
+							found = true;
+							
+							Song song = new Song();
+							loadSong(song, resultSet, 1);
+							
+							result.add(song);
+						}
+						
+						// check if any songs were found
+						if (!found) {
+							System.out.println("No songs were found in the database");
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
 		}
 
 		@Override
@@ -599,6 +638,15 @@ public class DerbyDatabase implements IDatabase {
 			pl.setNumberSongs(resultSet.getInt(index++));
 			pl.setPlaylistId(resultSet.getInt(index++));
 			pl.setUserOwnerId(resultSet.getInt(index++));
+		}
+		private void loadSong(Song song, ResultSet resultSet, int index) throws SQLException 
+		{
+			song.setTitle(resultSet.getString(index++));
+			song.setAlbumId(resultSet.getInt(index++));
+			song.setArtistId(resultSet.getInt(index++));
+			song.setGenreId(resultSet.getInt(index++));
+			song.setLocation(resultSet.getString(index++));
+			song.setSongId(resultSet.getInt(index++));
 		}
 		
 		// The main method creates the database tables and loads the initial data.
