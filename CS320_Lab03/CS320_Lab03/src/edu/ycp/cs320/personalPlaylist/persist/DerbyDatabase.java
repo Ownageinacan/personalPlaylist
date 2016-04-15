@@ -219,7 +219,7 @@ public class DerbyDatabase implements IDatabase {
 					try {
 						System.out.println("looking for all users in db");
 						stmt = conn.prepareStatement(
-								"select * from users " +
+								"select * from accounts " +
 								" order by username asc, password asc"
 						);
 						
@@ -356,7 +356,8 @@ public class DerbyDatabase implements IDatabase {
 												"	playlist_id integer primary key " +
 												"		generated always as identity (start with 1, increment by 1), " +									
 												"	playlist_title varchar(40)," +	//playlist title
-												"   number_songs Integer" +
+												"   number_songs Integer," +
+												"   user_ownerid Integer" +
 												")"
 										);
 								stmt1.executeUpdate();
@@ -378,7 +379,7 @@ public class DerbyDatabase implements IDatabase {
 										"create table artists (" +
 												"	artist_id integer primary key " +
 												"		generated always as identity (start with 1, increment by 1), " +									
-												"	artist_name varchar(20)" +	//band name
+												"	artist_name varchar(50)" +	//band name
 												")"
 										);
 								stmt4.executeUpdate();
@@ -568,7 +569,24 @@ public class DerbyDatabase implements IDatabase {
 						// This statement should be working
 						//we need to be concious of the order of initialization of tables due to foriegn keys.
 						//the last insert to do is the playlist songs, so add on top of insertplaylist
-						//DO NOT MAKE INSERT METHODS BELOW INSERTSONG EXCEPT INSERT PLAYLISTSONG
+						//DO NOT MAKE INSERT METHODS BELOW INSERTSONG EXCEPT INSERT PLAYLISTSONg
+						
+						System.out.println("inserting data into genres table");
+						insertGenre = conn.prepareStatement("insert into genres (genre_title) values (?)");
+						for (Genre ge : genreList) {
+							insertGenre.setString(1, ge.getGenre());
+							insertGenre.addBatch();
+						}
+						insertGenre.executeBatch();
+						
+						System.out.println("inserting data into artists table");
+						insertArtist = conn.prepareStatement("insert into artists (artist_name) values (?)");
+						for (Artist ar : artistList) {
+							insertArtist.setString(1, ar.getArtistName());
+							insertArtist.addBatch();
+						}
+						insertArtist.executeBatch();
+						
 						System.out.println("inserting data into albums table");
 						insertAlbum = conn.prepareStatement("insert into albums (album_title) values (?)");
 						for (Album al : albumList) {
@@ -587,10 +605,11 @@ public class DerbyDatabase implements IDatabase {
 						insertAccount.executeBatch();
 						
 						System.out.println("inserting data into playlists table");
-						insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title, number_songs) values (?, ?)");
+						insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title, number_songs, user_ownerid) values (?, ?, ?)");
 						for (Playlist pl : playList) {
 							insertPlaylist.setString(1, pl.getTitle());
 							insertPlaylist.setInt(2,pl.getNumberSongs());
+							insertPlaylist.setInt(3,pl.getUserOwnerId());
 							insertPlaylist.addBatch();
 						}
 						insertPlaylist.executeBatch();
@@ -611,6 +630,14 @@ public class DerbyDatabase implements IDatabase {
 						}
 						insertSong.executeBatch();
 
+						/*System.out.println("inserting data into playlistSongs table");
+						insertPlaylistSong = conn.prepareStatement("insert into playlistsongs (playlist_id, song_id) values (?, ?)");
+						for (PlayListSongs pll : playlistsongs) {
+							insertPlaylistSong.setInt(1, pll.getplayListId());
+							insertPlaylistSong.setInt(2, pll.getsongId());
+							insertPlaylistSong.addBatch();
+						}
+						insertPlaylistSong.executeBatch();*/
 						
 						// TODO: add more things here as necessary
 						
@@ -618,6 +645,11 @@ public class DerbyDatabase implements IDatabase {
 					} finally {
 						DBUtil.closeQuietly(insertSong);
 						DBUtil.closeQuietly(insertPlaylist);
+						DBUtil.closeQuietly(insertAlbum);
+						DBUtil.closeQuietly(insertGenre);
+						DBUtil.closeQuietly(insertPlaylistSong);
+						DBUtil.closeQuietly(insertArtist);
+						DBUtil.closeQuietly(insertAccount);
 					}
 				}
 			});
@@ -665,6 +697,10 @@ public class DerbyDatabase implements IDatabase {
 			song.setSongId(resultSet.getInt(index++));
 		}
 		
+		private void loadAlbum(Album album, ResultSet resultSet, int index) throws SQLException 
+		{
+			album.setTitle(resultSet.getString(index++));
+		}
 		// The main method creates the database tables and loads the initial data.
 		public static void main(String[] args) throws IOException {
 			
