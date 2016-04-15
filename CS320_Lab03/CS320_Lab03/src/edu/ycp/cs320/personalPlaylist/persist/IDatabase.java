@@ -26,6 +26,9 @@ public interface IDatabase {
 	public Integer insertSongIntoPlaylist(String title);
 	public List<Account> findAllAccounts(); //list of accounts
 	public List<Artist> findAllArtists(); //list of artists
+	List<Pair<Song, Artist>> findSongByArtistName(int artistId);
+	//TODO:
+	List<Song> removeSongByTitle(String title);//Maybe change type of song to something else?
 
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?
