@@ -16,6 +16,8 @@ import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
 import edu.ycp.cs320.personalPlaylist.persist.DBUtil;
+import edu.ycp.cs320.booksdb.model.Author;
+import edu.ycp.cs320.booksdb.persist.DerbyDatabase.Transaction;
 import edu.ycp.cs320.personalPlaylist.model.Account;
 import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
@@ -98,9 +100,48 @@ public class DerbyDatabase implements IDatabase {
 		}
 
 		@Override
-		public List<Playlist> findAllPlaylists() {
-			// TODO Auto-generated method stub
-			return null;
+		public List<Playlist> findAllPlaylists() 
+		{
+			return executeTransaction(new Transaction<List<Playlist>>() {
+				@Override
+				public List<Playlist> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					
+					try {
+						stmt = conn.prepareStatement(
+								"select * from playlists " +
+								" order by playlist_title asc"
+						);
+						
+						List<Playlist> result = new ArrayList<Playlist>();
+						
+						resultSet = stmt.executeQuery();
+						
+						// for testing that a result was returned
+						Boolean found = false;
+						
+						while (resultSet.next()) {
+							found = true;
+							
+							Playlist playlist = new Playlist();
+							loadPlaylist(playlist, resultSet, 1);
+							
+							result.add(playlist);
+						}
+						
+						// check if any authors were found
+						if (!found) {
+							System.out.println("No authors were found in the database");
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
 		}
 
 		@Override
@@ -551,6 +592,13 @@ public class DerbyDatabase implements IDatabase {
 			account.setAccountId(resultSet.getInt(index++));
 			account.setUserName(resultSet.getString(index++));
 			account.setPassword(resultSet.getString(index++));
+		}
+		private void loadPlaylist(Playlist pl, ResultSet resultSet, int index) throws SQLException 
+		{
+			pl.setTitle(resultSet.getString(index++));
+			pl.setNumberSongs(resultSet.getInt(index++));
+			pl.setPlaylistId(resultSet.getInt(index++));
+			pl.setUserOwnerId(resultSet.getInt(index++));
 		}
 		
 		// The main method creates the database tables and loads the initial data.
