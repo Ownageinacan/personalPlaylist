@@ -190,6 +190,59 @@ public class DerbyDatabase implements IDatabase {
 		}
 
 		@Override
+		public List<Pair<Song, Artist>> findSongByArtistName(final int artistId)
+		{
+			return executeTransaction(new Transaction<List<Pair<Song,Artist>>>() {
+				@Override
+				public List<Pair<Song, Artist>> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+
+					// try to retrieve songs based on artist name
+					//TODO: TEST THIS, NO GUARANTEES THAT IT WORKS
+					//LIKE I HAVE NO IDEA
+					try {
+						stmt = conn.prepareStatement(
+								"select songs.* " +
+								"  from  songs " +
+								"  where artists.artist_id = ? "
+						);
+						
+						stmt.setInt(1, artistId);
+						
+						// establish the list of (Author, Book) Pairs to receive the result
+						List<Pair<Song, Artist>> result = new ArrayList<Pair<Song,Artist>>();
+						
+						// execute the query, get the results, and assemble them in an ArrayLsit
+						resultSet = stmt.executeQuery();
+						while (resultSet.next()) {
+							Artist artist = new Artist();
+							loadArtist(artist, resultSet, 1);	//this is at an index of 1
+							Song song = new Song();
+							loadSong(song, resultSet, 4);	//this is at an index of 4
+															//TODO: FIND OUT WHAT THESE INDICIES DO
+							
+							result.add(new Pair<Song, Artist>(song, artist));
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
+		}
+		
+		//TODO: This is a pretty important method. It's required in at least one JUNIT
+		@Override
+		public List<Song> removeSongByTitle(final String title)
+		{
+			//TODO: Implement
+			return null;
+		}
+		
+		@Override
 		//Note: Same thing as addPlaylist
 		public Integer deleteSongFromSongsTable(String title){
 			// TODO: Implement
@@ -663,6 +716,23 @@ public class DerbyDatabase implements IDatabase {
 			song.setGenreId(resultSet.getInt(index++));
 			song.setLocation(resultSet.getString(index++));
 			song.setSongId(resultSet.getInt(index++));
+		}
+		//retrieves artist information from query result set
+		private void loadArtist(Artist artist, ResultSet resultSet, int index) throws SQLException
+		{
+			artist.setArtistId(resultSet.getInt(index++));
+			artist.setArtistName(resultSet.getString(index++));
+			
+		}
+		private void loadGenre(Genre genre, ResultSet resultSet, int index) throws SQLException
+		{
+			genre.setGenreId(resultSet.getInt(index++));
+			genre.setGenre(resultSet.getString(index++));
+		}
+		private void loadAlbum(Album album, ResultSet resultSet, int index) throws SQLException
+		{
+			album.setAlbumId(resultSet.getInt(index++));
+			album.setTitle(resultSet.getString(index++));
 		}
 		
 		// The main method creates the database tables and loads the initial data.

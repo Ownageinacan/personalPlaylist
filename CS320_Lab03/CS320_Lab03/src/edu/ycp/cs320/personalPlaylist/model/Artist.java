@@ -4,7 +4,6 @@ public class Artist {
 
 	private int artistId;
 	private String artistName;
-	private String artistFirstName;
 
 	public Artist() {
 
