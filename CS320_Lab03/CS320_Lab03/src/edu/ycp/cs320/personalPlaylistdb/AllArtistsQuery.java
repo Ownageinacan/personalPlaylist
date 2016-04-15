@@ -20,7 +20,7 @@ public class AllArtistsQuery {
 		
 		// check if anything was returned and output the list
 		if (artistList.isEmpty()) {
-			System.out.println("There are no authors in the database");
+			System.out.println("There are no artists in the database");
 		}
 		else {
 			for (Artist Artist : artistList) {
