@@ -3,7 +3,7 @@ package edu.ycp.cs320.personalPlaylist.model;
 public class Artist {
 
 	private int artistId;
-	private String artistLastName;
+	private String artistName;
 	private String artistFirstName;
 
 	public Artist() {
@@ -19,21 +19,13 @@ public class Artist {
 		return this.artistId;
 	}
 
-	public void setArtistLastName(String name) 
+	public void setArtistName(String name)
 	{
-		this.artistLastName = name;
-	}
-	public void setArtistFirstName(String name) 
-	{
-		this.artistFirstName = name;
+		this.artistName = name;
 	}
 
-	public String getArtistLastName() 
+	public String getArtistName()
 	{
-		return this.artistLastName;
-	}
-	public String getArtistFirstName() 
-	{
-		return this.artistFirstName;
+		return artistName;
 	}
 }

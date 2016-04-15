@@ -84,7 +84,7 @@ public class InitialData {
 	}
 	
 	//reads initial artist data from a CSV
-	public static List<Artist> getArtits() throws IOException {
+	public static List<Artist> getArtists() throws IOException {
 		List<Artist> ArtistList = new ArrayList<Artist>();
 		ReadCSV readArtists = new ReadCSV("artists.csv");	//Create ReadCSV object
 		try {
@@ -101,8 +101,7 @@ public class InitialData {
 //				author.setAuthorId(Integer.parseInt(i.next()));
 				
 				artist.setArtistId(artistId++);
-				artist.setArtistLastName(i.next());	//Set song title
-				artist.setArtistFirstName(i.next());
+				artist.setArtistName(i.next());	//Set song title
 				
 				ArtistList.add(artist);	//Might be redundant
 			}

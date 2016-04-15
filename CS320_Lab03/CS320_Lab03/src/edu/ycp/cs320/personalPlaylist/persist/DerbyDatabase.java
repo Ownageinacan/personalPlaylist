@@ -63,7 +63,7 @@ public class DerbyDatabase implements IDatabase {
 		//TODO: PLEASE LOOK AT HAKE'S DERBYDATABASE TEMPALTE BEFORE ATTEMPTING TO WRITE ANY OF THESE PLEASE
 	
 		@Override
-		public Integer insertSongIntoSongsTable(String title ,String location, Artist artist, Genre genre, Album album) throws SQLException {
+		public Integer insertSongIntoSongsTable(String title ,String location, int artistId, int genreId, int albumId) throws SQLException {
 			// TODO Auto-generated method stub
 			System.out.println("inserting song into songs table");
 			Connection conn = createConnection();
@@ -73,9 +73,9 @@ public class DerbyDatabase implements IDatabase {
 				insertSong = conn.prepareStatement("insert into songs (title, location, artist_id, genre_id, album_id) values (?, ?, ?, ?, ?)");
 				insertSong.setString(1, title);
 				insertSong.setString(2, location);
-				insertSong.setInt(3, artist.getArtistId());
-				insertSong.setInt(4, genre.getGenreId());
-				insertSong.setInt(5, album.getAlbumId());
+				insertSong.setInt(3, artistId);
+				insertSong.setInt(4, genreId);
+				insertSong.setInt(5, albumId);
 				return insertSong.executeUpdate();
 			} finally {
 				DBUtil.closeQuietly(insertSong);
@@ -541,7 +541,7 @@ public class DerbyDatabase implements IDatabase {
 						playList = InitialData.getPlaylists();
 						songList = InitialData.getSongs();
 						albumList = InitialData.getAblum();
-						artistList = InitialData.getArtits();
+						artistList = InitialData.getArtists();
 						genreList = InitialData.getGenres();
 						playlistsongs = InitialData.getplaylistSongs();
 						accountlist = InitialData.getAccounts();
