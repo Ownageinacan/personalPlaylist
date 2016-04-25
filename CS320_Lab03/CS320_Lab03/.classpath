@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="lib/derbynet.jar"/>
 	<classpathentry kind="lib" path="lib/derbyrun.jar"/>
 	<classpathentry kind="lib" path="lib/derbytools.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CS320_Derby"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -8,10 +8,10 @@ public class PlayListSongs {
 
 	}
 	
-	public int getsongId(){
+	public int getSongId(){
 		return this.songId;
 	}
-	public int getplayListId(){
+	public int getPlayListId(){
 		return this.playListId;
 	}
 	public void setSongId(int Id){

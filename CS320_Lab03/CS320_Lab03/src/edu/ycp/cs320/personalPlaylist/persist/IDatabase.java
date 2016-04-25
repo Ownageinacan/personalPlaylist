@@ -29,6 +29,7 @@ public interface IDatabase {
 	List<Pair<Song, Artist>> findSongByArtistName(int artistId);
 	//TODO:
 	List<Song> removeSongByTitle(String title);//Maybe change type of song to something else?
+	List<Genre> findAllGenres(String genre);
 
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?

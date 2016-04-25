@@ -90,8 +90,137 @@ public class DerbyDatabase implements IDatabase {
 		}
 		@Override
 		public List<Artist> findAllArtists(){
-			//TODO: Implement
-			return null;
+			return executeTransaction(new Transaction<List<Artist>>() {
+				@Override
+				public List<Artist> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					
+					try {
+						stmt = conn.prepareStatement(
+								"select * from artists " +
+								" order by artist_name asc"
+						);
+						
+						List<Artist> result = new ArrayList<Artist>();
+						
+						resultSet = stmt.executeQuery();
+						
+						// for testing that a result was returned
+						Boolean found = false;
+						
+						while (resultSet.next()) {
+							found = true;
+							
+							Artist artist = new Artist();
+							loadArtist(artist, resultSet, 1);
+							
+							result.add(artist);
+						}
+						
+						// check if any playlists were found
+						if (!found) {
+							System.out.println("No artists were found in the database");
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
+		}
+
+		@Override
+		public List<Genre> findAllGenres (String genre)
+		{
+			return executeTransaction(new Transaction<List<Genre>>() {
+				@Override
+				public List<Genre> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					
+					try {
+						stmt = conn.prepareStatement(
+								"select * from genres " +
+								" order by genre_title asc"
+						);
+						
+						List<Genre> result = new ArrayList<Genre>();
+						
+						resultSet = stmt.executeQuery();
+						
+						// for testing that a result was returned
+						Boolean found = false;
+						
+						while (resultSet.next()) {
+							found = true;
+							
+							Genre genre = new Genre();
+							loadGenre(genre, resultSet, 1);
+							
+							result.add(genre);
+						}
+						
+						// check if any playlists were found
+						if (!found) {
+							System.out.println("No genres were found in the database");
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
+		}
+		
+
+
+		public List<Album> findAllAlbums(String album)
+		{
+			return executeTransaction(new Transaction<List<Album>>() {
+				@Override
+				public List<Album> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					
+					try {
+						stmt = conn.prepareStatement(
+								"select * from album " +
+								" order by album_title asc"
+						);
+						
+						List<Album> result = new ArrayList<Album>();
+						
+						resultSet = stmt.executeQuery();
+						
+						// for testing that a result was returned
+						Boolean found = false;
+						
+						while (resultSet.next()) {
+							found = true;
+							
+							Album album = new Album();
+							loadAlbum(album, resultSet, 1);
+							
+							result.add(album);
+						}
+						
+						// check if any playlists were found
+						if (!found) {
+							System.out.println("No albums were found in the database");
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
 		}
 		@Override
 		public List<Pair<Song, Playlist>> findAllSongInPlaylist(String playlist) {
