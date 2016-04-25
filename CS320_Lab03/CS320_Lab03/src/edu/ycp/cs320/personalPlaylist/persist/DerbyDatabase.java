@@ -526,8 +526,10 @@ public class DerbyDatabase implements IDatabase {
 								System.out.println("playlistsongs table doesn't exist, creating it");
 								stmt3 = conn.prepareStatement(
 										"create table playlistsongs (" +
-										"	playlist_id integer constraint playlist_id references playlists, " +	//these 2 lines are getting foreign keys
-										"	song_id integer constraint song_id references songs " +
+										//"	playlist_id integer constraint playlist_id references playlists, " +	//these 2 lines are getting foreign keys
+										//"	song_id integer constraint song_id references songs " +
+										"playlist_id integer, " +
+										"song_id integer " +
 										")"		
 										);
 								stmt3.executeUpdate();
@@ -683,14 +685,14 @@ public class DerbyDatabase implements IDatabase {
 						}
 						insertSong.executeBatch();
 
-						/*System.out.println("inserting data into playlistSongs table");
+						System.out.println("inserting data into playlistSongs table");
 						insertPlaylistSong = conn.prepareStatement("insert into playlistsongs (playlist_id, song_id) values (?, ?)");
 						for (PlayListSongs pll : playlistsongs) {
-							insertPlaylistSong.setInt(1, pll.getplayListId());
-							insertPlaylistSong.setInt(2, pll.getsongId());
+							insertPlaylistSong.setInt(1, pll.getPlayListId());
+							insertPlaylistSong.setInt(2, pll.getSongId());
 							insertPlaylistSong.addBatch();
 						}
-						insertPlaylistSong.executeBatch();*/
+						insertPlaylistSong.executeBatch();
 						
 						// TODO: add more things here as necessary
 						

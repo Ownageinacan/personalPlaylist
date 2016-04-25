@@ -23,11 +23,8 @@ public class LoginTest {
 	
 	@Test
 	public void testUsercheck() throws Exception {
-
-		assertEquals("Ben", benAccount.getUserName());	//This says that "Ben" is equal to model.getUsername 
-		assertEquals("Noodle", benAccount.getPassword());	//Same thing as above
 		
-		assertTrue(controller.Usercheck("Ben", "Noodle")); //Asserts that usercheck is true
+		assertTrue(controller.Usercheck("ben", "noodle")); //Asserts that usercheck is true
 		
 	}
 }
