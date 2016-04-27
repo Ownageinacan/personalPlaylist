@@ -21,8 +21,7 @@ public interface IDatabase {
 //	public List<Album> findAllAlbums();	//list of albums
 //	public List<Artist> findAllArtists();	//list of artists
 	public Integer insertPlaylistIntoPlaylistsTable(String title);
-	public Integer deleteSongFromSongsTable(String title);
-	public Integer deletePlaylistFromPlaylistTable(String title);
+	public List<Playlist> deletePlaylistFromPlaylistTable(String title);
 	public Integer insertSongIntoPlaylist(String title);
 	public List<Account> findAllAccounts(); //list of accounts
 	public List<Artist> findAllArtists(); //list of artists

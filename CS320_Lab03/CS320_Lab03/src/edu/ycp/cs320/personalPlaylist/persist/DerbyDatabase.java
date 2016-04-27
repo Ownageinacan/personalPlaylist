@@ -365,6 +365,7 @@ public class DerbyDatabase implements IDatabase {
 
 	// deletes song (and possibly artist) from library
 	//TODO: additionally should delete genre, album if applicable
+	// OR OR OR OR OR JUST DELETE IT IF THIS DOESNT WORK
 	@Override
 	public List<Artist> removeSongByTitle(final String title)
 	{
@@ -517,17 +518,90 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
+	//TODO: check this
+	
 	@Override
-	//Note: Same thing as addPlaylist
-	public Integer deleteSongFromSongsTable(String title){
-		// TODO: Implement
-		return null;
-	}
+	public List<Playlist> deletePlaylistFromPlaylistTable(final String title){
+		return executeTransaction(new Transaction<List<Playlist>>(){
+			@Override
+			public List<Playlist> execute (Connection conn) throws SQLException{
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				
+				ResultSet resultSet1 = null;
+				//ResultSet resultSet2 = null; //unused
+				//ResultSet resultSet3 = null;
+				
+				try{
+					
+					//get playlists to be deleted
+					//also need to get playlist id to remove it from playlistsongs
+					
+					stmt1 = conn.prepareStatement(
+							"select playlists.* " +
+							"  from  playlists " +
+							"  where playlists.playlist_title = ? "
+							);
+					
+					// get the playlists
+					
+					stmt1.setString(1, title);
+					resultSet1 = stmt1.executeQuery();
+					
+					// assemble list of playlists
+					List<Playlist> playlists = new ArrayList<Playlist>();
+					
+					while(resultSet1.next()){
+						Playlist pl = new Playlist();
+						loadPlaylist(pl, resultSet1, 1);
+						playlists.add(pl);
+					}
+					
+					// delete entries in playlistsongs
+					
+					stmt2 = conn.prepareStatement(
+							"delete from playlistsongs " +
+							" where playlist_id = ?"
+					);
+					
+					// get playlist ID
+					stmt2.setInt(1, playlists.get(0).getPlaylistId());
+					stmt2.executeUpdate();
+					
+					System.out.println("Deleted junction table entries for playlist(s) <"+ title+" from DB");
+				
+					//Now remove entires from playlist table
+					
+					stmt3 = conn.prepareStatement(
+							"delete from playlists " +
+							" where playlist_title = ? "
+					);
+					
+					stmt3.setString(1, title);
+					stmt3.executeUpdate();
+					
+					System.out.println("Deleted playlist(s) with title <"+title+"> from DB");
+					
+					//TODO: THIS MIGHT BE HORRIBLY HORRIBLY WRONG
+					// I DONT UNDERSTAND WHY WE NEED RETURN TYPES IN THESE
+					// ANYWAY, SO SOMEONE PLEASE CHECK THIS OR REMIND ME TO
+					// CHECK WITH THIS
+					
+					return playlists;
+					
+				}finally{
 
-	@Override
-	public Integer deletePlaylistFromPlaylistTable(String title){
-		// TODO: Implement
-		return null;
+					DBUtil.closeQuietly(resultSet1);
+					//DBUtil.closeQuietly(resultSet2);
+					//DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					
+				}		
+			}
+		});
 	}
 
 	@Override
