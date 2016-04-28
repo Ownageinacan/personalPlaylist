@@ -122,7 +122,9 @@
 
 	<body>
 		<div class ="topButtons">
-			<input type="button" onclick="location.href='http://localhost:8081/lab03/Account';" value="My Account"/>
+			<form action="${pageContext.servletContext.contextPath}/Account" method="get">
+			<input type="Submit" name="submitaccount" value="My Account">
+			</form>
 			<input type="button" onclick="location.href='http://localhost:8081/lab03/Login';" value="Logout" style="left: 200px;" />
 		</div>
 		<!--
