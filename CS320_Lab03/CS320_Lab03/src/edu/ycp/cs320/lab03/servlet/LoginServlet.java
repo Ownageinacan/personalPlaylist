@@ -5,7 +5,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import edu.ycp.cs320.lab03.controller.LoginController;
+import edu.ycp.cs320.personalPlaylist.model.Session;
 
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -21,14 +24,17 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		// Decode form parameters and dispatch to controller
+		HttpSession session = req.getSession(true);
 		String errorMessage = null;
 		Boolean result = null;
 		LoginController controller = new LoginController();
+		String Username = null;
+		String Password = null;
 		try {
 			//String Username = getStringFromParameter(req.getParameter("Username"));
 			//String Password = getStringFromParameter(req.getParameter("Password"));
-			String Username = req.getParameter("Username");
-			String Password = req.getParameter("Password");
+			Username = req.getParameter("Username");
+			Password = req.getParameter("Password");
 			result = controller.Usercheck(Username, Password);
 			
 			if (result == false) {
@@ -41,6 +47,7 @@ public class LoginServlet extends HttpServlet {
 		// Add parameters as request attributes
 		req.setAttribute("Username", req.getParameter("Username"));
 		req.setAttribute("Password", req.getParameter("Password"));
+		req.setAttribute("Session", session);
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
@@ -48,8 +55,9 @@ public class LoginServlet extends HttpServlet {
 		
 		if(result == true){
 			// Forward to view to render the result HTML document
-			//req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
-			resp.sendRedirect("/lab03/Home");
+			session.setAttribute("Username", Username);
+			session.setAttribute("Password", Password);
+			req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
 		}else{
 			req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 		}

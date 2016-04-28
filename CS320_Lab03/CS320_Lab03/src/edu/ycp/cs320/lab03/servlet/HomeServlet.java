@@ -13,6 +13,13 @@ public class HomeServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
+		try{
+			if(!req.getSession().getAttribute("Username").equals(null)){
+				req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
+			}
+		}catch(NullPointerException e){
+			req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
+		}
+			
 	}
 }
