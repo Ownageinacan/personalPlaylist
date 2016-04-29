@@ -81,6 +81,7 @@ public class DerbyDatabase implements IDatabase {
 			DBUtil.closeQuietly(insertSong);
 		}
 	}
+
 	@Override
 	//TODO: Add more fields eventually to this method, for now let's just get it working
 	//Side note: Use integer or not? I don't even know mane
@@ -228,6 +229,54 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
+
+	//TODO: FINISH LATER; LOW PRIORITY
+
+	@Override
+	public List<Playlist> findPlaylistByTitle(String title)
+	{
+		return executeTransaction(new Transaction<List<Playlist>>()
+		{
+			@Override
+			public List<Playlist> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try{
+
+					stmt = conn.prepareStatement(
+							"select * from playlists "+
+									"where playlists.playlist_title = ?"
+							);
+					List<Playlist> result = new ArrayList<Playlist>();
+					resultSet = stmt.executeQuery();
+
+					//execute query, get results, put them into a list, return list
+					
+					while(resultSet.next())
+					{
+						//TODO: CHECK WHY INDEX IS 1
+						Playlist pl = new Playlist();
+						loadPlaylist(pl, resultSet, 1);
+						
+						
+						//TODO: also check if this is right
+						result.add(pl);
+					}
+
+					return result;
+					
+				}finally{
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+
+			}
+
+		});
+	}
+
 	@Override
 	public List<Playlist> findAllPlaylists() 
 	{
@@ -319,6 +368,73 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
+	public List<Pair<Song, Playlist>> findSongsByPlaylistTitle(final String title)
+	{
+		return executeTransaction(new Transaction<List<Pair<Song,Playlist>>>()
+		{
+			@Override
+			public List<Pair<Song,Playlist>> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try
+				{
+
+					stmt = conn.prepareStatement(
+
+							//TODO: MAKE THIS MORE COMPLEX
+							// WE WANT TO SHOW MORE THAN JUST SONG TITLE
+
+							"select songs.song_title "+
+							" from songs, playlists, playListSongs "+
+							" where playlists.playlist_title = ? "+
+							" and songs.song_id = playListSongs.song_id "+
+							" and playlists.playlist_id = playListSongs.playlist_id "
+
+							);
+
+					stmt.setString(1, title);
+					List<Pair<Song, Playlist>> result = new ArrayList<Pair<Song,Playlist>>();
+
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+
+					Boolean found = false;
+
+					while(resultSet.next())
+					{
+						//TODO: CHECK WHY INDICIES ARE 1 AND 4?
+						
+						found = true;
+
+						Song song = new Song();
+						loadSong(song, resultSet, 1);
+						Playlist pl = new Playlist();
+						loadPlaylist(pl, resultSet, 4);
+
+						result.add(new Pair<Song, Playlist>(song, pl));
+
+					}
+
+					// check if title was found
+					if(!found)
+					{
+						System.out.println("<"+title+"> was not found in the playlists table");
+					}
+
+					return result;
+
+				}finally{
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+
+	@Override
 	public List<Pair<Song, Artist>> findSongByArtistName(final int artistId)
 	{
 		return executeTransaction(new Transaction<List<Pair<Song,Artist>>>() {
@@ -378,14 +494,14 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
 				PreparedStatement stmt6 = null;
-				
+
 				ResultSet resultSet1 = null;
 				ResultSet resultSet2 = null;
 				//ResultSet resultSet3 = null;
 				//ResultSet resultSet4 = null;
 				ResultSet resultSet5 = null;
 				//Resultset resultSet6 = null;
-				
+
 				try{
 					//First get Artist of Song to be deleted
 					//in the event that it's the only song by
@@ -424,47 +540,47 @@ public class DerbyDatabase implements IDatabase {
 									" from songs "+
 									" where songs.song_title = ? "
 							);
-					
+
 					//get song(s)
 					stmt2.setString(1,  title);
 					resultSet2 = stmt2.executeQuery();
-					
+
 					//create list of songs from query
 					List<Song> songs = new ArrayList<Song>();
-					
+
 					while(resultSet2.next())
 					{
 						Song song = new Song();
 						loadSong(song, resultSet2, 1);
 						songs.add(song);
 					}
-					
+
 					//delete the specified song from the junction table
 					//(have to remove foreign key to be able to delete in
 					// other tables)
-					
+
 					stmt3 = conn.prepareStatement(
 							"delete from playlistsongs"+
-							"where song_id = ?"
-						);
-					
+									"where song_id = ?"
+							);
+
 					stmt3.setInt(1,  songs.get(0).getSongId());
 					stmt3.executeUpdate();
-					
+
 					System.out.println("Deleted junction table entries for song(s) <"+ title +"> from DB");
-					
+
 					//Now we can finally delete the entries in the songs table
 					stmt4 = conn.prepareStatement(
 							"delete from songs " +
-							" where song_title = ? "
+									" where song_title = ? "
 							);
-					
+
 					//delete the song entries from the DB for this title
 					stmt4.setString(1,  title);
 					stmt4.executeUpdate();
-					
+
 					System.out.println("Deleted song(s) with title <" + title + "> from DB");
-					
+
 					//Now check to see if the artists have created other songs
 					//TODO: CHECK AND SEE IF THIS WORKS
 					//I HAVE NO CLUE IF IT DOES
@@ -472,37 +588,37 @@ public class DerbyDatabase implements IDatabase {
 					{
 						stmt5 = conn.prepareStatement(
 								"select songs.artist_id from songs"	+
-								"where songs.artist_id = ?"
+										"where songs.artist_id = ?"
 								);
-						
+
 						stmt5.setInt(1, songs.get(i).getArtistId());
 						resultSet5 = stmt5.executeQuery();
-						
+
 						//if nothing is returned, delete artist
 						if(!resultSet5.next())
 						{
 							//TODO: this might be wrong
 							stmt6 = conn.prepareStatement(
 									"delete from artists "+
-									" where artists.artist_id = ?"
+											" where artists.artist_id = ?"
 									);
-							
+
 							stmt6.setInt(1,  artists.get(i).getArtistId());
 							stmt6.executeUpdate();
-							
+
 							System.out.println("Deleted artist <"+ artists.get(i).getArtistName()+ "> from DB");
 							DBUtil.closeQuietly(stmt6);
 						}
-						
+
 						//finally done with this, so close it
 						DBUtil.closeQuietly(resultSet5);
 						DBUtil.closeQuietly(stmt5);
-						
-						
-						
+
+
+
 					}
 					return artists;
-					
+
 				} finally {
 					DBUtil.closeQuietly(resultSet1);
 					DBUtil.closeQuietly(resultSet2);
@@ -510,16 +626,16 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
-					
+
 				}
-				
+
 
 			}
 		});
 	}
 
 	//TODO: check this
-	
+
 	@Override
 	public List<Playlist> deletePlaylistFromPlaylistTable(final String title){
 		return executeTransaction(new Transaction<List<Playlist>>(){
@@ -528,68 +644,68 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3 = null;
-				
+
 				ResultSet resultSet1 = null;
 				//ResultSet resultSet2 = null; //unused
 				//ResultSet resultSet3 = null;
-				
+
 				try{
-					
+
 					//get playlists to be deleted
 					//also need to get playlist id to remove it from playlistsongs
-					
+
 					stmt1 = conn.prepareStatement(
 							"select playlists.* " +
-							"  from  playlists " +
-							"  where playlists.playlist_title = ? "
+									"  from  playlists " +
+									"  where playlists.playlist_title = ? "
 							);
-					
+
 					// get the playlists
-					
+
 					stmt1.setString(1, title);
 					resultSet1 = stmt1.executeQuery();
-					
+
 					// assemble list of playlists
 					List<Playlist> playlists = new ArrayList<Playlist>();
-					
+
 					while(resultSet1.next()){
 						Playlist pl = new Playlist();
 						loadPlaylist(pl, resultSet1, 1);
 						playlists.add(pl);
 					}
-					
+
 					// delete entries in playlistsongs
-					
+
 					stmt2 = conn.prepareStatement(
 							"delete from playlistsongs " +
-							" where playlist_id = ?"
-					);
-					
+									" where playlist_id = ?"
+							);
+
 					// get playlist ID
 					stmt2.setInt(1, playlists.get(0).getPlaylistId());
 					stmt2.executeUpdate();
-					
+
 					System.out.println("Deleted junction table entries for playlist(s) <"+ title+" from DB");
-				
+
 					//Now remove entires from playlist table
-					
+
 					stmt3 = conn.prepareStatement(
 							"delete from playlists " +
-							" where playlist_title = ? "
-					);
-					
+									" where playlist_title = ? "
+							);
+
 					stmt3.setString(1, title);
 					stmt3.executeUpdate();
-					
+
 					System.out.println("Deleted playlist(s) with title <"+title+"> from DB");
-					
+
 					//TODO: THIS MIGHT BE HORRIBLY HORRIBLY WRONG
 					// I DONT UNDERSTAND WHY WE NEED RETURN TYPES IN THESE
 					// ANYWAY, SO SOMEONE PLEASE CHECK THIS OR REMIND ME TO
 					// CHECK WITH THIS
-					
+
 					return playlists;
-					
+
 				}finally{
 
 					DBUtil.closeQuietly(resultSet1);
@@ -598,7 +714,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
-					
+
 				}		
 			}
 		});
@@ -1068,7 +1184,7 @@ public class DerbyDatabase implements IDatabase {
 		//THIS CHANGES FOR EACH INDIVIDUAL
 		//********************************
 
-		Connection conn = DriverManager.getConnection("jdbc:derby:/cs320/gitRepository/CS320_Lab03/CS320_Lab03/library.db;create=true");		
+		Connection conn = DriverManager.getConnection("jdbc:derby:H:/git/personalPlaylist/dblibrary.db;create=true");		
 
 		// Set autocommit to false to allow multiple the execution of
 		// multiple queries/statements as part of the same transaction.
