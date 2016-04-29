@@ -9,22 +9,21 @@
 
 	<body>
 		My Account
-		<form action="${pageContext.servletContext.contextPath}/Account" method="post">
+		<form action="${pageContext.servletContext.contextPath}/Home" method="post">
 		<table>
 		
-			 <tr>
-       				<td class="nameColHeading">Last Name</td>
-       				<td class="nameColHeading">First Name</td>       				
-			 </tr>
 			 
 			<c:forEach items="${accounts}" var="account">
-			        <tr class="accountRow">
-			            <td class="nameCol">${account.UserName}</td>
-			            <td class="nameCol">${account.Password}</td>			            
+			        <tr class="UserRow">
+			            <td class="nameCol">Username: ${account.username}</td>			            			            
+			        </tr>
+			         <tr class="PassRow">
+			            <td class="nameCol">Password: ${account.password}</td>			            
 			        </tr>
 			</c:forEach>
 		
 		</table>
+		<input type="Submit" name="submithome" value="Home">
 		</form>
 	</body>
 </html>

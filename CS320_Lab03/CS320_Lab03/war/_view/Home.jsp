@@ -28,16 +28,16 @@
 		{
 			position:absolute;
 			z-index:3;
-			left: 8.5%;
-			top: 12%;
+			left: 500px;
+			top: 500px;
 			font-size: 32px;
 		}
 		.song
 		{
 			position:absolute;
 			z-index:3;
-			left: 8.75%;
-			top: 500%;
+			left: 500px;
+			top: 500px;
 			font-size: 20px;
 		}
 		tr.playlistRow{
@@ -55,21 +55,21 @@
 		.SongPlayer{
 			position: absolute;
 			z-index:4;
-			left: 200%;	
-			top: 90%;
+			left: 500px;	
+			top: 500px;
 		}	
 		.HiddenSongPlayer{
 			position: absolute;
 			z-index:4;
-			left: 8.75%;	
-			top: 15%;
-			opacity: 0;
+			left: 500px;	
+			top: 500px;
+			opacity: 100;
 		}
-		.topButtons{
+		.sideButtons{
 			position: absolute;
 			z-index: 3;
-			left: 200px;	
-			top: 50px;
+			left: 5px;	
+			top: 15%;
 		}
 		.topLogo {
 			z-index: 2;
@@ -117,12 +117,18 @@
 			top: 0;
 			left: 0;	
 		}
+		.playlists {
+			position: absolute;
+			z-index: 3;
+			left: 120px;	
+			top: 150px;
+		}
 		</style>
 	</head>
 
 	<body>
-		<div class ="topButtons">
-			<form action="${pageContext.servletContext.contextPath}/Account" method="get">
+		<div class ="sideButtons">
+			<form action="${pageContext.servletContext.contextPath}/Account" method="post">
 			<input type="Submit" name="submitaccount" value="My Account">
 			</form>
 			<input type="button" onclick="location.href='http://localhost:8081/lab03/Login';" value="Logout" style="left: 200px;" />
@@ -146,6 +152,17 @@
 		</script>
 		</form>
 		-->
+		<div class="playlists">
+			hurp
+			<table>
+				<c:forEach items="${playlists}" var="playlist">
+				        <tr class="playlistRow">
+				            <td class="nameCol">${playlist.title}</td>			            			            
+				        </tr>
+				         
+				</c:forEach>
+			</table>
+		</div>
 		<div class="sideBorder"></div>
 		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>
 		<div class="topLogo">

@@ -1,6 +1,7 @@
 package edu.ycp.cs320.personalPlaylist.persist;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.personalPlaylist.model.Song;	//using song instead of pair. when using song, requires all 3 parameters

@@ -9,14 +9,15 @@ import edu.ycp.cs320.personalPlaylist.persist.IDatabase;
 import edu.ycp.cs320.personalPlaylistdb.InitDatabase;
 
 public class LoginController {
-
+	
+	
 	public Boolean Usercheck(String Username, String Password) {
 		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
 		List<Account> accountList = db.findAllAccounts();
 		
 		for(Account ac : accountList){
-			if(ac.getUserName().equals(Username)){
+			if(ac.getUsername().equals(Username)){
 				if(ac.getPassword().equals(Password)){
 					return true;
 				}

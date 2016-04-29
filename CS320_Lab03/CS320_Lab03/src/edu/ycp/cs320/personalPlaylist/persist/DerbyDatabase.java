@@ -287,25 +287,28 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet = null;
 
 				try {
+					System.out.println("looking for playlists");
 					stmt = conn.prepareStatement(
-							"select * from playlists " +
-									" order by playlist_title asc"
+							"select * from playlists "
+									//" order by playlist_title asc"
 							);
-
+					System.out.println("found playlists");
 					List<Playlist> result = new ArrayList<Playlist>();
-
+					System.out.println("created list");
 					resultSet = stmt.executeQuery();
-
+					System.out.println("executed query");
 					// for testing that a result was returned
 					Boolean found = false;
-
+					System.out.println("starting the loop");
 					while (resultSet.next()) {
 						found = true;
-
+						System.out.println("found was set to true");
 						Playlist playlist = new Playlist();
+						System.out.println("created a playlist");
 						loadPlaylist(playlist, resultSet, 1);
-
+						System.out.println("loaded a playlist!!!!!!!!!1111one");
 						result.add(playlist);
+						System.out.println("added a playlist");
 					}
 
 					// check if any playlists were found
@@ -1116,7 +1119,7 @@ public class DerbyDatabase implements IDatabase {
 					System.out.println("inserting data into Accounts table");
 					insertAccount = conn.prepareStatement("insert into accounts (username, password) values (?, ?)");
 					for (Account ac : accountlist) {
-						insertAccount.setString(1, ac.getUserName());
+						insertAccount.setString(1, ac.getUsername());
 						insertAccount.setString(2,ac.getPassword());
 						insertAccount.addBatch();
 					}
@@ -1195,14 +1198,14 @@ public class DerbyDatabase implements IDatabase {
 	//retrieves account information from account query resultset
 	private void loadAccount(Account account, ResultSet resultSet, int index) throws SQLException {
 		account.setAccountId(resultSet.getInt(index++));
-		account.setUserName(resultSet.getString(index++));
+		account.setUsername(resultSet.getString(index++));
 		account.setPassword(resultSet.getString(index++));
 	}
 	private void loadPlaylist(Playlist pl, ResultSet resultSet, int index) throws SQLException 
 	{
+		pl.setPlaylistId(resultSet.getInt(index++));
 		pl.setTitle(resultSet.getString(index++));
 		pl.setNumberSongs(resultSet.getInt(index++));
-		pl.setPlaylistId(resultSet.getInt(index++));
 		pl.setUserOwnerId(resultSet.getInt(index++));
 	}
 	private void loadSong(Song song, ResultSet resultSet, int index) throws SQLException 

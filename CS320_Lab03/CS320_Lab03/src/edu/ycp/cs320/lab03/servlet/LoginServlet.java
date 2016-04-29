@@ -8,14 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.lab03.controller.LoginController;
-import edu.ycp.cs320.personalPlaylist.model.Session;
+
 
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
 		req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 	}
 	
@@ -24,6 +26,7 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		// Decode form parameters and dispatch to controller
+		
 		HttpSession session = req.getSession(true);
 		String errorMessage = null;
 		Boolean result = null;
@@ -57,7 +60,8 @@ public class LoginServlet extends HttpServlet {
 			// Forward to view to render the result HTML document
 			session.setAttribute("Username", Username);
 			session.setAttribute("Password", Password);
-			req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
+			//req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
+			resp.sendRedirect(req.getContextPath() + "/Home");
 		}else{
 			req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 		}

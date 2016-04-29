@@ -187,7 +187,7 @@ public class InitialData {
 							Account account = new Account();		//Create a user object
 //							author.setAuthorId(Integer.parseInt(i.next()));
 							
-							account.setUserName(i.next());
+							account.setUsername(i.next());
 							account.setPassword(i.next());	//Set genre title
 							account.setAccountId(accountId++);
 							

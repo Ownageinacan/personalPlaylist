@@ -36,11 +36,11 @@ public class Account
 	public int getAccountId(){
 		return AccountId;
 	}
-	public String getUserName() 
+	public String getUsername() 
 	{
 		return Username;
 	}
-	public void setUserName(String username) 
+	public void setUsername(String username) 
 	{
 		this.Username = username;
 	}
