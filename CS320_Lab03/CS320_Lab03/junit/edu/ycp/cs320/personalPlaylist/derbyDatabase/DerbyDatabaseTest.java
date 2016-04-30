@@ -54,37 +54,70 @@ public class DerbyDatabaseTest
 	{
 		//empty
 	}
+
+	
+	
 	@Test
-	public void testFindAllSongs() 
+	public void testInsertSongIntoSongsTable()
 	{
-		int countSongs = 0;
-		System.out.println("\n Testing FindAllSongs:");
+		//TODO: implement
+	}
+	@Test
+	public void insertPlaylistIntoPlaylistsTable()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testFindAllArtists() 
+	{
+		int countAllArtists = 0;
+		System.out.println("\n Testing FindAllArtists:");
 
 		//get all of the songs
-		List<Song> songsList = db.findAllSongs();
+		List<Artist> artistList = db.findAllArtists();
 		
 		//simple test to check if no results were found in the DB
-		if (songsList.isEmpty()) 
+		if (artistList.isEmpty()) 
 		{
-			System.out.println("No songs were found");
-			fail("No songs were found in the database");
+			System.out.println("No artists were found");
+			fail("No artists were found in the database");
 		}
 
 		else 
 		{			
-			songs = new ArrayList<Song>();
-			for (Song song : songsList) 
+			artists = new ArrayList<Artist>();
+			for (Artist artist : artistList) 
 			{
-				songs.add(song);
-				System.out.println(song);
-				countSongs++;
+				artists.add(artist);
+				System.out.println(artist);
+				countAllArtists++;
 			}
-			if(songs.size() != countSongs)
+			if(artists.size() != countAllArtists)
 			{
-				System.out.println("Only " + countSongs + " songs were found");
-				fail("Missing songs");
+				System.out.println("Only " + countAllArtists + " were found");
+				fail("Not all artists were found");
 			}
 		}
+	}
+	@Test
+	public void testFindAllGenres()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testFindAllAlbums()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testFindAllSongsInPlaylist()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testFindPlaylistByTitle()
+	{
+		//TODO: implement
 	}
 	@Test
 	public void testFindAllPlaylists() 
@@ -119,36 +152,84 @@ public class DerbyDatabaseTest
 		}
 	}
 	@Test
-	public void testFindAllArtists() 
+	public void testFindAllSongs() 
 	{
-		int countAllArtists = 0;
-		System.out.println("\n Testing FindAllArtists:");
+		int countSongs = 0;
+		System.out.println("\n Testing FindAllSongs:");
 
 		//get all of the songs
-		List<Artist> artistList = db.findAllArtists();
+		List<Song> songsList = db.findAllSongs();
 		
 		//simple test to check if no results were found in the DB
-		if (artistList.isEmpty()) 
+		if (songsList.isEmpty()) 
 		{
-			System.out.println("No artists were found");
-			fail("No artists were found in the database");
+			System.out.println("No songs were found");
+			fail("No songs were found in the database");
 		}
 
 		else 
 		{			
-			artists = new ArrayList<Artist>();
-			for (Artist artist : artistList) 
+			songs = new ArrayList<Song>();
+			for (Song song : songsList) 
 			{
-				artists.add(artist);
-				System.out.println(artist);
-				countAllArtists++;
+				songs.add(song);
+				System.out.println(song);
+				countSongs++;
 			}
-			if(artists.size() != countAllArtists)
+			if(songs.size() != countSongs)
 			{
-				System.out.println("Only " + countAllArtists + " were found");
-				fail("Not all artists were found");
+				System.out.println("Only " + countSongs + " songs were found");
+				fail("Missing songs");
 			}
 		}
 	}
-
+	@Test
+	public void testFindSongsByPlaylistTitle()
+	{
+		//TODO: implement
+	}	@Test
+	public void testFindSongByArtistName()
+	{
+		//TODO: implement
+	}	@Test
+	public void testRemoveSongByTitle()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testDeletePlaylistFromPlaylistTable()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testinsertSongIntoPlaylist()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testFindAllAccounts()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testExecuteTransaction()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testDoExecuteTransaction()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testCreateTables()
+	{
+		//TODO: implement
+	}
+	@Test
+	public void testLoadInitialData()
+	{
+		//TODO: implement
+	}
+	
 }
