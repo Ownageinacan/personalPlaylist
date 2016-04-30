@@ -154,7 +154,7 @@
 		-->
 		<div class="playlists">
 			hurp
-			<form action="${pageContext.servletContext.contextPath}/Songs" method="post">
+			<form action="${pageContext.servletContext.contextPath}/Songs" method="get">
 				<c:forEach items="${playlists}" var="playlist">
 					<input type="checkbox" name="playlist" value="${playlist.title}">${playlist.title}<br>
 				</c:forEach>

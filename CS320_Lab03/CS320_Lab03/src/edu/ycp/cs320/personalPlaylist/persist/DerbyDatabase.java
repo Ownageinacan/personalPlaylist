@@ -235,12 +235,6 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	@Override
-	public List<Pair<Song, Playlist>> findAllSongInPlaylist(String playlist) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	//TODO: FINISH LATER; LOW PRIORITY
 
@@ -446,72 +440,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-/*
-	@Override
-	public List<Song> findSongsByPlaylistTitle(final String title)
-	{
-		return executeTransaction(new Transaction<List<Song>>()
-		{
-			@Override
-			public List<Song> execute(Connection conn) throws SQLException
-			{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
 
-				try
-				{
-
-					stmt = conn.prepareStatement(
-
-							//TODO: MAKE THIS MORE COMPLEX
-							// WE WANT TO SHOW MORE THAN JUST SONG TITLE
-							
-							"select songs.song_title "+
-							" from songs, playlists, playListSongs "+
-							" where playlists.playlist_title = ? "+
-							" and songs.song_id = playListSongs.song_id "+
-							" and playlists.playlist_id = playListSongs.playlist_id "
-
-							);
-
-					stmt.setString(1, title);
-					List<Song> result = new ArrayList<Song>();
-					System.out.println("executing findSongsByPlaylistTitle");
-					resultSet = stmt.executeQuery();
-					System.out.println("executed findSongsByPlaylistTitle");
-					// for testing that a result was returned
-
-					Boolean found = false;
-
-					while(resultSet.next())
-					{
-						//TODO: CHECK WHY INDICIES ARE 1 AND 4?
-						
-						found = true;
-						System.out.println("loading songs");
-						Song song = new Song();
-						loadSong(song, resultSet, 1);
-						System.out.println("songs loaded");
-						result.add(song);
-
-					}
-
-					// check if title was found
-					if(!found)
-					{
-						System.out.println("<"+title+"> was not found in the playlists table");
-					}
-
-					return result;
-
-				}finally{
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-*/
 	@Override
 	public List<Pair<Song, Artist>> findSongByArtistName(final int artistId)
 	{
