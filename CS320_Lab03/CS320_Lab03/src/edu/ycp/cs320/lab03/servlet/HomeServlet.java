@@ -27,6 +27,12 @@ public class HomeServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/Login");
 			return;
 		}
+		controller = new HomeController();
+		System.out.println("getting all playlists");
+		List<Playlist> playlists = controller.getAllPlayLists();	
+		req.setAttribute("playlists", playlists);
+		System.out.print(playlists.get(1).getTitle());
+		
 		req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
 		/*try{
 				req.getSession().getAttribute("Username");

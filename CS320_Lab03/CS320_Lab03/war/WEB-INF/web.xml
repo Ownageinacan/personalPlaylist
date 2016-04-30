@@ -8,6 +8,10 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>CreateAccountServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab03.servlet.SongsServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CreateAccountServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab03.servlet.CreateAccountServlet</servlet-class>
   </servlet>
   <servlet>
@@ -28,6 +32,10 @@
     <servlet-name>CreateAccountServlet</servlet-name>
     <url-pattern>/CreateAccount</url-pattern>
     <url-pattern>/AccountCreated</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SongsServlet</servlet-name>
+    <url-pattern>/Songs</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>AccountServlet</servlet-name>

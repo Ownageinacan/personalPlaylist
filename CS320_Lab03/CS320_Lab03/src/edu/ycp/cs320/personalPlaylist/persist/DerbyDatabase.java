@@ -49,7 +49,7 @@ public class DerbyDatabase implements IDatabase {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 			//conn = DriverManager.getConnection("jdbc:derby:C:/CS320/library.db;create=true");
-			conn = DriverManager.getConnection("jdbc:derby:/cs320/gitRepository/CS320_Lab03/CS320_Lab03/library.db;create=true");
+			conn = DriverManager.getConnection("jdbc:derby:C:/cs320/dblibrary.db;create=true");
 
 			conn.setAutoCommit(false);
 
@@ -750,7 +750,7 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet = null;
 
 				try {
-					System.out.println("looking for all users in db");
+					System.out.println("looking for all users in the db");
 					stmt = conn.prepareStatement(
 							"select * from accounts " +
 									" order by username asc, password asc"
