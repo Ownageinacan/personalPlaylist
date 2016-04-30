@@ -22,6 +22,9 @@ public interface IDatabase {
 //	public List<Album> findAllAlbums();	//list of albums
 //	public List<Artist> findAllArtists();	//list of artists
 	public Integer insertPlaylistIntoPlaylistsTable(String title, int ownerId) throws SQLException;
+	public Integer insertGenreIntoGenresTable(String genre) throws SQLException;
+	public Integer insertArtistIntoArtistsTable(String artistName) throws SQLException;
+	public Integer insertAlbumIntoAlbumsTable(String albumTitle) throws SQLException;
 	public List<Playlist> deletePlaylistFromPlaylistTable(String title);
 	public Integer insertSongIntoPlaylist(String title);
 	public List<Account> findAllAccounts(); //list of accounts
