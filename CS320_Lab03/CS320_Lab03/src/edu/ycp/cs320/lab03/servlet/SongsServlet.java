@@ -32,7 +32,9 @@ public class SongsServlet extends HttpServlet {
 		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
 		songs = db.findSongsByPlaylistTitle(playlistTitle);
+		
 		req.setAttribute("songs", songs);
+		req.setAttribute("playlistTitle", playlistTitle);
 		
 		req.getRequestDispatcher("/_view/Songs.jsp").forward(req, resp);
 	}

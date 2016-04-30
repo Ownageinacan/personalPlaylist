@@ -7,13 +7,15 @@
 		<title>MySongs</title>
 	</head>
 
-	<body>
-		hurp
-			<form action="${pageContext.servletContext.contextPath}/Songs" method="post">
-				<c:forEach items="${songs}" var="song">
-					<input type="checkbox" name="song" value="${song.location}">${song.title}<br>
-				</c:forEach>
-			<input type="submit" value="Submit">
-			</form>
+	<body>	
+		<c:out value="${playlistTitle}"/>
+		<c:forEach items="${songs}" var="song">
+			<div class ="song">
+				<input type="checkbox" name="song" value="${song.location}">${song.title}<br>
+				<audio controls>
+						<source src='${song.location}' type="audio/mpeg">
+				</audio>
+			</div>	
+		</c:forEach>	
 	</body>
 </html>

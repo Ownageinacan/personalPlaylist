@@ -167,6 +167,7 @@
 			<img src='Assets/Icons/PersonalPlayerLogo.png' style="height: 100%; width: 100%;"/>
 		</div>
 		<div class="topBanner"></div>
+		<!--
 		<div class="Playlist">
 			<table>
 			    <tr>
@@ -183,12 +184,12 @@
 			    </c:forEach>
 			</table>
 		</div>
-			<div class="HiddenSongPlayer"><audio controls>
-  				<source src='Assets/Songs/song.mp3' type="audio/mpeg">
-			</audio>
-		<div class="SongPlayer"><audio controls>
+ 
+		<div class="SongPlayer">
+			<audio controls>
   			<source src='Assets/Songs/song.mp3' type="audio/mpeg">
 			</audio>
 			</div>
+		-->	
 	</body>
 </html>
