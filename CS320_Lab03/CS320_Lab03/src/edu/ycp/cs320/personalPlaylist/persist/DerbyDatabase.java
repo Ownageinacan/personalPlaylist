@@ -85,9 +85,21 @@ public class DerbyDatabase implements IDatabase {
 	@Override
 	//TODO: Add more fields eventually to this method, for now let's just get it working
 	//Side note: Use integer or not? I don't even know mane
-	public Integer insertPlaylistIntoPlaylistsTable(String title){
+	public Integer insertPlaylistIntoPlaylistsTable(String title, int ownerId) throws SQLException{
 		//TODO: Implement
-		return null;
+		System.out.println("inserting song into playlists table");
+		Connection conn = createConnection();
+		PreparedStatement insertPlaylist = null;
+
+		try {
+			insertPlaylist = conn.prepareStatement("insert into playlists (title, number_songs, user_ownerid) values (?, ?, ?)");
+			insertPlaylist.setString(1, title);
+			insertPlaylist.setInt(2, 0);
+			insertPlaylist.setInt(3, ownerId);
+			return insertPlaylist.executeUpdate();
+		} finally {
+			DBUtil.closeQuietly(insertPlaylist);
+		}
 	}
 	@Override
 	public List<Artist> findAllArtists(){
@@ -1187,7 +1199,7 @@ public class DerbyDatabase implements IDatabase {
 		//THIS CHANGES FOR EACH INDIVIDUAL
 		//********************************
 
-		Connection conn = DriverManager.getConnection("jdbc:derby:H:/git/personalPlaylist/dblibrary.db;create=true");		
+		Connection conn = DriverManager.getConnection("jdbc:derby:C:/cs320/dblibrary.db;create=true");		
 
 		// Set autocommit to false to allow multiple the execution of
 		// multiple queries/statements as part of the same transaction.
