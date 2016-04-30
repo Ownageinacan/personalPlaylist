@@ -154,14 +154,12 @@
 		-->
 		<div class="playlists">
 			hurp
-			<table>
+			<form action="${pageContext.servletContext.contextPath}/Songs" method="post">
 				<c:forEach items="${playlists}" var="playlist">
-				        <tr class="playlistRow">
-				            <td class="nameCol">${playlist.title}</td>			            			            
-				        </tr>
-				         
+					<input type="checkbox" name="playlist" value="${playlist.title}">${playlist.title}<br>
 				</c:forEach>
-			</table>
+			<input type="submit" value="Submit">
+			</form>
 		</div>
 		<div class="sideBorder"></div>
 		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>

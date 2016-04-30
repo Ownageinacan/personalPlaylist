@@ -258,7 +258,7 @@ public class DerbyDatabase implements IDatabase {
 				try{
 
 					stmt = conn.prepareStatement(
-							"select * from playlists "+
+							"select * from playlistsongs "+
 									"where playlists.playlist_title = ?"
 							);
 					List<Playlist> result = new ArrayList<Playlist>();
@@ -381,14 +381,14 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-
+	
 	@Override
-	public List<Pair<Song, Playlist>> findSongsByPlaylistTitle(final String title)
+	public List<Song> findSongsByPlaylistTitle(final String title)
 	{
-		return executeTransaction(new Transaction<List<Pair<Song,Playlist>>>()
+		return executeTransaction(new Transaction<List<Song>>()
 		{
 			@Override
-			public List<Pair<Song,Playlist>> execute(Connection conn) throws SQLException
+			public List<Song> execute(Connection conn) throws SQLException
 			{
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
@@ -400,8 +400,8 @@ public class DerbyDatabase implements IDatabase {
 
 							//TODO: MAKE THIS MORE COMPLEX
 							// WE WANT TO SHOW MORE THAN JUST SONG TITLE
-
-							"select songs.song_title "+
+							
+							"select songs.* "+
 							" from songs, playlists, playListSongs "+
 							" where playlists.playlist_title = ? "+
 							" and songs.song_id = playListSongs.song_id "+
@@ -410,10 +410,10 @@ public class DerbyDatabase implements IDatabase {
 							);
 
 					stmt.setString(1, title);
-					List<Pair<Song, Playlist>> result = new ArrayList<Pair<Song,Playlist>>();
-
+					List<Song> result = new ArrayList<Song>();
+					System.out.println("executing findSongsByPlaylistTitle");
 					resultSet = stmt.executeQuery();
-
+					System.out.println("executed findSongsByPlaylistTitle");
 					// for testing that a result was returned
 
 					Boolean found = false;
@@ -423,13 +423,11 @@ public class DerbyDatabase implements IDatabase {
 						//TODO: CHECK WHY INDICIES ARE 1 AND 4?
 						
 						found = true;
-
+						System.out.println("loading songs");
 						Song song = new Song();
 						loadSong(song, resultSet, 1);
-						Playlist pl = new Playlist();
-						loadPlaylist(pl, resultSet, 4);
-
-						result.add(new Pair<Song, Playlist>(song, pl));
+						System.out.println("songs loaded");
+						result.add(song);
 
 					}
 
@@ -448,7 +446,72 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+/*
+	@Override
+	public List<Song> findSongsByPlaylistTitle(final String title)
+	{
+		return executeTransaction(new Transaction<List<Song>>()
+		{
+			@Override
+			public List<Song> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
 
+				try
+				{
+
+					stmt = conn.prepareStatement(
+
+							//TODO: MAKE THIS MORE COMPLEX
+							// WE WANT TO SHOW MORE THAN JUST SONG TITLE
+							
+							"select songs.song_title "+
+							" from songs, playlists, playListSongs "+
+							" where playlists.playlist_title = ? "+
+							" and songs.song_id = playListSongs.song_id "+
+							" and playlists.playlist_id = playListSongs.playlist_id "
+
+							);
+
+					stmt.setString(1, title);
+					List<Song> result = new ArrayList<Song>();
+					System.out.println("executing findSongsByPlaylistTitle");
+					resultSet = stmt.executeQuery();
+					System.out.println("executed findSongsByPlaylistTitle");
+					// for testing that a result was returned
+
+					Boolean found = false;
+
+					while(resultSet.next())
+					{
+						//TODO: CHECK WHY INDICIES ARE 1 AND 4?
+						
+						found = true;
+						System.out.println("loading songs");
+						Song song = new Song();
+						loadSong(song, resultSet, 1);
+						System.out.println("songs loaded");
+						result.add(song);
+
+					}
+
+					// check if title was found
+					if(!found)
+					{
+						System.out.println("<"+title+"> was not found in the playlists table");
+					}
+
+					return result;
+
+				}finally{
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+*/
 	@Override
 	public List<Pair<Song, Artist>> findSongByArtistName(final int artistId)
 	{
@@ -1222,12 +1285,14 @@ public class DerbyDatabase implements IDatabase {
 	}
 	private void loadSong(Song song, ResultSet resultSet, int index) throws SQLException 
 	{
+		song.setSongId(resultSet.getInt(index++));
 		song.setTitle(resultSet.getString(index++));
+		song.setLocation(resultSet.getString(index++));
 		song.setAlbumId(resultSet.getInt(index++));
 		song.setArtistId(resultSet.getInt(index++));
 		song.setGenreId(resultSet.getInt(index++));
-		song.setLocation(resultSet.getString(index++));
-		song.setSongId(resultSet.getInt(index++));
+		
+		
 	}
 	//retrieves artist information from query result set
 	private void loadArtist(Artist artist, ResultSet resultSet, int index) throws SQLException

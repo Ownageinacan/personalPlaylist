@@ -7,7 +7,7 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>CreateAccountServlet</servlet-name>
+    <servlet-name>SongsServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab03.servlet.SongsServlet</servlet-class>
   </servlet>
   <servlet>
