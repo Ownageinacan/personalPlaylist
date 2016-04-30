@@ -92,7 +92,7 @@ public class DerbyDatabase implements IDatabase {
 		PreparedStatement insertPlaylist = null;
 
 		try {
-			insertPlaylist = conn.prepareStatement("insert into playlists (title, number_songs, user_ownerid) values (?, ?, ?)");
+			insertPlaylist = conn.prepareStatement("insert into playlists (playlist_title, number_songs, user_ownerid) values (?, ?, ?)");
 			insertPlaylist.setString(1, title);
 			insertPlaylist.setInt(2, 0);
 			insertPlaylist.setInt(3, ownerId);
@@ -101,6 +101,55 @@ public class DerbyDatabase implements IDatabase {
 			DBUtil.closeQuietly(insertPlaylist);
 		}
 	}
+	
+	@Override
+	public Integer insertGenreIntoGenresTable(String genre) throws SQLException{
+		//TODO: Implement
+		System.out.println("inserting genre into genres table");
+		Connection conn = createConnection();
+		PreparedStatement insertGenre = null;
+
+		try {
+			insertGenre = conn.prepareStatement("insert into genres (genre_title) values (?)");
+			insertGenre.setString(1, genre);
+			return insertGenre.executeUpdate();
+		} finally {
+			DBUtil.closeQuietly(insertGenre);
+		}
+	}
+	
+	@Override
+	public Integer insertArtistIntoArtistsTable(String artistName) throws SQLException{
+		//TODO: Implement
+		System.out.println("inserting genre into genres table");
+		Connection conn = createConnection();
+		PreparedStatement insertArtist = null;
+
+		try {
+			insertArtist = conn.prepareStatement("insert into artists (artist_name) values (?)");
+			insertArtist.setString(1, artistName);
+			return insertArtist.executeUpdate();
+		} finally {
+			DBUtil.closeQuietly(insertArtist);
+		}
+	}
+	
+	@Override
+	public Integer insertAlbumIntoAlbumsTable(String albumTitle) throws SQLException{
+		//TODO: Implement
+		System.out.println("inserting album into albums table");
+		Connection conn = createConnection();
+		PreparedStatement insertAlbum = null;
+
+		try {
+			insertAlbum = conn.prepareStatement("insert into albums (album_title) values (?)");
+			insertAlbum.setString(1, albumTitle);
+			return insertAlbum.executeUpdate();
+		} finally {
+			DBUtil.closeQuietly(insertAlbum);
+		}
+	}
+	
 	@Override
 	public List<Artist> findAllArtists(){
 		return executeTransaction(new Transaction<List<Artist>>() {
