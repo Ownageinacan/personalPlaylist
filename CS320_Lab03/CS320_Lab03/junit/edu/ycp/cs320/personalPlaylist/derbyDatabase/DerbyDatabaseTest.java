@@ -60,12 +60,14 @@ public class DerbyDatabaseTest
 	@Test
 	public void testInsertSongIntoSongsTable()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void insertPlaylistIntoPlaylistsTable()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testFindAllArtists() 
@@ -102,22 +104,26 @@ public class DerbyDatabaseTest
 	@Test
 	public void testFindAllGenres()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testFindAllAlbums()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testFindAllSongsInPlaylist()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testFindPlaylistByTitle()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testFindAllPlaylists() 
@@ -186,50 +192,62 @@ public class DerbyDatabaseTest
 	@Test
 	public void testFindSongsByPlaylistTitle()
 	{
-		//TODO: implement
-	}	@Test
+		//TODO: Implement
+		fail("TODO: Implement");
+	}	
+	@Test
 	public void testFindSongByArtistName()
 	{
-		//TODO: implement
-	}	@Test
+		//TODO: Implement
+		fail("TODO: Implement");
+	}	
+	@Test
 	public void testRemoveSongByTitle()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testDeletePlaylistFromPlaylistTable()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testinsertSongIntoPlaylist()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testFindAllAccounts()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testExecuteTransaction()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testDoExecuteTransaction()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testCreateTables()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	@Test
 	public void testLoadInitialData()
 	{
-		//TODO: implement
+		//TODO: Implement
+		fail("TODO: Implement");
 	}
 	
 }
