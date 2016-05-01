@@ -32,9 +32,9 @@ public interface IDatabase {
 	public List<Playlist> findPlaylistByTitle(String title);
 	public List<Song> findSongByTitle(String title);
 	public List<Song> findSongsByPlaylistTitle(String title);
-	public List<Artist> findArtistBySongTitle(String title);
-	public List<Album> findAlbumBySongTitle(String title);
-	public List<Genre> findGenreBySongTitle(String title);
+	public List<Artist> findArtistBySongTitle(String title, String name);
+	public List<Album> findAlbumBySongTitle(String title, String albumTitle);
+	public List<Genre> findGenreBySongTitle(String title, String name);
 	public Integer insertAccountIntoAccountsTable(String username, String password);
 	public List<Playlist> removePlaylistFromPlaylistTable(String title);
 	public Integer insertSongIntoPlaylist(String plTitle, int ownerId, String songTitle, int albumId, int artistId, int genreId) throws SQLException;
