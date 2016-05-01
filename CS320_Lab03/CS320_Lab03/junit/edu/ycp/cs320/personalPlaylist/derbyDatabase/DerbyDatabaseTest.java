@@ -30,7 +30,9 @@ public class DerbyDatabaseTest
 	List<Album> albums = null;
 	List<Account> accounts = null;
 	List<Song> songsFromPlaylist = null;
+	List<Pair<Song, Artist>> songArtistList = null;
 	String playlistName = null;
+	
 	
 	
 	@BeforeClass
@@ -246,7 +248,7 @@ public class DerbyDatabaseTest
 		int countTotalPlaylists = 0;
 		System.out.println("\n Testing FindPlaylistByTitle:");
 
-		//get all of the songs
+		//get all of the playlists
 		List<Playlist> playlistsList = db.findAllPlaylists();
 		
 		//simple test to check if no results were found in the DB
@@ -270,8 +272,9 @@ public class DerbyDatabaseTest
 				fail("Not all playlists were found");
 			}
 		}
-		//playlistName = db.findPlaylistByTitle(playlists.get(0));
-		//TODO: i have no clue if this is necessary or not
+		playlistName = playlists.get(0).getTitle(); 
+		fail("This method needs reviewing before I finish implementing the test");
+		//TODO: review this method before finishing test case
 	}
 	@Test
 	public void testFindAllPlaylists() 
@@ -364,14 +367,56 @@ public class DerbyDatabaseTest
 		if(songsFromPlaylist.size() != countSongsInPlaylist)
 		{
 			System.out.println("Only " + countSongsInPlaylist + " songs were found");
-			fail("Missing songs");
+			fail("Missing songs"); //this shouldn't happen
 		}
 	}	
 	@Test
-	public void testFindSongByArtistName()
+	public void testFindSongsByArtistName()
 	{
-		//TODO: Implement
-		fail("TODO: Implement");
+		int countAllArtists = 0;
+		System.out.println("\n Testing FindSongsByArtistName:");
+
+		//get all of the songs
+		List<Artist> artistList = db.findAllArtists();
+		
+		//simple test to check if no results were found in the DB
+		if (artistList.isEmpty()) 
+		{
+			System.out.println("No artists were found");
+			fail("No artists were found in the database");
+		}
+
+		else 
+		{			
+			artists = new ArrayList<Artist>();
+			for (Artist artist : artistList) 
+			{
+				artists.add(artist);
+				System.out.println(artist.getArtistName());
+				countAllArtists++;
+			}
+			if(artists.size() != countAllArtists)
+			{
+				System.out.println("Only " + countAllArtists + " were found");
+				fail("Not all artists were found");
+			}
+		}
+		
+		int countSongs = 0;
+		List<Pair<Song, Artist>> listOfSongArtists = db.findSongByArtistName(artists.get(0).getArtistId());
+		
+		songArtistList = new ArrayList<Pair<Song, Artist>>();
+		for (Pair<Song,Artist> songArtist : listOfSongArtists) 
+		{
+			songsFromPlaylist.add(songArtist.getLeft());
+			System.out.println(songsFromPlaylist.get(countSongs));
+			countSongs++;
+		}
+		if(songsFromPlaylist.size() != countSongs)
+		{
+			System.out.println("Only " + countSongs + " songs were found");
+			fail("Missing songs"); //this shouldn't happen
+		}
 	}	
 	@Test
 	public void testRemoveSongByTitle()

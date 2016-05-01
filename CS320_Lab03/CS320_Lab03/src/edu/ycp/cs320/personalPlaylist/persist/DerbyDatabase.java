@@ -1039,10 +1039,10 @@ public class DerbyDatabase implements IDatabase {
 							//TODO: CHECK WHY INDICIES ARE 1 AND 4?
 
 							found = true;
-							System.out.println("loading songs");
+							//System.out.println("loading songs"); //annoying spam statement
 							Song song = new Song();
 							loadSong(song, resultSet, 1);
-							System.out.println("songs loaded");
+							//System.out.println("songs loaded");  //annoying spam statement
 							result.add(song);
 
 						}
@@ -1077,8 +1077,10 @@ public class DerbyDatabase implements IDatabase {
 					try {
 						stmt = conn.prepareStatement(
 								"select songs.* " +
-										"  from  songs " +
-										"  where artists.artist_id = ? "
+										"  from songs, artists " +
+										"  where songs.artist_id = ? "+
+										" and artists.artist_id = ? "
+
 								);
 
 						stmt.setInt(1, artistId);
