@@ -120,8 +120,44 @@
 		.playlists {
 			position: absolute;
 			z-index: 3;
-			left: 120px;	
-			top: 150px;
+			left: 9.2%;	
+			top: 14%;
+		}
+		.playlistsHead{
+			font-size: 40px;
+			font-weight: bold;
+			font-family: "Verdana", sans-serif;
+			background-color: #65337E;
+			border-top-width: thick;
+			border-right-width: thick;
+			border-bottom-width: thick;
+			border-left-width: thick;
+			border-top-style: solid;
+			border-right-style: solid;
+			border-bottom-style: solid;
+			border-left-style: solid;
+			border-top-color: #FFF;
+			border-right-color: #FFF;
+			border-bottom-color: #FFF;
+			border-left-color: #FFF;
+			border-radius: 7px;
+		}
+		.playlists{
+			color: white;
+			background-color: #65337E;
+			border-top-width: thick;
+			border-right-width: thick;
+			border-bottom-width: thick;
+			border-left-width: thick;
+			border-top-style: none;
+			border-right-style: solid;
+			border-bottom-style: solid;
+			border-left-style: solid;
+			border-top-color: #FFF;
+			border-right-color: #FFF;
+			border-bottom-color: #FFF;
+			border-left-color: #FFF;
+			border-radius: 7px;
 		}
 		</style>
 	</head>
@@ -131,7 +167,10 @@
 			<form action="${pageContext.servletContext.contextPath}/Account" method="post">
 			<input type="Submit" name="submitaccount" value="My Account">
 			</form>
-			<input type="button" onclick="location.href='http://localhost:8081/lab03/Login';" value="Logout" style="left: 200px;" />
+			
+			<form action="${pageContext.servletContext.contextPath}/Login" method="get">
+			<input type="Submit" name="submitLogout" value="Logout">
+			</form>
 		</div>
 		<!--
 		<form name="Menus">
@@ -153,12 +192,14 @@
 		</form>
 		-->
 		<div class="playlists">
-			hurp
+			<div class="playlistsHead">
+			Playlists
+			</div>
 			<form action="${pageContext.servletContext.contextPath}/Songs" method="get">
 				<c:forEach items="${playlists}" var="playlist">
-					<input type="checkbox" name="playlist" value="${playlist.title}">${playlist.title}<br>
+					<input type="radio" name="playlist" value="${playlist.title}">${playlist.title}<br>
 				</c:forEach>
-			<input type="submit" value="Submit">
+			<input type="submit" value="Show Me the Playlist">
 			</form>
 		</div>
 		<div class="sideBorder"></div>

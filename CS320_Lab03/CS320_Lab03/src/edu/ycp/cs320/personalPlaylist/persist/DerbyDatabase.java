@@ -57,7 +57,53 @@ public class DerbyDatabase implements IDatabase {
 			return null;
 		} 
 	}
+	@Override
+	public List<Playlist> findPlaylistsByAccount(final String username)
+	{
+		return executeTransaction(new Transaction<List<Playlist>>()
+		{
+			@Override
+			public List<Playlist> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
 
+				try{
+					System.out.println("preparing statements");
+					stmt = conn.prepareStatement(
+							"select playlists.playlist_title"+
+									"from playlists, accounts"+
+									"where accounts.username = ?" +
+									"and playlists.user_ownerid = accounts.user_id"
+									
+							);
+					List<Playlist> result = new ArrayList<Playlist>();
+					resultSet = stmt.executeQuery();
+
+					//execute query, get results, put them into a list, return list
+					System.out.println("looking for playlists by account");
+					while(resultSet.next())
+					{
+						//TODO: CHECK WHY INDEX IS 1
+						Playlist pl = new Playlist();
+						loadPlaylist(pl, resultSet, 1);
+						
+						
+						//TODO: also check if this is right
+						result.add(pl);
+					}
+
+					return result;
+					
+				}finally{
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+
+			}
+
+		});
+	}
 	@Override
 	public Integer insertSongIntoSongsTable(final String title, final String location, final int albumId, final Artist artist, final int genreId) {
 		return executeTransaction(new Transaction<Integer>() {

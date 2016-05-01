@@ -39,6 +39,8 @@ public interface IDatabase {
 	public List<Playlist> removePlaylistFromPlaylistTable(String title);
 	public Integer insertSongIntoPlaylist(String plTitle, int ownerId, String songTitle, int albumId, int artistId, int genreId) throws SQLException;
 
+	List<Playlist> findPlaylistsByAccount(String username);
+
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?
 }
