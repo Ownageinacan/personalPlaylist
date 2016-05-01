@@ -80,15 +80,15 @@ public class DerbyDatabaseTest
 			
 			if (songs.isEmpty()) {
 				System.out.println("No songs found for name <" + songName + ">");
-				fail("Failed to insert new book <" + songName + "> into Library DB");
+				fail("Failed to insert new song <" + songName + "> into Library DB");
 			}
 			// otherwise, the test was successful.  Now remove the song just inserted to return the DB
 			// to it's original state, except for using a song_id
 			else {
 				System.out.println("New song (ID: " + song_id + ") successfully added to Songs table: <" + songName + ">");
 				
-				// now delete Book (and its Author) from DB
-				// leaving the DB in its previous state - except that an author_id, and a song_id have been used
+				// now delete Song (and its Artist) from DB
+				// leaving the DB in its previous state - except that an artist_id, and a song_id have been used
 				List<Artist> artist = db.removeSongByTitle(songName);				
 			}
 		}
@@ -99,11 +99,44 @@ public class DerbyDatabaseTest
 		}
 	}
 	@Test
-	public void insertPlaylistIntoPlaylistsTable()
+	public void insertPlaylistIntoPlaylistsTable() throws SQLException
 	{
-		//TODO: Implement
-		fail("TODO: Implement");
+		System.out.println("\n*** Testing insertPlaylistIntoPlaylistsTable ***");
+
+		String playlistName = "AlsoDankMemes";
+		int ownerId = 1;
+				
+		// insert new book (and possibly new author) into DB
+		Integer playlist_id = db.insertPlaylistIntoPlaylistsTable(playlistName, ownerId);
+
+		// check the return value - should be a song_id > 0
+		if (playlist_id > 0)
+		{
+			// try to retrieve the song from the DB
+			// get the list of (Songs) from DB
+			playlists = db.findPlaylistByTitle(playlistName);
+			
+			if (playlists.isEmpty()) {
+				System.out.println("No playlists found for name <" + playlistName + ">");
+				fail("Failed to insert new playlist <" + playlistName + "> into Library DB");
+			}
+			// otherwise, the test was successful.  Now remove the song just inserted to return the DB
+			// to it's original state, except for using a song_id
+			else {
+				System.out.println("New playlist (ID: " + playlist_id + ") successfully added to Playlists table: <" + playlistName + ">");
+				
+				// now delete Playlist from DB
+				// leaving the DB in its previous state - except that a playlist_id have been used
+				List<Playlist> playlist = db.deletePlaylistFromPlaylistTable(playlistName);				
+			}
+		}
+		else
+		{
+			System.out.println("Failed to insert new playlist (ID: " + playlist_id + ") into Playlists table: <" + playlistName + ">");
+			fail("Failed to insert new playlist <" + playlistName + "> into DB");
+		}
 	}
+	
 	@Test
 	public void testFindAllArtists() 
 	{
