@@ -16,6 +16,7 @@ import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
 import edu.ycp.cs320.personalPlaylist.persist.DBUtil;
+//import edu.ycp.cs320.booksdb.persist.DerbyDatabase.Transaction;
 //import edu.ycp.cs320.booksdb.model.Author;
 //import edu.ycp.cs320.personsalPlaylist.persist.DerbyDatabase.Transaction;
 import edu.ycp.cs320.personalPlaylist.model.Account;
@@ -61,25 +62,163 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	//TODO: PLEASE LOOK AT HAKE'S DERBYDATABASE TEMPALTE BEFORE ATTEMPTING TO WRITE ANY OF THESE PLEASE
-
 	@Override
-	public Integer insertSongIntoSongsTable(String title ,String location, int artistId, int genreId, int albumId) throws SQLException {
-		// TODO Auto-generated method stub
-		System.out.println("inserting song into songs table");
-		Connection conn = createConnection();
-		PreparedStatement insertSong = null;
+	public Integer insertSongIntoSongsTable(final String title, final String location, final int albumId, final Artist artist, final int genreId) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+				PreparedStatement stmt5 = null;
+				PreparedStatement stmt6 = null;				
+				
+				ResultSet resultSet1 = null;
+//	(unused)	ResultSet resultSet2 = null;
+				ResultSet resultSet3 = null;
+//	(unused)	ResultSet resultSet4 = null;
+				ResultSet resultSet5 = null;				
+//	(unused)	ResultSet resultSet6 = null;
+				
+				// for saving artist ID and song ID
+				Integer artist_id = -1;
+				Integer song_id   = -1;
 
-		try {
-			insertSong = conn.prepareStatement("insert into songs (song_title, song_location, album, artist, genre) values (?, ?, ?, ?, ?)");
-			insertSong.setString(1, title);
-			insertSong.setString(2, location);
-			insertSong.setInt(3, albumId);
-			insertSong.setInt(4, artistId);
-			insertSong.setInt(5, genreId);
-			return insertSong.executeUpdate();
-		} finally {
-			DBUtil.closeQuietly(insertSong);
-		}
+				// try to retrieve artist_id (if it exists) from DB, for Artist's name, passed into query
+				try {
+					stmt1 = conn.prepareStatement(
+							"select artist_id from artists " +
+							"  where artist_name = ?"
+					);
+					stmt1.setString(1, artist.getArtistName());
+					
+					// execute the query, get the result
+					resultSet1 = stmt1.executeQuery();
+
+					
+					// if Artist was found then save artist_id					
+					if (resultSet1.next())
+					{
+						artist_id = resultSet1.getInt(1);
+						System.out.println("Artist <" + artist.getArtistName() + "> found with ID: " + artist_id);						
+					}
+					else
+					{
+						System.out.println("Artist <" + artist.getArtistName() + "> not found");
+				
+						// if the Artist is new, insert new Artist into Artists table
+						if (artist_id <= 0) {
+							// prepare SQL insert statement to add Artist to Artists table
+							stmt2 = conn.prepareStatement(
+									"insert into artists (artist_name) " +
+									"  values(?) "
+							);
+							stmt2.setString(1, artist.getArtistName());
+							
+							// execute the update
+							stmt2.executeUpdate();
+							
+							System.out.println("New artist <" + artist.getArtistName() + "> inserted in Artists table");						
+						
+							// try to retrieve author_id for new Author - DB auto-generates author_id
+							stmt3 = conn.prepareStatement(
+									"select artist_id from artists " +
+									"  where artist_name = ?"
+							);
+							stmt3.setString(1, artist.getArtistName());
+							
+							// execute the query							
+							resultSet3 = stmt3.executeQuery();
+							
+							// get the result - there had better be one							
+							if (resultSet3.next())
+							{
+								artist_id = resultSet3.getInt(1);
+								System.out.println("New artist <" + artist.getArtistName() + "> ID: " + artist_id);						
+							}
+							else	// really should throw an exception here - the new artist should have been inserted, but we didn't find them
+							{
+								System.out.println("New artist <" + artist.getArtistName() + "> not found in Artists table (ID: " + artist_id);
+							}
+						}
+					}
+					
+					// now insert new song into songs table
+					// prepare SQL insert statement to add new song to songs table
+					stmt4 = conn.prepareStatement(
+							"insert into songs (song_title, song_location, album, artist, genre) " +
+							"  values(?, ?) "
+					);
+					stmt4.setString(1, title);
+					stmt4.setString(2, location);
+					stmt4.setInt(3, albumId);
+					stmt4.setInt(4, artist.getArtistId());
+					stmt4.setInt(5, genreId);
+					
+					// execute the update
+					stmt4.executeUpdate();
+					
+					System.out.println("New song <" + title + "> inserted into Songs table");					
+
+					// now retrieve song_id for new song, so that we can set up SongArtist entry
+					// and return the song_id, which the DB auto-generates
+					// prepare SQL statement to retrieve book_id for new Book
+					stmt5 = conn.prepareStatement(
+							"select song_id from books " +
+							"  where title = ? and location = ? "
+					);
+					stmt5.setString(1, title);
+					stmt5.setString(2, location);
+
+					// execute the query
+					resultSet5 = stmt5.executeQuery();
+					
+					// get the result - there had better be one
+					if (resultSet5.next())
+					{
+						song_id = resultSet5.getInt(1);
+						System.out.println("New song <" + title + "> ID: " + song_id);						
+					}
+					else	// really should throw an exception here - the new song should have been inserted, but we didn't find it
+					{
+						System.out.println("New song <" + title + "> not found in Songs table (ID: " + song_id);
+					}
+					
+					// now that we have all the information, insert entry into BookAuthors table
+					// which is the junction table for Books and Authors
+					// prepare SQL insert statement to add new Book to Books table
+					/*stmt6 = conn.prepareStatement(
+							"insert into bookAuthors (book_id, author_id) " +
+							"  values(?, ?) "
+					);
+					stmt6.setInt(1, book_id);
+					stmt6.setInt(2, author_id);
+					
+					// execute the update
+					stmt6.executeUpdate();
+					
+					System.out.println("New enry for book ID <" + book_id + "> and author ID <" + author_id + "> inserted into BookAuthors junction table");						
+					
+					System.out.println("New book <" + title + "> inserted into Books table");					
+					*/
+					return song_id;
+				} finally {
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt1);
+//	(unused)		DBUtil.closeQuietly(resultSet2);
+					DBUtil.closeQuietly(stmt2);					
+					DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(stmt3);					
+// (unused)			DBUtil.closeQuietly(resultSet4);
+					DBUtil.closeQuietly(stmt4);
+					DBUtil.closeQuietly(resultSet5);
+					DBUtil.closeQuietly(stmt5);
+// (unused)			DBUtil.closeQuietly(resultSet6);
+					DBUtil.closeQuietly(stmt6);
+				}
+			}
+		});
 	}
 
 	@Override
