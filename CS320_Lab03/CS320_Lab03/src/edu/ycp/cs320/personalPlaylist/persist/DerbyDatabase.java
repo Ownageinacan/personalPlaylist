@@ -58,53 +58,6 @@ public class DerbyDatabase implements IDatabase {
 		} 
 	}
 	@Override
-	public List<Playlist> findPlaylistsByAccount(final String username)
-	{
-		return executeTransaction(new Transaction<List<Playlist>>()
-		{
-			@Override
-			public List<Playlist> execute(Connection conn) throws SQLException
-			{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-
-				try{
-					System.out.println("preparing statements");
-					stmt = conn.prepareStatement(
-							"select playlists.playlist_title"+
-									"from playlists, accounts"+
-									"where accounts.username = ?" +
-									"and playlists.user_ownerid = accounts.user_id"
-									
-							);
-					List<Playlist> result = new ArrayList<Playlist>();
-					resultSet = stmt.executeQuery();
-
-					//execute query, get results, put them into a list, return list
-					System.out.println("looking for playlists by account");
-					while(resultSet.next())
-					{
-						//TODO: CHECK WHY INDEX IS 1
-						Playlist pl = new Playlist();
-						loadPlaylist(pl, resultSet, 1);
-						
-						
-						//TODO: also check if this is right
-						result.add(pl);
-					}
-
-					return result;
-					
-				}finally{
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-
-			}
-
-		});
-	}
-	@Override
 	public Integer insertSongIntoSongsTable(final String title, final String location, final int albumId, final Artist artist, final int genreId) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
@@ -1459,6 +1412,88 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+
+	@Override
+																		//password not necessary but nice safety feature
+	public List<Playlist> findPlaylistsByAccount(final String username, final String password)
+	{
+		return executeTransaction(new Transaction<List<Playlist>>()
+		{
+			@Override
+			public List<Playlist> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+
+				ResultSet resultSet = null;
+				ResultSet resultSet2 = null;
+
+
+				Integer user_id = -1;
+				
+				try{
+					
+					//first get the user_id
+					stmt2 = conn.prepareStatement(
+							"select user_id "+
+									" from accounts "+
+									" where username = ? and password = ? "
+							);
+
+					stmt2.setString(1, username);
+					stmt2.setString(2, password);
+
+					//We now have ints
+					resultSet2 = stmt2.executeQuery();
+
+					//Here we would test if the user_id doesn't exist
+					//but there's no way we would be calling this method if it didn't
+					//R-right?
+					
+					//if(resultSet2.next()){
+					user_id = resultSet2.getInt(1);
+					//}else{
+					//(would have created it or thrown exception)
+					//}
+					
+					//Since we don't need to check anything, we can just jump right
+					//into the next statement
+					
+					stmt = conn.prepareStatement(
+							"select playlists.playlist_title"+
+									" from playlists "+
+									" where user_ownerid = ?"
+							);
+					
+					stmt.setInt(1, user_id);
+					
+
+					List<Playlist> result = new ArrayList<Playlist>();
+
+					resultSet = stmt.executeQuery();
+
+					while(resultSet.next()){
+						Playlist pl = new Playlist();
+						loadPlaylist(pl, resultSet, 1);
+
+						result.add(pl);
+					}	
+
+					return result;
+
+				}finally{
+					DBUtil.closeQuietly(resultSet2);
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2);
+				}
+
+			}
+
+		});
+	}
+	
+	
 	// deletes song (and possibly artist) from library
 
 	@Override
