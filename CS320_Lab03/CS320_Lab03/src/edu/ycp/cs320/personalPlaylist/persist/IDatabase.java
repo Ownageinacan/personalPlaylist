@@ -25,7 +25,7 @@ public interface IDatabase {
 	public Integer insertArtistIntoArtistsTable(String artistName) throws SQLException;
 	public Integer insertAlbumIntoAlbumsTable(String albumTitle) throws SQLException;
 	public List<Playlist> deletePlaylistFromPlaylistTable(String title);
-	public Integer insertSongIntoPlaylist(String title);
+	public Integer insertSongIntoPlaylist(Song song, Playlist playlist) throws SQLException;
 	public List<Account> findAllAccounts(); //list of accounts
 	public List<Artist> findAllArtists(); //list of artists
 	List<Pair<Song, Artist>> findSongByArtistName(int artistId);
@@ -33,6 +33,7 @@ public interface IDatabase {
 	List<Artist> removeSongByTitle(String title);//Maybe change type of song to something else?
 	List<Genre> findAllGenres(String genre);
 	List<Playlist> findPlaylistByTitle(String title);
+	List<Song> findSongByTitle(String title);
 	List<Song> findSongsByPlaylistTitle(String title);
 
 	

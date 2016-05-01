@@ -70,12 +70,12 @@ public class DerbyDatabase implements IDatabase {
 		PreparedStatement insertSong = null;
 
 		try {
-			insertSong = conn.prepareStatement("insert into songs (title, location, artist_id, genre_id, album_id) values (?, ?, ?, ?, ?)");
+			insertSong = conn.prepareStatement("insert into songs (song_title, song_location, album, artist, genre) values (?, ?, ?, ?, ?)");
 			insertSong.setString(1, title);
 			insertSong.setString(2, location);
-			insertSong.setInt(3, artistId);
-			insertSong.setInt(4, genreId);
-			insertSong.setInt(5, albumId);
+			insertSong.setInt(3, albumId);
+			insertSong.setInt(4, artistId);
+			insertSong.setInt(5, genreId);
 			return insertSong.executeUpdate();
 		} finally {
 			DBUtil.closeQuietly(insertSong);
@@ -87,7 +87,7 @@ public class DerbyDatabase implements IDatabase {
 	//Side note: Use integer or not? I don't even know mane
 	public Integer insertPlaylistIntoPlaylistsTable(String title, int ownerId) throws SQLException{
 		//TODO: Implement
-		System.out.println("inserting song into playlists table");
+		System.out.println("inserting playlist into playlists table");
 		Connection conn = createConnection();
 		PreparedStatement insertPlaylist = null;
 
@@ -121,7 +121,7 @@ public class DerbyDatabase implements IDatabase {
 	@Override
 	public Integer insertArtistIntoArtistsTable(String artistName) throws SQLException{
 		//TODO: Implement
-		System.out.println("inserting genre into genres table");
+		System.out.println("inserting artist into artists table");
 		Connection conn = createConnection();
 		PreparedStatement insertArtist = null;
 
@@ -422,6 +422,52 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt);
 				}
 			}
+		});
+	}
+	
+	@Override
+	public List<Song> findSongByTitle(final String title)
+	{
+		return executeTransaction(new Transaction<List<Song>>()
+		{
+			@Override
+			public List<Song> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try{
+
+					stmt = conn.prepareStatement(
+							"select * from songs "+
+									"where songs.song_title = ?"
+							);
+					stmt.setString(1, title);
+					List<Song> result = new ArrayList<Song>();
+					resultSet = stmt.executeQuery();
+
+					//execute query, get results, put them into a list, return list
+					
+					while(resultSet.next())
+					{
+						//TODO: CHECK WHY INDEX IS 1
+						Song sl = new Song();
+						loadSong(sl, resultSet, 1);
+						
+						
+						//TODO: also check if this is right
+						result.add(sl);
+					}
+
+					return result;
+					
+				}finally{
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+
+			}
+
 		});
 	}
 	
@@ -777,9 +823,20 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public Integer insertSongIntoPlaylist(String title){
+	public Integer insertSongIntoPlaylist(Song song, Playlist playlist) throws SQLException{
 		// Insert song into memberOfPl table and match it w/ a playlist
-		return null;
+		System.out.println("inserting song into playlistsongs table");
+		Connection conn = createConnection();
+		PreparedStatement insertSong = null;
+
+		try {
+			insertSong = conn.prepareStatement("insert into playlistsongs (playlist_id, song_id) values (?, ?)");
+			insertSong.setInt(1, playlist.getPlaylistId());
+			insertSong.setInt(2, song.getSongId());
+			return insertSong.executeUpdate();
+		} finally {
+			DBUtil.closeQuietly(insertSong);
+		}
 	}
 
 	@Override

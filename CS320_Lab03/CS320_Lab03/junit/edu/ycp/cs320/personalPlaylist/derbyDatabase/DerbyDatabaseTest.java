@@ -2,6 +2,7 @@ package edu.ycp.cs320.personalPlaylist.derbyDatabase;
 
 import static org.junit.Assert.fail;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +59,44 @@ public class DerbyDatabaseTest
 	
 	
 	@Test
-	public void testInsertSongIntoSongsTable()
-	{
-		//TODO: Implement
-		fail("TODO: Implement");
+	public void testInsertSongIntoSongsTable() throws SQLException {
+		System.out.println("\n*** Testing insertSongIntoSongsTable ***");
+
+		String songName     = "DankMemes";
+		String location  = "H:/someplacethatIdunno";
+		int albumId = 2;
+		int artistId = 3;
+		int genreId = 1;
+				
+		// insert new book (and possibly new author) into DB
+		Integer song_id = db.insertSongIntoSongsTable(songName, location, albumId, artistId, genreId);
+
+		// check the return value - should be a song_id > 0
+		if (song_id > 0)
+		{
+			// try to retrieve the song from the DB
+			// get the list of (Songs) from DB
+			songs = db.findSongByTitle(songName);
+			
+			if (songs.isEmpty()) {
+				System.out.println("No songs found for name <" + songName + ">");
+				fail("Failed to insert new book <" + songName + "> into Library DB");
+			}
+			// otherwise, the test was successful.  Now remove the song just inserted to return the DB
+			// to it's original state, except for using a song_id
+			else {
+				System.out.println("New song (ID: " + song_id + ") successfully added to Songs table: <" + songName + ">");
+				
+				// now delete Book (and its Author) from DB
+				// leaving the DB in its previous state - except that an author_id, and a song_id have been used
+				List<Artist> artist = db.removeSongByTitle(songName);				
+			}
+		}
+		else
+		{
+			System.out.println("Failed to insert new song (ID: " + song_id + ") into Songs table: <" + songName + ">");
+			fail("Failed to insert new song <" + songName + "> into DB");
+		}
 	}
 	@Test
 	public void insertPlaylistIntoPlaylistsTable()
