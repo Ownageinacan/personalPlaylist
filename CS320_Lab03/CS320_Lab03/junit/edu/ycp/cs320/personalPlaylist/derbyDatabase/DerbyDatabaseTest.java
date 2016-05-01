@@ -12,11 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.ycp.cs320.personalPlaylist.model.Album;
-import edu.ycp.cs320.personalPlaylist.model.Artist;
-import edu.ycp.cs320.personalPlaylist.model.Genre;
-import edu.ycp.cs320.personalPlaylist.model.Playlist;
-import edu.ycp.cs320.personalPlaylist.model.Song;
+import edu.ycp.cs320.personalPlaylist.model.*;
 import edu.ycp.cs320.personalPlaylist.persist.DatabaseProvider;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
 import edu.ycp.cs320.personalPlaylist.persist.IDatabase;
@@ -32,6 +28,9 @@ public class DerbyDatabaseTest
 	List<Artist> artists = null;
 	List<Genre> genres = null;
 	List<Album> albums = null;
+	List<Account> accounts = null;
+	List<Song> songsFromPlaylist = null;
+	String playlistName = null;
 	
 	
 	@BeforeClass
@@ -59,12 +58,10 @@ public class DerbyDatabaseTest
 	{
 		//empty
 	}
-
-	
-	
 	@Test
 	public void testInsertSongIntoSongsTable() throws SQLException 
 	{
+		fail("broken atm");
 		/*
 		System.out.println("\n*** Testing insertSongIntoSongsTable ***");
 
@@ -108,6 +105,7 @@ public class DerbyDatabaseTest
 	@Test
 	public void insertPlaylistIntoPlaylistsTable() throws SQLException
 	{
+		fail("broken atm");
 	/*
 		System.out.println("\n*** Testing insertPlaylistIntoPlaylistsTable ***");
 
@@ -168,7 +166,7 @@ public class DerbyDatabaseTest
 			for (Artist artist : artistList) 
 			{
 				artists.add(artist);
-				System.out.println(artist);
+				System.out.println(artist.getArtistName());
 				countAllArtists++;
 			}
 			if(artists.size() != countAllArtists)
@@ -200,7 +198,7 @@ public class DerbyDatabaseTest
 			for (Genre genre : genreList) 
 			{
 				genres.add(genre);
-				System.out.println(genre);
+				System.out.println(genre.getGenre());
 				countAllGenres++;
 			}
 			if(genres.size() != countAllGenres)
@@ -232,7 +230,7 @@ public class DerbyDatabaseTest
 			for (Album album : albumList) 
 			{
 				albums.add(album);
-				System.out.println(album);
+				System.out.println(album.getTitle());
 				countAllAlbums++;
 			}
 			if(albums.size() != countAllAlbums)
@@ -243,16 +241,37 @@ public class DerbyDatabaseTest
 		}
 	}
 	@Test
-	public void testFindAllSongsInPlaylist()
-	{
-		//TODO: Implement
-		fail("TODO: Implement");
-	}
-	@Test
 	public void testFindPlaylistByTitle()
 	{
-		//TODO: Implement
-		fail("TODO: Implement");
+		int countTotalPlaylists = 0;
+		System.out.println("\n Testing FindPlaylistByTitle:");
+
+		//get all of the songs
+		List<Playlist> playlistsList = db.findAllPlaylists();
+		
+		//simple test to check if no results were found in the DB
+		if (playlistsList.isEmpty()) 
+		{
+			System.out.println("No playlists were found");
+			fail("No playlists were found in the database");
+		}
+
+		else 
+		{			
+			playlists = new ArrayList<Playlist>();
+			for (Playlist playlist : playlistsList) 
+			{
+				playlists.add(playlist);
+				countTotalPlaylists++;
+			}
+			if(playlists.size() != countTotalPlaylists)
+			{
+				System.out.println("Only " + countTotalPlaylists + " were found");
+				fail("Not all playlists were found");
+			}
+		}
+		//playlistName = db.findPlaylistByTitle(playlists.get(0));
+		//TODO: i have no clue if this is necessary or not
 	}
 	@Test
 	public void testFindAllPlaylists() 
@@ -276,7 +295,7 @@ public class DerbyDatabaseTest
 			for (Playlist playlist : playlistsList) 
 			{
 				playlists.add(playlist);
-				System.out.println(playlist);
+				System.out.println(playlist.getTitle());
 				countTotalPlaylists++;
 			}
 			if(playlists.size() != countTotalPlaylists)
@@ -308,7 +327,7 @@ public class DerbyDatabaseTest
 			for (Song song : songsList) 
 			{
 				songs.add(song);
-				System.out.println(song);
+				System.out.println(song.getTitle());
 				countSongs++;
 			}
 			if(songs.size() != countSongs)
@@ -321,8 +340,32 @@ public class DerbyDatabaseTest
 	@Test
 	public void testFindSongsByPlaylistTitle()
 	{
-		//TODO: Implement
-		fail("TODO: Implement");
+		int countSongsInPlaylist = 0;
+		String playlistName = null;
+		List<Playlist> listOfPlaylists = db.findAllPlaylists();
+		System.out.println("\n Testing FindAllSongsByPlaylistTitle:");
+		
+		if(listOfPlaylists != null)
+		{
+			playlistName = listOfPlaylists.get(0).getTitle();
+		}
+		else
+		{
+			fail("No playlists were found to find songs from");
+		}
+		List<Song> songsList = db.findSongsByPlaylistTitle(playlistName);
+		songsFromPlaylist = new ArrayList<Song>();
+		for (Song song : songsList) 
+		{
+			songsFromPlaylist.add(song);
+			System.out.println(song.getTitle());
+			countSongsInPlaylist++;
+		}
+		if(songsFromPlaylist.size() != countSongsInPlaylist)
+		{
+			System.out.println("Only " + countSongsInPlaylist + " songs were found");
+			fail("Missing songs");
+		}
 	}	
 	@Test
 	public void testFindSongByArtistName()
@@ -351,8 +394,34 @@ public class DerbyDatabaseTest
 	@Test
 	public void testFindAllAccounts()
 	{
-		//TODO: Implement
-		fail("TODO: Implement");
+		int countAllAccounts = 0;
+		System.out.println("\n Testing FindAllAccounts:");
+
+		//get all of the songs
+		List<Account> accountList = db.findAllAccounts();
+		
+		//simple test to check if no results were found in the DB
+		if (accountList.isEmpty()) 
+		{
+			System.out.println("No accounts were found");
+			fail("No accounts were found in the database");
+		}
+
+		else 
+		{			
+			accounts = new ArrayList<Account>();
+			for (Account account : accountList) 
+			{
+				accounts.add(account);
+				System.out.println(account.getUsername() + ", " + account.getPassword());
+				countAllAccounts++;
+			}
+			if(accounts.size() != countAllAccounts)
+			{
+				System.out.println("Only " + countAllAccounts + " were found");
+				fail("Not all accounts were found");
+			}
+		}
 	}
 	@Test
 	public void testExecuteTransaction()
