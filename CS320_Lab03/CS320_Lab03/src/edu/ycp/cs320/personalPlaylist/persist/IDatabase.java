@@ -19,7 +19,7 @@ public interface IDatabase {
 	public List<Playlist> findAllPlaylists();	//list of playlists
 	public List<Song> findAllSongs();	//list of songs
 	public List<Album> findAllAlbums();	//list of albums
-//	public List<Artist> findAllArtists();	//list of artists
+
 	public Integer insertPlaylistIntoPlaylistsTable(String title, int ownerId) throws SQLException;
 	public Integer insertGenreIntoGenresTable(String genre) throws SQLException;
 	public Integer insertArtistIntoArtistsTable(String artistName) throws SQLException;
@@ -28,13 +28,12 @@ public interface IDatabase {
 	public Integer insertSongIntoPlaylist(Song song, Playlist playlist) throws SQLException;
 	public List<Account> findAllAccounts(); //list of accounts
 	public List<Artist> findAllArtists(); //list of artists
-	List<Pair<Song, Artist>> findSongByArtistName(int artistId);
-	//TODO:
-	List<Artist> removeSongByTitle(String title);//Maybe change type of song to something else?
-	List<Genre> findAllGenres();
-	List<Playlist> findPlaylistByTitle(String title);
-	List<Song> findSongByTitle(String title);
-	List<Song> findSongsByPlaylistTitle(String title);
+	public List<Pair<Song, Artist>> findSongByArtistName(int artistId);
+	public List<Artist> removeSongByTitle(String title);//Maybe change type of song to something else?
+	public List<Genre> findAllGenres();
+	public List<Playlist> findPlaylistByTitle(String title);
+	public List<Song> findSongByTitle(String title);
+	public List<Song> findSongsByPlaylistTitle(String title);
 
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?

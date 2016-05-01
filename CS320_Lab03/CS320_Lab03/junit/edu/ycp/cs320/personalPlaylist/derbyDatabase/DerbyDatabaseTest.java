@@ -67,7 +67,7 @@ public class DerbyDatabaseTest
 		System.out.println("\n*** Testing insertSongIntoSongsTable ***");
 
 		String songName     = "DankMemes";
-		String location  = "H:/someplacethatIdunno";
+		String location  = "C:/someplacethatIdunno";
 		int albumId = 2;
 		int artistId = 3;
 		int genreId = 1;
