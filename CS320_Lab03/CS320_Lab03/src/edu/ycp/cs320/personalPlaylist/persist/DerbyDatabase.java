@@ -390,7 +390,7 @@ public class DerbyDatabase implements IDatabase {
 
 				try {
 					stmt = conn.prepareStatement(
-							"select * from album " +
+							"select * from albums " +
 									" order by album_title asc"
 							);
 
