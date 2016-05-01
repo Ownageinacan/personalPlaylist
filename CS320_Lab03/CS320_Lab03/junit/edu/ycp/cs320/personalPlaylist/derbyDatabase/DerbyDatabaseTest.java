@@ -11,7 +11,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
+import edu.ycp.cs320.personalPlaylist.model.Genre;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DatabaseProvider;
@@ -27,6 +29,8 @@ public class DerbyDatabaseTest
 	List<Song> songs = null;
 	List<Playlist> playlists = null;
 	List<Artist> artists = null;
+	List<Genre> genres = null;
+	List<Album> albums = null;
 	
 	
 	@BeforeClass
@@ -104,14 +108,66 @@ public class DerbyDatabaseTest
 	@Test
 	public void testFindAllGenres()
 	{
-		//TODO: Implement
-		fail("TODO: Implement");
+		int countAllGenres = 0;
+		System.out.println("\n Testing FindAllGenres:");
+
+		//get all of the songs
+		List<Genre> genreList = db.findAllGenres();
+		
+		//simple test to check if no results were found in the DB
+		if (genreList.isEmpty()) 
+		{
+			System.out.println("No genres were found");
+			fail("No genres were found in the database");
+		}
+
+		else 
+		{			
+			genres = new ArrayList<Genre>();
+			for (Genre genre : genreList) 
+			{
+				genres.add(genre);
+				System.out.println(genre);
+				countAllGenres++;
+			}
+			if(genres.size() != countAllGenres)
+			{
+				System.out.println("Only " + countAllGenres + " were found");
+				fail("Not all genres were found");
+			}
+		}
 	}
 	@Test
 	public void testFindAllAlbums()
 	{
-		//TODO: Implement
-		fail("TODO: Implement");
+		int countAllAlbums = 0;
+		System.out.println("\n Testing FindAllAlbums:");
+
+		//get all of the songs
+		List<Album> albumList = db.findAllAlbums();
+		
+		//simple test to check if no results were found in the DB
+		if (albumList.isEmpty()) 
+		{
+			System.out.println("No albums were found");
+			fail("No albums were found in the database");
+		}
+
+		else 
+		{			
+			albums = new ArrayList<Album>();
+			for (Album album : albumList) 
+			{
+				albums.add(album);
+				System.out.println(album);
+				countAllAlbums++;
+			}
+			if(albums.size() != countAllAlbums)
+			{
+				System.out.println("Only " + countAllAlbums + " were found");
+				fail("Not all albums were found");
+			}
+		}
 	}
 	@Test
 	public void testFindAllSongsInPlaylist()

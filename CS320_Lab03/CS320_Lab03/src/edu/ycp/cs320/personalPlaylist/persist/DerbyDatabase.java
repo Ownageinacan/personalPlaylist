@@ -195,7 +195,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Genre> findAllGenres (String genre)
+	public List<Genre> findAllGenres()
 	{
 		return executeTransaction(new Transaction<List<Genre>>() {
 			@Override
@@ -241,7 +241,7 @@ public class DerbyDatabase implements IDatabase {
 
 
 
-	public List<Album> findAllAlbums(String album)
+	public List<Album> findAllAlbums()
 	{
 		return executeTransaction(new Transaction<List<Album>>() {
 			@Override
