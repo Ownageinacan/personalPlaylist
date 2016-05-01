@@ -24,8 +24,6 @@ public interface IDatabase {
 	public Integer insertGenreIntoGenresTable(String genre) throws SQLException;
 	public Integer insertArtistIntoArtistsTable(String artistName) throws SQLException;
 	public Integer insertAlbumIntoAlbumsTable(String albumTitle) throws SQLException;
-	public List<Playlist> deletePlaylistFromPlaylistTable(String title);
-	public Integer insertSongIntoPlaylist(Song song, Playlist playlist) throws SQLException;
 	public List<Account> findAllAccounts(); //list of accounts
 	public List<Artist> findAllArtists(); //list of artists
 	public List<Pair<Song, Artist>> findSongByArtistName(int artistId);
@@ -34,6 +32,12 @@ public interface IDatabase {
 	public List<Playlist> findPlaylistByTitle(String title);
 	public List<Song> findSongByTitle(String title);
 	public List<Song> findSongsByPlaylistTitle(String title);
+	public List<Artist> findArtistBySongTitle(String title);
+	public List<Album> findAlbumBySongTitle(String title);
+	public List<Genre> findGenreBySongTitle(String title);
+	public Integer insertAccountIntoAccountsTable(String username, String password);
+	public List<Playlist> removePlaylistFromPlaylistTable(String title);
+	public Integer insertSongIntoPlaylist(String plTitle, int ownerId, String songTitle, int albumId, int artistId, int genreId) throws SQLException;
 
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?
