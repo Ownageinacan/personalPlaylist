@@ -14,7 +14,7 @@ import edu.ycp.cs320.personalPlaylist.model.Pair;
 
 public interface IDatabase {
 
-	public Integer insertSongIntoSongsTable(String title, String location, int artistId, int genreId, int albumId) throws SQLException;
+	public Integer insertSongIntoSongsTable(String title, String location, int genreId, Artist artist, int albumId);
 	
 	public List<Playlist> findAllPlaylists();	//list of playlists
 	public List<Song> findAllSongs();	//list of songs
