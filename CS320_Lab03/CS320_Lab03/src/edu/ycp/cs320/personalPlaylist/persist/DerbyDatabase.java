@@ -1071,32 +1071,32 @@ public class DerbyDatabase implements IDatabase {
 			public List<Song> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				PreparedStatement stmt2 = null;
-				
+
 				ResultSet resultSet = null;
 				ResultSet resultSet2 = null;
-				
+
 				Integer artist_id = -1;
-				
+
 				// try to retrieve songs based on artist name
 
 				try {
-					
+
 					stmt2 = conn.prepareStatement(
 							"select artists.artist_id "+
-							" from artists "+
-							" where artists.artist_name = ? "
-							
+									" from artists "+
+									" where artists.artist_name = ? "
+
 							);
-					
+
 					stmt2.setString(1, name);
-					
+
 					resultSet2 = stmt2.executeQuery();
-					
-					
+
+
 					//TODO: Normally would test this to see if it exists
 					//Let's assume that it does
 					artist_id = resultSet2.getInt(1);
-					
+
 					stmt = conn.prepareStatement(
 							"select songs.* " +
 									"  from songs " +
@@ -1110,7 +1110,7 @@ public class DerbyDatabase implements IDatabase {
 
 					// execute the query, get the results, and assemble them in an ArrayLsit
 					resultSet = stmt.executeQuery();
-					
+
 					while (resultSet.next()) {
 						Song song = new Song();
 						loadSong(song, resultSet, 1);	//this is at an index of 1
@@ -1436,7 +1436,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-																		//password not necessary but nice safety feature
+	//password not necessary but nice safety feature
 	public List<Playlist> findPlaylistsByAccount(final String username, final String password)
 	{
 		return executeTransaction(new Transaction<List<Playlist>>()
@@ -1450,16 +1450,15 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet = null;
 				ResultSet resultSet2 = null;
 
-
 				Integer user_id = -1;
-				
+
 				try{
-					
+
 					//first get the user_id
 					stmt2 = conn.prepareStatement(
-							"select user_id "+
+							"select accounts.user_id "+
 									" from accounts "+
-									" where username = ? and password = ? "
+									" where accounts.username = ? and accounts.password = ? "
 							);
 
 					stmt2.setString(1, username);
@@ -1471,24 +1470,24 @@ public class DerbyDatabase implements IDatabase {
 					//Here we would test if the user_id doesn't exist
 					//but there's no way we would be calling this method if it didn't
 					//R-right?
-					
-					//if(resultSet2.next()){
-					user_id = resultSet2.getInt(1);
-					//}else{
-					//(would have created it or thrown exception)
-					//}
-					
+
+					if(resultSet2.next()){
+						user_id = resultSet2.getInt(1);
+					}
+
+
+
 					//Since we don't need to check anything, we can just jump right
 					//into the next statement
-					
+
 					stmt = conn.prepareStatement(
-							"select playlists.playlist_title"+
+							"select playlists.* "+
 									" from playlists "+
-									" where user_ownerid = ?"
+									" where playlists.user_ownerid = ? "
 							);
-					
+
 					stmt.setInt(1, user_id);
-					
+
 
 					List<Playlist> result = new ArrayList<Playlist>();
 
@@ -1514,8 +1513,8 @@ public class DerbyDatabase implements IDatabase {
 
 		});
 	}
-	
-	
+
+
 	// deletes song (and possibly artist) from library
 
 	@Override
