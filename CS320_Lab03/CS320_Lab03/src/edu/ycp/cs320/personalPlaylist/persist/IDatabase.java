@@ -26,7 +26,7 @@ public interface IDatabase {
 	public Integer insertAlbumIntoAlbumsTable(String albumTitle) throws SQLException;
 	public List<Account> findAllAccounts(); //list of accounts
 	public List<Artist> findAllArtists(); //list of artists
-	public List<Pair<Song, Artist>> findSongByArtistName(int artistId);
+	public List<Song> findSongByArtistName(String name);
 	public List<Artist> removeSongByTitle(String title);//Maybe change type of song to something else?
 	public List<Genre> findAllGenres();
 	public List<Playlist> findPlaylistByTitle(String title);

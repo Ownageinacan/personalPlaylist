@@ -1064,43 +1064,65 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Pair<Song, Artist>> findSongByArtistName(final int artistId)
+	public List<Song> findSongByArtistName(final String name)
 	{
-		return executeTransaction(new Transaction<List<Pair<Song,Artist>>>() {
+		return executeTransaction(new Transaction<List<Song>>() {
 			@Override
-			public List<Pair<Song, Artist>> execute(Connection conn) throws SQLException {
+			public List<Song> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+				
 				ResultSet resultSet = null;
-
+				ResultSet resultSet2 = null;
+				
+				Integer artist_id = -1;
+				
 				// try to retrieve songs based on artist name
 
 				try {
+					
+					stmt2 = conn.prepareStatement(
+							"select artists.artist_id "+
+							" from artists "+
+							" where artists.artist_name = ? "
+							
+							);
+					
+					stmt2.setString(1, name);
+					
+					resultSet2 = stmt2.executeQuery();
+					
+					
+					//TODO: Normally would test this to see if it exists
+					//Let's assume that it does
+					artist_id = resultSet2.getInt(1);
+					
 					stmt = conn.prepareStatement(
 							"select songs.* " +
 									"  from songs " +
 									"  where songs.artist = ? "
 							);
 
-					stmt.setInt(1, artistId);
+					stmt.setInt(1, artist_id);
 
 					// establish the list of (Author, Book) Pairs to receive the result
-					List<Pair<Song, Artist>> result = new ArrayList<Pair<Song,Artist>>();
+					List<Song> result = new ArrayList<Song>();
 
 					// execute the query, get the results, and assemble them in an ArrayLsit
 					resultSet = stmt.executeQuery();
+					
 					while (resultSet.next()) {
-						Artist artist = new Artist();
-						loadArtist(artist, resultSet, 1);	//this is at an index of 1
 						Song song = new Song();
-						loadSong(song, resultSet, 4);	//this is at an index of 4
+						loadSong(song, resultSet, 1);	//this is at an index of 1
 
-						result.add(new Pair<Song, Artist>(song, artist));
+						result.add(song);
 					}
 
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2);
 				}
 			}
 		});
