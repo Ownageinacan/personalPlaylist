@@ -17,5 +17,8 @@
 				</audio>
 			</div>	
 		</c:forEach>	
+		<form action="${pageContext.servletContext.contextPath}/Home" method="get">
+		<input type="submit" value="Home">
+			</form>
 	</body>
 </html>

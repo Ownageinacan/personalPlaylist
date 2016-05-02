@@ -16,4 +16,11 @@ public class HomeController {
 		List<Playlist> playlists = db.findPlaylistsByAccount(user, pass);
 		return playlists;
 	}
+
+	public List<Playlist> getAllPlayLists() {
+		InitDatabase.init();
+		List<Playlist> playlists = db.findAllPlaylists();
+		return playlists;
+		
+	}
 }
