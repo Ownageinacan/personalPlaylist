@@ -20,6 +20,7 @@ public class HomeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String user = (String) req.getSession().getAttribute("Username");
+		String pass = (String) req.getSession().getAttribute("Password");
 		if (user == null) {
 			System.out.println("   User: <" + user + "> not logged in or session timed out");
 
@@ -29,7 +30,7 @@ public class HomeServlet extends HttpServlet {
 		}
 		controller = new HomeController();
 		System.out.println("getting all playlists");
-		List<Playlist> playlists = controller.getAllPlayLists();	
+		List<Playlist> playlists = controller.getAllPlayListsbyAccount(user, pass);	
 		req.setAttribute("playlists", playlists);
 		System.out.print(playlists.get(1).getTitle());
 		
@@ -44,9 +45,11 @@ public class HomeServlet extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		String user = (String) req.getSession().getAttribute("Username");
+		String pass = (String) req.getSession().getAttribute("Password");
 		controller = new HomeController();
 		System.out.println("getting all playlists");
-		List<Playlist> playlists = controller.getAllPlayLists();	
+		List<Playlist> playlists = controller.getAllPlayListsbyAccount(user, pass);	
 		req.setAttribute("playlists", playlists);
 		System.out.print(playlists.get(0).getTitle());
 		req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);

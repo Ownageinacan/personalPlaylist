@@ -10,10 +10,10 @@ import edu.ycp.cs320.personalPlaylistdb.InitDatabase;
 public class HomeController {
 	IDatabase db = DatabaseProvider.getInstance();
 	
-	public List<Playlist> getAllPlayLists(){
+	public List<Playlist> getAllPlayListsbyAccount(String user, String pass){
 		InitDatabase.init();
 		
-		List<Playlist> playlists = db.findAllPlaylists();
+		List<Playlist> playlists = db.findPlaylistsByAccount(user, pass);
 		return playlists;
 	}
 }
