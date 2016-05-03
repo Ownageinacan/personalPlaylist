@@ -57,6 +57,7 @@ public class DerbyDatabase implements IDatabase {
 			return null;
 		} 
 	}
+	
 	@Override
 	public Integer insertSongIntoSongsTable(final String title, final String location, final int albumId, final Artist artist, final int genreId) {
 		return executeTransaction(new Transaction<Integer>() {
@@ -440,12 +441,14 @@ public class DerbyDatabase implements IDatabase {
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				PreparedStatement stmt2 = null;
-
+				PreparedStatement stmt3 = null;
+				
 				//ResultSet resultSet = null; //unused
 				ResultSet resultSet2 = null;
 
 				Integer user_id = -1;
-
+				Integer num_playlists = 0;
+				
 				try{
 					stmt = conn.prepareStatement(
 							"insert into accounts (username, password) "+
@@ -471,6 +474,19 @@ public class DerbyDatabase implements IDatabase {
 						user_id = resultSet2.getInt(1);
 						System.out.println("New user <"+username+"> ID: "+user_id);
 					}
+					
+					if(num_playlists == 0){
+						
+						stmt3 = conn.prepareStatement(
+								"insert into playlists (playlist_title, number_songs, user_ownerid) " +
+								" values(?, ?, ?) "
+								);
+						stmt3.setString(1, "Library");
+						stmt3.setInt(2, 0);
+						stmt3.setInt(3, user_id);
+						
+					}
+					
 					else
 					{
 						System.out.println("New user <"+username+"> not found in the accounts table (ID: "+user_id);
