@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs320.lab03.controller.LoginController;
+import edu.ycp.cs320.lab03.controller.MasterController;
 
 
 public class LoginServlet extends HttpServlet {
@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
 		HttpSession session = req.getSession(true);
 		String errorMessage = null;
 		Boolean result = null;
-		LoginController controller = new LoginController();
+		MasterController controller = new MasterController();
 		String Username = null;
 		String Password = null;
 		try {

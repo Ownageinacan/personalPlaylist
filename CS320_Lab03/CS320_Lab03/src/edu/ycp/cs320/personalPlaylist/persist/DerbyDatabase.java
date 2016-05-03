@@ -9,16 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import edu.ycp.cs320.personalPlaylist.model.Pair;
 import edu.ycp.cs320.personalPlaylist.model.PlayListSongs;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
 import edu.ycp.cs320.personalPlaylist.persist.DBUtil;
-//import edu.ycp.cs320.booksdb.persist.DerbyDatabase.Transaction;
-//import edu.ycp.cs320.booksdb.model.Author;
-//import edu.ycp.cs320.personsalPlaylist.persist.DerbyDatabase.Transaction;
 import edu.ycp.cs320.personalPlaylist.model.Account;
 import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
@@ -827,23 +822,18 @@ public class DerbyDatabase implements IDatabase {
 							"select * from playlists "
 							//" order by playlist_title asc"
 							);
-					System.out.println("found playlists");
 					List<Playlist> result = new ArrayList<Playlist>();
-					System.out.println("created list");
 					resultSet = stmt.executeQuery();
-					System.out.println("executed query");
 					// for testing that a result was returned
 					Boolean found = false;
-					System.out.println("starting the loop");
+					
 					while (resultSet.next()) {
 						found = true;
-						System.out.println("found was set to true");
+						
 						Playlist playlist = new Playlist();
-						System.out.println("created a playlist");
 						loadPlaylist(playlist, resultSet, 1);
-						System.out.println("loaded a playlist!!!!!!!!!1111one");
 						result.add(playlist);
-						System.out.println("added a playlist");
+						
 					}
 
 					// check if any playlists were found
@@ -1027,9 +1017,7 @@ public class DerbyDatabase implements IDatabase {
 
 					stmt.setString(1, title);
 					List<Song> result = new ArrayList<Song>();
-					System.out.println("executing findSongsByPlaylistTitle");
 					resultSet = stmt.executeQuery();
-					System.out.println("executed findSongsByPlaylistTitle");
 					// for testing that a result was returned
 
 					Boolean found = false;
@@ -1492,17 +1480,20 @@ public class DerbyDatabase implements IDatabase {
 					List<Playlist> result = new ArrayList<Playlist>();
 
 					resultSet = stmt.executeQuery();
-
+				
+					
 					while(resultSet.next()){
 						Playlist pl = new Playlist();
 						loadPlaylist(pl, resultSet, 1);
 
 						result.add(pl);
-					}	
+					}
+					
 
 					return result;
 
 				}finally{
+				
 					DBUtil.closeQuietly(resultSet2);
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);

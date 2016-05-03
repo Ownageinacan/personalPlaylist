@@ -5,17 +5,17 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ycp.cs320.lab03.controller.LoginController;
+import edu.ycp.cs320.lab03.controller.MasterController;
 import edu.ycp.cs320.personalPlaylist.model.Account;
 
 //TODO: FINISH THIS JAZZ
 
 public class LoginTest {
-	private LoginController controller;
+	private MasterController controller;
 	private Account benAccount;
 	@Before
 	public void setUp() {
-		controller = new LoginController();
+		controller = new MasterController();
 		benAccount = new Account();
 		//Need to add ben's account to the AllUsers map/key to check this
 		

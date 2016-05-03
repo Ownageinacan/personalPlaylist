@@ -8,13 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-import edu.ycp.cs320.lab03.controller.HomeController;
+import edu.ycp.cs320.lab03.controller.MasterController;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private HomeController controller = null;	
+	private MasterController controller = null;	
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -28,7 +27,7 @@ public class HomeServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/Login");
 			return;
 		}
-		controller = new HomeController();
+		controller = new MasterController();
 		System.out.println("getting all playlists");
 		List<Playlist> playlists = controller.getAllPlayListsbyAccount(user, pass);	
 		req.setAttribute("playlists", playlists);
@@ -47,7 +46,7 @@ public class HomeServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String user = (String) req.getSession().getAttribute("Username");
 		String pass = (String) req.getSession().getAttribute("Password");
-		controller = new HomeController();
+		controller = new MasterController();
 		System.out.println("getting all playlists");
 		List<Playlist> playlists = controller.getAllPlayListsbyAccount(user, pass);	
 		req.setAttribute("playlists", playlists);
