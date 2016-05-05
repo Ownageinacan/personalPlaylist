@@ -1,5 +1,6 @@
 package edu.ycp.cs320.lab03.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import edu.ycp.cs320.personalPlaylist.model.Account;
@@ -48,4 +49,26 @@ public class MasterController {
 		
 		db.insertAccountIntoAccountsTable(username, password);
 	}
+	
+	public void CreatePlaylist(String PlaylistName, String User) throws SQLException {
+		InitDatabase.init();
+		IDatabase db = DatabaseProvider.getInstance();
+		
+		db.insertPlaylistIntoPlaylistsTable(PlaylistName, getAccount_id(User));
+}
+	
+	public int getAccount_id(String User) throws SQLException {
+		InitDatabase.init();
+		IDatabase db = DatabaseProvider.getInstance();
+		
+		int User_id = 0;
+		List<Account> accountList = db.findAllAccounts();
+		
+		for(Account ac : accountList){
+			if(ac.getUsername().equals(User)){
+				User_id = ac.getAccountId();
+			}
+		}
+		return User_id;
+}
 }

@@ -240,7 +240,7 @@ public class DerbyDatabase implements IDatabase {
 
 					stmt2 = conn.prepareStatement(
 							"select playlist_id from playlists " +
-									" where title = ? and ownerId = ? "
+									" where playlist_title = ? and user_ownerId = ? "
 
 							);
 					stmt2.setString(1, title);

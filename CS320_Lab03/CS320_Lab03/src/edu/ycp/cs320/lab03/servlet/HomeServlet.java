@@ -2,6 +2,7 @@ package edu.ycp.cs320.lab03.servlet;
 
 import java.util.List;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -44,13 +45,23 @@ public class HomeServlet extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		String createPlaylistName = req.getParameter("createPlaylistName");
 		String user = (String) req.getSession().getAttribute("Username");
 		String pass = (String) req.getSession().getAttribute("Password");
+		
 		controller = new MasterController();
-		System.out.println("getting all playlists");
+
+		if(!(createPlaylistName == null)){
+			try {
+				controller.CreatePlaylist(createPlaylistName, user);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		List<Playlist> playlists = controller.getAllPlayListsbyAccount(user, pass);	
 		req.setAttribute("playlists", playlists);
-		System.out.print(playlists.get(0).getTitle());
+
 		req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
 	}	
 }

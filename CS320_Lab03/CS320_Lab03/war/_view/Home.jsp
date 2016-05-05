@@ -117,12 +117,6 @@
 			top: 0;
 			left: 0;	
 		}
-		.playlists {
-			position: absolute;
-			z-index: 3;
-			left: 9.2%;	
-			top: 14%;
-		}
 		.playlistsHead{
 			font-size: 40px;
 			font-weight: bold;
@@ -143,6 +137,10 @@
 			border-radius: 7px;
 		}
 		.playlists{
+			position: absolute;
+			z-index: 3;
+			left: 9.2%;	
+			top: 14%;
 			color: white;
 			background-color: #65337E;
 			border-top-width: thick;
@@ -158,6 +156,16 @@
 			border-bottom-color: #FFF;
 			border-left-color: #FFF;
 			border-radius: 7px;
+		}
+		.topButtons{
+			position: absolute;
+			left: 130px;
+			top: 25px;
+			z-index: 2;
+			color: white;
+			font-size: 14px;
+			font-weight: bold;
+			font-family: "Verdana", sans-serif;
 		}
 		</style>
 	</head>
@@ -207,7 +215,21 @@
 		<div class="topLogo">
 			<img src='Assets/Icons/PersonalPlayerLogo.png' style="height: 100%; width: 100%;"/>
 		</div>
-		<div class="topBanner"></div>
+		<div class="topBanner">
+			<div class="topButtons">
+				<div class="createPlaylistButton">
+					<form action="${pageContext.servletContext.contextPath}/Home" method="post">
+						<table>
+							<tr>
+								<td class="label">Playlist Name:</td>
+								<td><input type="text" name="createPlaylistName" size="12" value="${createPlaylistName}" /></td>
+							</tr>
+						</table>
+						<input type="Submit" name="createPlaylist" value="createPlaylist">
+					</form>
+				</div>
+			</div>
+		</div>
 		<!--
 		<div class="Playlist">
 			<table>
