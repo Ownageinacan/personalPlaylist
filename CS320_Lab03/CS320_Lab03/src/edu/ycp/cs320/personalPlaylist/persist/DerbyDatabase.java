@@ -470,17 +470,11 @@ public class DerbyDatabase implements IDatabase {
 						System.out.println("New user <"+username+"> ID: "+user_id);
 					}
 					
-					if(num_playlists == 0){
-						
-						stmt3 = conn.prepareStatement(
-								"insert into playlists (playlist_title, number_songs, user_ownerid) " +
-								" values(?, ?, ?) "
-								);
-						stmt3.setString(1, "Library");
-						stmt3.setInt(2, 0);
-						stmt3.setInt(3, user_id);
-						
-					}
+				     if(num_playlists == 0){
+
+				    	 insertPlaylistIntoPlaylistsTable("Library", user_id);
+
+				    	 }
 					
 					else
 					{
