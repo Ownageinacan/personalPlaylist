@@ -1060,7 +1060,6 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-
 	@Override
 	public List<Song> findSongByArtistName(final String name)
 	{
@@ -1080,7 +1079,7 @@ public class DerbyDatabase implements IDatabase {
 				try {
 
 					stmt2 = conn.prepareStatement(
-							"select artists.artist_id "+
+							"select artists.* "+
 									" from artists "+
 									" where artists.artist_name = ? "
 
@@ -1090,19 +1089,22 @@ public class DerbyDatabase implements IDatabase {
 
 					resultSet2 = stmt2.executeQuery();
 
-
-					//TODO: Normally would test this to see if it exists
-					//Let's assume that it does
-					artist_id = resultSet2.getInt(1);
-
+					List<Artist> artists = new ArrayList<Artist>();
+					
+					while(resultSet2.next()){
+						Artist artist = new Artist();
+						loadArtist(artist, resultSet2, 1);
+						artists.add(artist);
+					}
+					
 					stmt = conn.prepareStatement(
 							"select songs.* " +
 									"  from songs " +
 									"  where songs.artist = ? "
 							);
 
-					stmt.setInt(1, artist_id);
-
+					stmt.setInt(1, artists.get(0).getArtistId());
+					
 					// establish the list of (Author, Book) Pairs to receive the result
 					List<Song> result = new ArrayList<Song>();
 
@@ -1125,7 +1127,6 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-
 
 	@Override
 	public List<Artist> findArtistBySongTitle(final String title, final String name)
