@@ -18,7 +18,7 @@ import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
 import edu.ycp.cs320.personalPlaylist.persist.IDatabase;
 
 
-
+//CS320 Lab06 Derby Database test code was used as a template for many of the methods in this class(find, insert, remove)
 public class DerbyDatabaseTest 
 {
 	private IDatabase db = null;
@@ -30,7 +30,8 @@ public class DerbyDatabaseTest
 	List<Album> albums = null;
 	List<Account> accounts = null;
 	List<Song> songsFromPlaylist = null;
-	List<Pair<Song, Artist>> songArtistList = null;
+	List<Artist> artists2 = null;
+	List<Song> songsByArtistList = null;
 	String playlistName = null;
 	
 	
@@ -371,7 +372,7 @@ public class DerbyDatabaseTest
 		}
 	}	
 	@Test
-	public void testFindSongsByArtistName()
+	public void testFindSongByArtistName()
 	{
 		int countAllArtists = 0;
 		System.out.println("\n Testing FindSongsByArtistName:");
@@ -388,14 +389,14 @@ public class DerbyDatabaseTest
 
 		else 
 		{			
-			artists = new ArrayList<Artist>();
+			artists2 = new ArrayList<Artist>();
 			for (Artist artist : artistList) 
 			{
-				artists.add(artist);
+				artists2.add(artist);
 				System.out.println(artist.getArtistName());
 				countAllArtists++;
 			}
-			if(artists.size() != countAllArtists)
+			if(artists2.size() != countAllArtists)
 			{
 				System.out.println("Only " + countAllArtists + " were found");
 				fail("Not all artists were found");
@@ -403,12 +404,12 @@ public class DerbyDatabaseTest
 		}
 		
 		int countSongs = 0;
-		List<Pair<Song, Artist>> listOfSongArtists = db.findSongByArtistName(artists.get(0).getArtistId());
+		List<Song> listOfSongsByArtist = db.findSongByArtistName(artists2.get(0).toString());
 		
-		songArtistList = new ArrayList<Pair<Song, Artist>>();
-		for (Pair<Song,Artist> songArtist : listOfSongArtists) 
+		songsByArtistList = new ArrayList<Song>();
+		for (Song songByArtist : listOfSongsByArtist) 
 		{
-			songsFromPlaylist.add(songArtist.getLeft());
+			songsFromPlaylist.add(songByArtist);
 			System.out.println(songsFromPlaylist.get(countSongs));
 			countSongs++;
 		}
@@ -423,6 +424,7 @@ public class DerbyDatabaseTest
 	{
 		//TODO: Implement
 		fail("TODO: Implement");
+		
 	}
 	@Test
 	public void testDeletePlaylistFromPlaylistTable()
