@@ -32,7 +32,7 @@
 		<input type="submit" value="Home">
 		</form>
 		<div class ="CreateNewSong">
-			<form action="${pageContext.servletContext.contextPath}/Home" method="post">
+			<form action="${pageContext.servletContext.contextPath}/Songs" method="post">
 				<table>
 					<tr>
 						<td class="label">Song Name:</td>
@@ -55,7 +55,7 @@
 						<td><input type="text" name="createSongLocation" size="12" value="${createSongLocation}" /></td>
 					</tr>
 				</table>
-				<input type="Submit" name="createPlaylist" value="createPlaylist">
+				<input type="Submit" name="createSong" value="createSong">
 			</form>
 		</div>	
 	</body>

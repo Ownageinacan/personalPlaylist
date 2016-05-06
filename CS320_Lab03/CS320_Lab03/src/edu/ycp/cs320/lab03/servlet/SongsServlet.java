@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.lab03.controller.MasterController;
 import edu.ycp.cs320.personalPlaylist.model.Song;
@@ -22,6 +23,7 @@ public class SongsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		HttpSession session = req.getSession(true);
 		String user = (String) req.getSession().getAttribute("Username");
 		if (user == null) {
 			System.out.println("   User: <" + user + "> not logged in or session timed out");
@@ -31,6 +33,8 @@ public class SongsServlet extends HttpServlet {
 			return;
 		}
 		String playlistTitle = req.getParameter("playlist");
+		session.setAttribute("playlistTitle", playlistTitle);
+		
 		List<Song> songs = null; 
 		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
@@ -45,15 +49,18 @@ public class SongsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+		HttpSession session = req.getSession(true);
+		InitDatabase.init();
+		IDatabase db = DatabaseProvider.getInstance();
+		controller = new MasterController();
+
 		String createSongName = req.getParameter("createSongName");
 		String createSongGenre = req.getParameter("createSongGenre");
 		String createSongArtist = req.getParameter("createSongArtist");
 		String createSongAlbum = req.getParameter("createSongAlbum");
 		String createSongLocation = req.getParameter("createSongLocation");
-		String playlistTitle = req.getParameter("playlist");
-		
-		controller = new MasterController();
+		String playlistTitle = (String) session.getAttribute("playlistTitle");
+		List<Song> songs = db.findSongsByPlaylistTitle(playlistTitle);
 		
 		if(!(createSongName == null)){
 			try {
@@ -64,7 +71,8 @@ public class SongsServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-
+		req.setAttribute("songs", songs);
+		req.setAttribute("playlistTitle", playlistTitle);
 		req.getRequestDispatcher("/_view/Songs.jsp").forward(req, resp);
 	}
 }
