@@ -35,7 +35,7 @@ public interface IDatabase {
 	public List<Genre> findGenreBySongTitle(String title, String name);
 	public Integer insertAccountIntoAccountsTable(String username, String password);
 	public List<Playlist> removePlaylistFromPlaylistTable(String title);
-	public Integer insertSongIntoPlaylist(String plTitle, int ownerId, String songTitle, int albumId, int artistId, int genreId) throws SQLException;
+	public Integer insertSongIntoPlaylist(String plTitle, String songTitle, int albumId, int artistId, int genreId) throws SQLException;
 	public List<Playlist> findPlaylistsByAccount(String username, String password);
 	public List<Account> removeAccountByAccountName(String username);
 

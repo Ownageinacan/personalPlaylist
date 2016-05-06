@@ -492,7 +492,7 @@ public class DerbyDatabase implements IDatabase {
 	// Works if playlist does not exist. 
 
 	@Override
-	public Integer insertSongIntoPlaylist(final String plTitle, final int ownerId, final String songTitle, final int albumId, final int artistId, final int genreId) throws SQLException
+	public Integer insertSongIntoPlaylist(final String plTitle, final String songTitle, final int albumId, final int artistId, final int genreId) throws SQLException
 	{
 		return executeTransaction(new Transaction<Integer>(){
 			@Override
@@ -516,11 +516,10 @@ public class DerbyDatabase implements IDatabase {
 					//try to retrieve playlist_id
 					stmt = conn.prepareStatement(
 							"select playlist_id from playlists "+
-									" where playlist_title = ? and user_ownerid = ? "
+									" where playlist_title = ? "
 							);
 
 					stmt.setString(1, plTitle);
-					stmt.setInt(2, ownerId);
 
 					//execute query, get result
 					resultSet = stmt.executeQuery();
@@ -535,12 +534,11 @@ public class DerbyDatabase implements IDatabase {
 
 						if(playlist_id <= 0){
 							stmt2 = conn.prepareStatement(
-									"insert into playlists (playlist_title, number_songs, user_ownerid) "+
-											" values(?, ?, ?) "
+									"insert into playlists (playlist_title, number_songs) "+
+											" values(?, ?) "
 									);
 							stmt2.setString(1, plTitle);
 							stmt2.setInt(2, 0);
-							stmt2.setInt(3, ownerId);
 
 							stmt2.executeUpdate();
 
@@ -550,10 +548,9 @@ public class DerbyDatabase implements IDatabase {
 
 							stmt3 = conn.prepareStatement(
 									"select playlist_id from playlists "+
-											" where playlist_title = ? and user_ownerid = ? "										
+											" where playlist_title = ? "										
 									);
 							stmt3.setString(1, plTitle);
-							stmt3.setInt(2, ownerId);
 
 							resultSet3 = stmt3.executeQuery();
 
