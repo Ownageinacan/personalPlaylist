@@ -492,7 +492,7 @@ public class DerbyDatabase implements IDatabase {
 	// Works if playlist does not exist. 
 
 	@Override
-	public Integer insertSongIntoPlaylist(final String plTitle, final String songTitle, final int albumId, final int artistId, final int genreId) throws SQLException
+	public Integer insertSongIntoPlaylist(final String plTitle, final String songTitle, final int albumId, final int artistId, final int genreId, final String location) throws SQLException
 	{
 		return executeTransaction(new Transaction<Integer>(){
 			@Override
@@ -568,19 +568,18 @@ public class DerbyDatabase implements IDatabase {
 
 					}
 
-					//TODO: Note, does not include song 'location'
 					// Get song_id
 					stmt4 = conn.prepareStatement(
 							"select song_id from songs "+
 									" where song_title = ? and album = ? "+
-									" and artist = ? and genre = ? "
+									" and artist = ? and genre = ? and song_location = ? "
 							);
 
 					stmt4.setString(1, songTitle);
 					stmt4.setInt(2, albumId);
 					stmt4.setInt(3, artistId);
 					stmt4.setInt(4, genreId);
-
+					stmt4.setString(5, location);
 					resultSet4 = stmt4.executeQuery();
 
 					if(resultSet4.next()){
