@@ -442,7 +442,6 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet2 = null;
 
 				Integer user_id = -1;
-				Integer num_playlists = 0;
 				
 				try{
 					stmt = conn.prepareStatement(
@@ -462,7 +461,8 @@ public class DerbyDatabase implements IDatabase {
 							);
 					stmt2.setString(1, username);
 					stmt2.setString(2, password);
-
+					
+					System.out.println("getting new user id");
 					resultSet2 = stmt2.executeQuery();
 
 					if(resultSet2.next()){
@@ -470,17 +470,10 @@ public class DerbyDatabase implements IDatabase {
 						System.out.println("New user <"+username+"> ID: "+user_id);
 					}
 					
-				     if(num_playlists == 0){
-
-				    	 insertPlaylistIntoPlaylistsTable("Library", user_id);
-
-				    	 }
-					
-					else
-					{
-						System.out.println("New user <"+username+"> not found in the accounts table (ID: "+user_id);
-					}
-
+					System.out.println("inserting library playlist");
+					insertPlaylistIntoPlaylistsTable("Library", user_id);
+					insertPlaylistIntoPlaylistsTable("Example Playlist", user_id);
+				
 					return user_id;	
 
 				}finally{
