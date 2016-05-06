@@ -169,6 +169,13 @@ public class MasterController {
 		}
 		
 		//TODO: call db insertSongIntoPlaylist
+		db.insertSongIntoPlaylist(Playlist, songName, Album_id, Artist_id, Genre_id, Location);
+	}
+
+	public void deletePlaylist(String PLaylist) {
+		InitDatabase.init();
+		IDatabase db = DatabaseProvider.getInstance();
 		
+		db.removePlaylistFromPlaylistTable(PLaylist);
 	}
 }

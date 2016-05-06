@@ -209,6 +209,9 @@
 				</c:forEach>
 			<input type="submit" value="Show Me the Playlist">
 			</form>
+			<form action="${pageContext.servletContext.contextPath}/Home" method="post">
+				<input type="button" name="deletePlaylist" value="deletePlaylist">
+			</form>
 		</div>
 		<div class="sideBorder"></div>
 		<div class="backgroundPic"><img src='Assets/Pictures/shutterstock_138386987.jpg' style="height: 100%; width: 100%;"/></div>

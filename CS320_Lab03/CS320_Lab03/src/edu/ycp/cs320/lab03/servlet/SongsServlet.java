@@ -23,6 +23,8 @@ public class SongsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		InitDatabase.init();
+		IDatabase db = DatabaseProvider.getInstance();
 		HttpSession session = req.getSession(true);
 		String user = (String) req.getSession().getAttribute("Username");
 		if (user == null) {
@@ -36,8 +38,6 @@ public class SongsServlet extends HttpServlet {
 		session.setAttribute("playlistTitle", playlistTitle);
 		
 		List<Song> songs = null; 
-		InitDatabase.init();
-		IDatabase db = DatabaseProvider.getInstance();
 		songs = db.findSongsByPlaylistTitle(playlistTitle);
 		
 		req.setAttribute("songs", songs);

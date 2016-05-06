@@ -48,6 +48,7 @@ public class HomeServlet extends HttpServlet {
 		String createPlaylistName = req.getParameter("createPlaylistName");
 		String user = (String) req.getSession().getAttribute("Username");
 		String pass = (String) req.getSession().getAttribute("Password");
+		String deleteButton = req.getParameter("deletePlaylist");
 		
 		controller = new MasterController();
 
@@ -58,6 +59,9 @@ public class HomeServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		if(!(deleteButton == null)){
+			controller.deletePlaylist(deleteButton);
 		}
 		List<Playlist> playlists = controller.getAllPlayListsbyAccount(user, pass);	
 		req.setAttribute("playlists", playlists);
