@@ -1754,6 +1754,133 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
+
+	@Override
+	public List<Account> removeAccountByAccountName(final String username)
+	{
+		return executeTransaction(new Transaction<List<Account>>(){
+			@Override
+			public List<Account> execute (Connection conn) throws SQLException{
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+
+				ResultSet resultSet1 = null;
+				ResultSet resultSet4 = null;
+				//ResultSet resultSet2 = null; //unused
+				//ResultSet resultSet3 = null;
+
+				//String playlistTitle = "";
+				Integer userId = -1;
+				
+				try{
+
+					//get username to be deleted
+					//also need to get account id to remove it from Playlists
+
+					stmt1 = conn.prepareStatement(
+							"select accounts.user_id " +
+									"  from  accounts " +
+									"  where accounts.username = ? "
+							);
+				
+					//get account id
+					stmt1.setString(1, username);
+					
+					resultSet1 = stmt1.executeQuery();
+
+					if(resultSet1.next()){
+						userId = resultSet1.getInt(1);
+						System.out.println("User <"+username+"> found with ID: "+userId);
+					}else{
+						System.out.println("How did you even attempt to remove a non-existing account?");
+					}
+				
+					// assemble list of accounts (should only be one account really)
+					// to return
+					List<Account> accounts = new ArrayList<Account>();
+
+					while(resultSet1.next()){
+						Account accnt = new Account();
+						loadAccount(accnt, resultSet1, 1);
+						accounts.add(accnt);
+					}
+
+					//next get playlist_titles owned by that user
+					//so that we can call removePlaylistByTitle method
+
+					stmt4 = conn.prepareStatement(
+							"select playlists.playlist_title "+
+							" from playlists "+
+							" where playlists.user_ownerid = ? "			
+							); 
+					
+					stmt4.setInt(1, userId);
+					resultSet4 = stmt4.executeQuery();
+					
+					List<String> playlists = new ArrayList<String>();
+					
+					//assemble the list of playlist ids
+					// TODO: CHECK THIS IT WILL ALMOST DEFINITELY
+					// BREAK OUT ENTIRE PROJECT GOOD LUCK
+					
+					while(resultSet4.next()){
+						String plTitle = resultSet4.getString(1);
+						playlists.add(plTitle);
+					}
+					
+					for(int i = 0; i < playlists.size(); i++){
+						removePlaylistFromPlaylistTable(playlists.get(i));
+					}
+					
+					/*// delete entries in playlistsongs
+
+					stmt2 = conn.prepareStatement(
+							"delete from playlistsongs " +
+									" where playlist_id = ?"
+							);
+
+					// get playlist ID
+					stmt2.setInt(1, playlists.get(0).getPlaylistId());
+					stmt2.executeUpdate();
+
+					System.out.println("Deleted junction table entries for playlist(s) owned by account <"+ username +" from DB");
+
+					//Now remove entires from playlist table
+
+					stmt3 = conn.prepareStatement(
+							"delete from playlists " +
+									" where playlist_id = ? "
+							);
+
+					stmt3.setString(1, playlistId);
+					stmt3.executeUpdate();
+
+					System.out.println("Deleted playlist(s) with title <"+title+"> from DB");
+					 */
+					
+					return accounts;
+
+				}finally{
+
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(resultSet4);
+					//DBUtil.closeQuietly(resultSet2);
+					//DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt4);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+
+
+				}		
+			}
+		});
+	}
+
+	
+	
 	// wrapper SQL transaction function that calls actual transaction function (which has retries)
 	public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
 		try {
