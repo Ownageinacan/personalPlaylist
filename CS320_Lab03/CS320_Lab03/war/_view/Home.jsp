@@ -167,6 +167,24 @@
 			font-weight: bold;
 			font-family: "Verdana", sans-serif;
 		}
+		.searchAlbum{
+			left: 400px;
+			top: 25px;
+			position: absolute;
+			color: white;
+			font-size: 14px;
+			font-weight: bold;
+			font-family: "Verdana", sans-serif;
+		}
+		.searchArtist{
+			left: 700px;
+			top: 25px;
+			position: absolute;
+			color: white;
+			font-size: 14px;
+			font-weight: bold;
+			font-family: "Verdana", sans-serif;
+		}
 		</style>
 	</head>
 
@@ -231,6 +249,28 @@
 						<input type="Submit" name="createPlaylist" value="createPlaylist">
 					</form>
 				</div>
+			</div>
+			<div class="searchAlbum">
+					<form action="${pageContext.servletContext.contextPath}/Songs" method="get">
+						<table>
+							<tr>
+								<td class="label">Album Name:</td>
+								<td><input type="text" name="searchAlbum" size="12" value="${albumName}" /></td>
+							</tr>
+						</table>
+						<input type="Submit" name="searchAlbum" value="search songs in an Album">
+					</form>
+			</div>
+			<div class="searchArtist">
+					<form action="${pageContext.servletContext.contextPath}/Songs" method="get">
+						<table>
+							<tr>
+								<td class="label">Artist Name:</td>
+								<td><input type="text" name="searchArtist" size="12" value="${artistName}" /></td>
+							</tr>
+						</table>
+						<input type="Submit" name="searchArtist" value="search songs by artist">
+					</form>
 			</div>
 		</div>
 		<!--

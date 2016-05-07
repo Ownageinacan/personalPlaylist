@@ -8,6 +8,7 @@ import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
 import edu.ycp.cs320.personalPlaylist.model.Genre;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
+import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DatabaseProvider;
 import edu.ycp.cs320.personalPlaylist.persist.IDatabase;
 import edu.ycp.cs320.personalPlaylistdb.InitDatabase;
@@ -171,11 +172,30 @@ public class MasterController {
 		//TODO: call db insertSongIntoPlaylist
 		db.insertSongIntoPlaylist(Playlist, songName, Album_id, Artist_id, Genre_id, Location);
 	}
-
+	
+	//deletes playlist
 	public void deletePlaylist(String PLaylist) {
 		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		db.removePlaylistFromPlaylistTable(PLaylist);
+	}
+
+	//gets songs from an album
+	public List<Song> getSongsInAlbum(String albumName) {
+		InitDatabase.init();
+		IDatabase db = DatabaseProvider.getInstance();
+
+		List<Song> songList = db.findAllSongs();
+		
+		return songList;
+	}
+
+	public List<Song> getSongsByArtist(String artistName) {
+		InitDatabase.init();
+		IDatabase db = DatabaseProvider.getInstance();
+
+		List<Song> songList = db.findSongByArtistName(artistName);
+		return songList;
 	}
 }

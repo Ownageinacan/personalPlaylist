@@ -35,13 +35,6 @@ public class HomeServlet extends HttpServlet {
 		System.out.print(playlists.get(1).getTitle());
 		
 		req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
-		/*try{
-				req.getSession().getAttribute("Username");
-				req.getRequestDispatcher("/_view/Home.jsp").forward(req, resp);
-		}catch(NullPointerException e){
-			req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
-		}*/
-			
 	}
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -60,6 +53,7 @@ public class HomeServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		//doesn't work
 		if(!(deleteButton == null)){
 			controller.deletePlaylist(deleteButton);
 		}

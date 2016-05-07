@@ -23,10 +23,14 @@ public class SongsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		controller = new MasterController();
 		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
 		HttpSession session = req.getSession(true);
 		String user = (String) req.getSession().getAttribute("Username");
+		String albumName = req.getParameter("albumName");
+		String artistName = req.getParameter("artistName");
+		
 		if (user == null) {
 			System.out.println("   User: <" + user + "> not logged in or session timed out");
 
@@ -38,7 +42,14 @@ public class SongsServlet extends HttpServlet {
 		session.setAttribute("playlistTitle", playlistTitle);
 		
 		List<Song> songs = null; 
-		songs = db.findSongsByPlaylistTitle(playlistTitle);
+		
+		if(!albumName.equals("") || !albumName.equals(null)){
+			songs = controller.getSongsInAlbum(albumName);
+		}else if(!artistName.equals("") || !artistName.equals(null)){
+			songs = controller.getSongsByArtist(artistName);
+		}else{
+			songs = db.findSongsByPlaylistTitle(playlistTitle);
+		}
 		
 		req.setAttribute("songs", songs);
 		req.setAttribute("playlistTitle", playlistTitle);
@@ -71,6 +82,7 @@ public class SongsServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		
 		req.setAttribute("songs", songs);
 		req.setAttribute("playlistTitle", playlistTitle);
 		req.getRequestDispatcher("/_view/Songs.jsp").forward(req, resp);
