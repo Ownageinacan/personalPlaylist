@@ -71,8 +71,9 @@ public class DerbyDatabaseTest
 	@Test
 	public void insertPlaylistIntoPlaylistsTable() throws SQLException
 	{
-		//fail("broken atm");
-	
+		fail("broken atm");
+		/*
+		String findPlaylist;
 		System.out.println("\nTesting insertPlaylistIntoPlaylistsTable");
 		Playlist playlist = new Playlist(); 
 		playlist.setNumberSongs(10);
@@ -87,7 +88,7 @@ public class DerbyDatabaseTest
 			// try to retrieve the song from the DB
 			// get the list of (Songs) from DB
 			playlistsForInserting = db.findAllPlaylists();
-			playlistsForInserting = db.findPlaylistByTitle(playlist.getTitle());
+			findPlaylist = db.findPlaylistByTitle(playlist.getTitle());
 			
 			if (playlistsForInserting.isEmpty()) {
 				System.out.println("No playlists found for name <" + playlist.getTitle() + ">");
@@ -108,9 +109,35 @@ public class DerbyDatabaseTest
 			System.out.println("Failed to insert new playlist (ID: " + playlist_id + ") into Playlists table: <" + playlistName + ">");
 			fail("Failed to insert new playlist <" + playlistName + "> into DB");
 		}
-		
+		*/
 	}
 	
+	@Test
+	public void insertGenreIntoPlaylistsTable() throws SQLException
+	{
+		fail("test not implemented");
+	}
+	@Test
+	public void insertArtistIntoArtistsTable() throws SQLException
+	{
+		fail("test not implemented");
+	}
+	@Test
+	public void insertAlbumIntoAlbumsTable() throws SQLException
+	{
+		fail("test not implemented");
+	}
+	@Test
+	public void insertAccountIntoAccountsTable() throws SQLException
+	{
+		fail("test not implemented");
+	}
+	@Test
+	public void testinsertSongIntoPlaylist()
+	{
+		//TODO: Implement
+		fail("TODO: Implement");
+	}
 	@Test
 	public void testFindAllArtists() 
 	{
@@ -275,6 +302,7 @@ public class DerbyDatabaseTest
 	}
 	@Test
 	public void testFindAllSongs() 
+
 	{
 		int countSongs = 0;
 		System.out.println("\n Testing FindAllSongs:");
@@ -302,6 +330,38 @@ public class DerbyDatabaseTest
 			{
 				System.out.println("Only " + countSongs + " songs were found");
 				fail("Missing songs");
+			}
+		}
+	}
+	@Test
+	public void testFindAllAccounts()
+	{
+		int countAllAccounts = 0;
+		System.out.println("\n Testing FindAllAccounts:");
+
+		//get all of the songs
+		List<Account> accountList = db.findAllAccounts();
+		
+		//simple test to check if no results were found in the DB
+		if (accountList.isEmpty()) 
+		{
+			System.out.println("No accounts were found");
+			fail("No accounts were found in the database");
+		}
+
+		else 
+		{			
+			accounts = new ArrayList<Account>();
+			for (Account account : accountList) 
+			{
+				accounts.add(account);
+				System.out.println(account.getUsername() + ", " + account.getPassword());
+				countAllAccounts++;
+			}
+			if(accounts.size() != countAllAccounts)
+			{
+				System.out.println("Only " + countAllAccounts + " were found");
+				fail("Not all accounts were found");
 			}
 		}
 	}
@@ -383,7 +443,24 @@ public class DerbyDatabaseTest
 			fail("Missing songs"); //this shouldn't happen
 		}
 	}	
+	
 	@Test
+	public void testFindSongByTitle()
+	{
+		System.out.println("Testing FindSongByTitle");
+		List<Song> allSongs = new ArrayList<Song>();
+		List<Song> songsByTitle = new ArrayList<Song>();
+		allSongs = db.findAllSongs();
+		songsByTitle = db.findSongByTitle(allSongs.get(0).toString());
+		if(songsByTitle.isEmpty())
+		{
+			fail("no song found");
+		}
+		for(Song song: songsByTitle)
+		{
+			System.out.println(song);
+		}
+	}@Test
 	public void testRemoveSongByTitle()
 	{
 		//TODO: Implement
@@ -396,44 +473,8 @@ public class DerbyDatabaseTest
 		//TODO: Implement
 		fail("TODO: Implement");
 	}
-	@Test
-	public void testinsertSongIntoPlaylist()
-	{
-		//TODO: Implement
-		fail("TODO: Implement");
-	}
-	@Test
-	public void testFindAllAccounts()
-	{
-		int countAllAccounts = 0;
-		System.out.println("\n Testing FindAllAccounts:");
-
-		//get all of the songs
-		List<Account> accountList = db.findAllAccounts();
-		
-		//simple test to check if no results were found in the DB
-		if (accountList.isEmpty()) 
-		{
-			System.out.println("No accounts were found");
-			fail("No accounts were found in the database");
-		}
-
-		else 
-		{			
-			accounts = new ArrayList<Account>();
-			for (Account account : accountList) 
-			{
-				accounts.add(account);
-				System.out.println(account.getUsername() + ", " + account.getPassword());
-				countAllAccounts++;
-			}
-			if(accounts.size() != countAllAccounts)
-			{
-				System.out.println("Only " + countAllAccounts + " were found");
-				fail("Not all accounts were found");
-			}
-		}
-	}
+	
+	
 	@Test
 	public void testExecuteTransaction()
 	{
