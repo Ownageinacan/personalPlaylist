@@ -41,6 +41,7 @@ public interface IDatabase {
 	public List<Playlist> findPlaylistsByAccount(String username, String password);
 	public List<Account> removeAccountByAccountName(String username);
 	public List<Song> findSongByAlbumName(String title);
+	public List<Song> findSongByGenreTitle(String title);
 
 	
 	//public List<Artist, Album, Playlist> findSongByArtistAndAlbumAndPlaylist(); //trio class?

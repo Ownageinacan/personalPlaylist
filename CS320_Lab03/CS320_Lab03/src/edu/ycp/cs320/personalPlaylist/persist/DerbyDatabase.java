@@ -1023,8 +1023,6 @@ public class DerbyDatabase implements IDatabase {
 
 					while(resultSet.next())
 					{
-						//TODO: CHECK WHY INDICIES ARE 1 AND 4?
-
 						found = true;
 						//System.out.println("loading songs"); //annoying spam statement
 						Song song = new Song();
@@ -1051,6 +1049,72 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
+	public List<Song> findSongByGenreTitle(final String title)
+	{
+		return executeTransaction(new Transaction<List<Song>>() {
+			@Override
+			public List<Song> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+	
+				ResultSet resultSet = null;
+				ResultSet resultSet2 = null;
+	
+				Integer genre_id = -1; //use this if method doesn't work
+	
+				// try to retrieve songs based on album title name
+	
+				try {
+	
+					stmt2 = conn.prepareStatement(
+							"select genre_id "+
+									" from genres "+
+									" where genre_title = ? "
+							);
+	
+					stmt2.setString(1, title);
+	
+					resultSet2 = stmt2.executeQuery();
+	
+					if(resultSet2.next()){
+						genre_id = resultSet2.getInt(1);
+						System.out.println("Album <"+title+"> found with ID: "+genre_id);
+					}else if(genre_id <= 0){
+						//TODO: IMLPEMENT IF ALBUM NOT FOUND
+						System.out.println("GENRE DOES NOT EXIST, PROBABLY SHOULDNT SEE THIS MESSAGE");
+					}
+					
+					stmt = conn.prepareStatement(
+							"select songs.* " +
+									"  from songs " +
+									"  where songs.genre = ? "
+							);
+	
+					stmt.setInt(1, genre_id);
+					
+					// establish the list to receive the result
+					List<Song> result = new ArrayList<Song>();
+	
+					// execute the query, get the results, and assemble them in an ArrayLsit
+					resultSet = stmt.executeQuery();
+	
+					while (resultSet.next()) {
+						Song song = new Song();
+						loadSong(song, resultSet, 1);	//this is at an index of 1
+						result.add(song);
+					}
+	
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
+	}
+	
+	@Override
 	public List<Song> findSongByAlbumName(final String title)
 	{
 		return executeTransaction(new Transaction<List<Song>>() {
@@ -1068,42 +1132,40 @@ public class DerbyDatabase implements IDatabase {
 	
 				try {
 	
-					stmt2 = conn.prepareStatement(
-							"select albums.album_id "+
-									" from albums "+
-									" where albums.album_title = ? "
-	
+					stmt = conn.prepareStatement(
+							"select album_id from albums "+
+									" where album_title = ? "
 							);
 	
-					stmt2.setString(1, title);
+					stmt.setString(1, title);
 	
-					resultSet2 = stmt2.executeQuery();
+					resultSet = stmt.executeQuery();
 	
-					if(resultSet2.next()){
-						album_id = resultSet2.getInt(1);
+					if(resultSet.next()){
+						album_id = resultSet.getInt(1);
 						System.out.println("Album <"+title+"> found with ID: "+album_id);
-					}else{
+					}else if(album_id <= 0){
 						//TODO: IMLPEMENT IF ALBUM NOT FOUND
 						System.out.println("ALBUM DOES NOT EXIST, PROBABLY SHOULDNT SEE THIS MESSAGE");
 					}
 					
-					stmt = conn.prepareStatement(
+					stmt2 = conn.prepareStatement(
 							"select songs.* " +
 									"  from songs " +
 									"  where songs.album = ? "
 							);
 	
-					stmt.setInt(1, album_id);
+					stmt2.setInt(1, album_id);
 					
 					// establish the list to receive the result
 					List<Song> result = new ArrayList<Song>();
 	
 					// execute the query, get the results, and assemble them in an ArrayLsit
-					resultSet = stmt.executeQuery();
+					resultSet2 = stmt.executeQuery();
 	
-					while (resultSet.next()) {
+					while (resultSet2.next()) {
 						Song song = new Song();
-						loadSong(song, resultSet, 1);	//this is at an index of 1
+						loadSong(song, resultSet2, 1);	//this is at an index of 1
 						result.add(song);
 					}
 	
@@ -1150,9 +1212,9 @@ public class DerbyDatabase implements IDatabase {
 					if(resultSet2.next()){
 						artist_id = resultSet2.getInt(1);
 						System.out.println("Artist <"+name+"> found with ID: "+artist_id);
-					}else{
-						//TODO: IMPLEMENT IF ALBUM NOT FOUND
-						System.out.println("ALBUM DOES NOT EXIST, PROBABLY SHOULDNT SEE THIS MESSAGE");
+					}else if(artist_id <= 0){
+						//TODO: IMPLEMENT IF ARTIST NOT FOUND
+						System.out.println("ARTIST DOES NOT EXIST, PROBABLY SHOULDNT SEE THIS MESSAGE");
 					}
 										
 					stmt = conn.prepareStatement(
@@ -1185,8 +1247,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-
-
+	
 	@Override
 	public List<Artist> findArtistBySongTitle(final String title, final String name)
 	{
