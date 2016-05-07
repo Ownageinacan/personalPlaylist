@@ -34,6 +34,8 @@ public class SongsServlet extends HttpServlet {
 		String albumName = req.getParameter("albumName");
 		System.out.println("got album name from jsp");
 		String artistName = req.getParameter("artistName");
+		String genreName = req.getParameter("genreName");
+		String playlistTitle = req.getParameter("playlist");
 		
 		if (user == null) {
 			System.out.println("   User: <" + user + "> not logged in or session timed out");
@@ -42,19 +44,27 @@ public class SongsServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/Login");
 			return;
 		}
-		String playlistTitle = req.getParameter("playlist");
+		
 		session.setAttribute("playlistTitle", playlistTitle);
 		
 		List<Song> songs = null; 
 		System.out.println("checking if albumname is null or empty");
-		if(!(albumName == "") || !(albumName == null)){
+		if(!(albumName == null)){
 			System.out.println("calling find albumname controller");
 			songs = controller.getSongsInAlbum(albumName);
-		}else if(!(artistName == "") || !(artistName == null))
+		}
+		else if(!(artistName == null)){
+			System.out.println("calling find artist controller");
 			songs = controller.getSongsByArtist(artistName);
-		else
+		}
+		else if(!(genreName == null)){
+			System.out.println("calling find genre controller");
+			songs = controller.getSongByGenre(genreName);
+		}
+		else{
+			System.out.println("getting all songs, genre artsit and album failed");
 			songs = db.findSongsByPlaylistTitle(playlistTitle);
-		
+		}
 		req.setAttribute("songs", songs);
 		req.setAttribute("playlistTitle", playlistTitle);
 		

@@ -185,6 +185,15 @@
 			font-weight: bold;
 			font-family: "Verdana", sans-serif;
 		}
+		.searchGenre{
+			left: 1000px;
+			top: 25px;
+			position: absolute;
+			color: white;
+			font-size: 14px;
+			font-weight: bold;
+			font-family: "Verdana", sans-serif;
+		}
 		</style>
 	</head>
 
@@ -270,6 +279,17 @@
 							</tr>
 						</table>
 						<input type="Submit" name="searchArtist" value="search songs by artist">
+					</form>
+			</div>
+			<div class="searchGenre">
+					<form action="${pageContext.servletContext.contextPath}/Songs" method="get">
+						<table>
+							<tr>
+								<td class="label">Genre Name:</td>
+								<td><input type="text" name="searchGenre" size="12" value="${genreName}" /></td>
+							</tr>
+						</table>
+						<input type="Submit" name="searchGenre" value="search songs by genre">
 					</form>
 			</div>
 		</div>

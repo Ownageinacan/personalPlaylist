@@ -1011,7 +1011,6 @@ public class DerbyDatabase implements IDatabase {
 							" where playlists.playlist_title = ? "+
 							" and songs.song_id = playListSongs.song_id "+
 							" and playlists.playlist_id = playListSongs.playlist_id "
-
 							);
 
 					stmt.setString(1, title);

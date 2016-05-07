@@ -198,4 +198,12 @@ public class MasterController {
 		List<Song> songList = db.findSongByArtistName(artistName);
 		return songList;
 	}
+
+	public List<Song> getSongByGenre(String genreName) {
+		InitDatabase.init();
+		IDatabase db = DatabaseProvider.getInstance();
+
+		List<Song> songList = null;
+		return songList;
+	}
 }
