@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.personalPlaylist.model.Account;
 
-
+////////////////////////////////////////////////////////////////////
+//This class was written without using the completed CS320 Lab03
+/////////////////////////////////////////////////////////////////////
 public class AccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -26,13 +28,6 @@ public class AccountServlet extends HttpServlet {
 			return;
 		}
 		req.getRequestDispatcher("/_view/Account.jsp").forward(req, resp);
-		/*try{
-			if(!req.getSession().getAttribute("Username").equals(null)){
-				req.getRequestDispatcher("/_view/Account.jsp").forward(req, resp);
-			}
-		}catch(NullPointerException e){
-			req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
-		}*/
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)

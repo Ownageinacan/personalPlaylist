@@ -15,7 +15,9 @@ import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DatabaseProvider;
 import edu.ycp.cs320.personalPlaylist.persist.IDatabase;
 import edu.ycp.cs320.personalPlaylistdb.InitDatabase;
-
+////////////////////////////////////////////////////////////////////
+//This class was written without using the completed CS320 Lab03
+/////////////////////////////////////////////////////////////////////
 public class SongsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MasterController controller = null;	

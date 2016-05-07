@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.lab03.controller.MasterController;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
-
+////////////////////////////////////////////////////////////////////
+//This class was written without using the completed CS320 Lab03
+/////////////////////////////////////////////////////////////////////
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MasterController controller = null;	
