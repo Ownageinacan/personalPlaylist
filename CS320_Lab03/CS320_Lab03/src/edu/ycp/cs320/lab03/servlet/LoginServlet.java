@@ -9,7 +9,9 @@ import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.lab03.controller.MasterController;
 
-
+////////////////////////////////////////////////////////////////////
+//This class was written without using the completed CS320 Lab03
+/////////////////////////////////////////////////////////////////////
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	

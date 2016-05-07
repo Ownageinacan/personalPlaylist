@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.lab03.controller.MasterController;
-
+////////////////////////////////////////////////////////////////////
+//This class was written without using the completed CS320 Lab03
+/////////////////////////////////////////////////////////////////////
 public class CreateAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
