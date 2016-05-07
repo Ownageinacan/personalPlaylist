@@ -36,11 +36,11 @@ public class HomeControllerTest
 		playlists = new ArrayList<Playlist>();
 		List<Playlist> listOfPlaylists = controller.getAllPlayLists();
 		playlists = db.findAllPlaylists();
-		if(listOfPlaylists != playlists)
+		if(listOfPlaylists.size() != playlists.size() && playlists.size() != 0)
 		{
 			fail("Not all of the playlists were found");
 		}
-		assertTrue(controller.getAllPlayLists() == db.findAllPlaylists());
+		assertTrue(controller.getAllPlayLists().size() == db.findAllPlaylists().size());
 		
 	}
 
