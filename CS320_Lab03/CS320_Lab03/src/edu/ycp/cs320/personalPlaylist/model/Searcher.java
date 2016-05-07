@@ -2,7 +2,7 @@
 package edu.ycp.cs320.personalPlaylist.model;
 
 import java.util.ArrayList;
-
+//This class never got implemented, it would be just calling methods from the db if we did implement it
 public class Searcher 
 {
 	private String titleContainsWord;

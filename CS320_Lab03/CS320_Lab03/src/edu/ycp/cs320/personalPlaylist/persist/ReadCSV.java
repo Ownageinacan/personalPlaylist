@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
+//////////////////////////////////////////////////////////////
+//CS320 Lab06 ReadCSV code was used for this method
+//////////////////////////////////////////////////////////////
 public class ReadCSV implements Closeable {
 	private BufferedReader reader;
 	

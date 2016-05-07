@@ -17,14 +17,16 @@ import edu.ycp.cs320.personalPlaylist.persist.DatabaseProvider;
 import edu.ycp.cs320.personalPlaylist.persist.DerbyDatabase;
 import edu.ycp.cs320.personalPlaylist.persist.IDatabase;
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //CS320 Lab06 Derby Database test code was used as a template for many of the methods in this class(find, insert, remove)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DerbyDatabaseTest 
 {
 	private IDatabase db = null;
 	
 	List<Song> songs = null;
 	List<Playlist> playlists = null;
+	List<Playlist> playlistsForInserting = null;
 	List<Artist> artists = null;
 	List<Genre> genres = null;
 	List<Album> albums = null;
@@ -64,69 +66,31 @@ public class DerbyDatabaseTest
 	@Test
 	public void testInsertSongIntoSongsTable() throws SQLException 
 	{
-		fail("broken atm");
-		/*
-		System.out.println("\n*** Testing insertSongIntoSongsTable ***");
-
-		String songName     = "DankMemes";
-		String location  = "C:/someplacethatIdunno";
-		int albumId = 2;
-		int artistId = 3;
-		int genreId = 1;
-				
-		// insert new book (and possibly new author) into DB
-		Integer song_id = db.insertSongIntoSongsTable(songName, location, albumId, artistId, genreId);
-
-		// check the return value - should be a song_id > 0
-		if (song_id > 0)
-		{
-			// try to retrieve the song from the DB
-			// get the list of (Songs) from DB
-			songs = db.findSongByTitle(songName);
-			
-			if (songs.isEmpty()) {
-				System.out.println("No songs found for name <" + songName + ">");
-				fail("Failed to insert new song <" + songName + "> into Library DB");
-			}
-			// otherwise, the test was successful.  Now remove the song just inserted to return the DB
-			// to it's original state, except for using a song_id
-			else {
-				System.out.println("New song (ID: " + song_id + ") successfully added to Songs table: <" + songName + ">");
-				
-				// now delete Song (and its Artist) from DB
-				// leaving the DB in its previous state - except that an artist_id, and a song_id have been used
-				List<Artist> artist = db.removeSongByTitle(songName);				
-			}
-		}
-		else
-		{
-			System.out.println("Failed to insert new song (ID: " + song_id + ") into Songs table: <" + songName + ">");
-			fail("Failed to insert new song <" + songName + "> into DB");
-		}
-		*/
+		fail("not going to use this method in implementation");
 	}
 	@Test
 	public void insertPlaylistIntoPlaylistsTable() throws SQLException
 	{
-		fail("broken atm");
-	/*
-		System.out.println("\n*** Testing insertPlaylistIntoPlaylistsTable ***");
-
-		String playlistName = "AlsoDankMemes";
+		//fail("broken atm");
+	
+		System.out.println("\nTesting insertPlaylistIntoPlaylistsTable");
+		Playlist playlist = new Playlist(); 
+		playlist.setNumberSongs(10);
+		playlist.setTitle("DankMemes"); 
 		int ownerId = 1;
 				
-		// insert new book (and possibly new author) into DB
-		Integer playlist_id = db.insertPlaylistIntoPlaylistsTable(playlistName, ownerId);
+		Integer playlist_id = db.insertPlaylistIntoPlaylistsTable(playlist.getTitle(), ownerId);
 
 		// check the return value - should be a song_id > 0
 		if (playlist_id > 0)
 		{
 			// try to retrieve the song from the DB
 			// get the list of (Songs) from DB
-			playlists = db.findPlaylistByTitle(playlistName);
+			playlistsForInserting = db.findAllPlaylists();
+			playlistsForInserting = db.findPlaylistByTitle(playlist.getTitle());
 			
-			if (playlists.isEmpty()) {
-				System.out.println("No playlists found for name <" + playlistName + ">");
+			if (playlistsForInserting.isEmpty()) {
+				System.out.println("No playlists found for name <" + playlist.getTitle() + ">");
 				fail("Failed to insert new playlist <" + playlistName + "> into Library DB");
 			}
 			// otherwise, the test was successful.  Now remove the song just inserted to return the DB
@@ -136,7 +100,7 @@ public class DerbyDatabaseTest
 				
 				// now delete Playlist from DB
 				// leaving the DB in its previous state - except that a playlist_id have been used
-				List<Playlist> playlist = db.deletePlaylistFromPlaylistTable(playlistName);				
+				List<Playlist> playlist2 = db.removePlaylistFromPlaylistTable(playlistName);				
 			}
 		}
 		else
@@ -144,7 +108,7 @@ public class DerbyDatabaseTest
 			System.out.println("Failed to insert new playlist (ID: " + playlist_id + ") into Playlists table: <" + playlistName + ">");
 			fail("Failed to insert new playlist <" + playlistName + "> into DB");
 		}
-		*/
+		
 	}
 	
 	@Test

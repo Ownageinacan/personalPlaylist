@@ -19,7 +19,9 @@ import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
 import edu.ycp.cs320.personalPlaylist.model.Genre;
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//CS320 Lab06 Derby Database code was used as a template for many of the methods in this class
+/////////////////////////////////////////////////////////////////////////////////////////////////
 public class DerbyDatabase implements IDatabase {
 	static {
 		try {

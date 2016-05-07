@@ -9,7 +9,9 @@ import edu.ycp.cs320.personalPlaylist.model.Account;
 import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
 import edu.ycp.cs320.personalPlaylist.model.Genre;
-
+///////////////////////////////////////////////////////////////////////////////
+//CS320 Lab06 IDatabase code was used as a template for this class
+///////////////////////////////////////////////////////////////////////////////
 public interface IDatabase {
 
 	public Integer insertSongIntoSongsTable(String title, String location, int genreId, Artist artist, int albumId);

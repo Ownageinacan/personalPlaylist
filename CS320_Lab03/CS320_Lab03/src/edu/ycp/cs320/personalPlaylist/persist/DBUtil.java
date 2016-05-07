@@ -8,6 +8,9 @@ import java.sql.Statement;
 /**
  * Some database utility functions.
  */
+///////////////////////////////////////////////////////////////
+//CS320 Lab06 code was used for this class
+///////////////////////////////////////////////////////////////
 public abstract class DBUtil {
 	/**
 	 * Attempt to close a Statement.

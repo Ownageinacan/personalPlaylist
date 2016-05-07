@@ -10,16 +10,13 @@ public class Song
 	private int genreId;
 	private int songId;
 	
-	//private boolean isPlaying;
-	//private String address;
-	//private float length;
 	
-	public Song() //Constructor (empty)
+	public Song()
 	{
 		
 	}
 	
-	//I promise all of these are correct
+	//getters and setters
 	public void setLocation(String location){
 		this.location = location;
 	}
@@ -66,36 +63,4 @@ public class Song
 	{
 		this.genreId = id;
 	}
-	
-	
-	/*
-	
-	//PROBABLY DON'T NEED THESE
-		public void setLength(float length) 
-	{
-		this.length = length;
-	}
-		public float getLength() 
-	{
-		return length;
-	}	
-	public boolean isPlaying() 
-	{
-		return isPlaying;
-	}
-	public void setPlaying(boolean isPlaying) 
-	{
-		this.isPlaying = isPlaying;
-	}
-	
-	public void setAddress(String address)
-	{
-		this.address = address;
-	}
-	
-	public String getAddress()
-	{
-		return this.address;
-	}
-	*/
 }

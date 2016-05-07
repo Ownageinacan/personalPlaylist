@@ -4,7 +4,9 @@ import java.util.List;
 import edu.ycp.cs320.personalPlaylist.model.Song;
 import edu.ycp.cs320.personalPlaylist.persist.DatabaseProvider;
 import edu.ycp.cs320.personalPlaylist.persist.IDatabase;
-
+////////////////////////////////////////////////////////////////////
+//CS320 Lab06 AllBooksQuery was used as a template for this class
+/////////////////////////////////////////////////////////////////////
 public class AllSongsQuery 
 {
 	public static void main(String[] args) 

@@ -55,41 +55,10 @@ public class Playlist
 		// TODO Auto-generated method stub
 		
 	}
-
-
-
 	public void setUserOwnerId(int Id) {
 		this.userOwnerId = Id;
 	}
 	public int getUserOwnerId(){
 		return userOwnerId;
 	}
-
-
-	/*
-	 //PROBABLY NOT GOING TO USE THESE
-	  
-	  	public boolean addSong(String name)//should these be file names?
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	public boolean removeSong(String name)
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	public boolean skipSong()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	public boolean reverseSong()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	public boolean shuffle()
-	{
-		throw new UnsupportedOperationException("TODO - implement");
-	}
-	 */
-	
-	
 }

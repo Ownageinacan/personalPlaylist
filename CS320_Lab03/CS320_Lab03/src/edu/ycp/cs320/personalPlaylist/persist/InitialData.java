@@ -12,7 +12,9 @@ import edu.ycp.cs320.personalPlaylist.model.Genre;
 import edu.ycp.cs320.personalPlaylist.model.PlayListSongs;
 import edu.ycp.cs320.personalPlaylist.model.Playlist;
 import edu.ycp.cs320.personalPlaylist.model.Song;
-
+///////////////////////////////////////////////////////////////////////////
+//CS320 Lab06 InitialData code was used as a template for this class
+///////////////////////////////////////////////////////////////////////////
 public class InitialData {
 
 	// reads initial song data from CSV file and returns a List of songs
@@ -30,8 +32,6 @@ public class InitialData {
 				}
 				Iterator<String> i = tuple.iterator();	
 				Song song = new Song();		//Create a song object
-//				author.setAuthorId(Integer.parseInt(i.next()));
-				//TEMPORARY HARD CODE; ASK YOURSELF WHY WE WOULD SET ANY OF THESE?
 				song.setTitle(i.next());	//Set song title
 				song.setLocation(i.next());
 				song.setArtistId(Integer.parseInt(i.next()));
@@ -51,13 +51,13 @@ public class InitialData {
 	
 	
 	
-	// reads initial PlayList data from CSV file and returns a List of Books
+	// reads initial PlayList data from CSV file and returns a List of playlists
 	public static List<Playlist> getPlaylists() throws IOException {
 		List<Playlist> playList = new ArrayList<Playlist>();
 		ReadCSV readPlaylists = new ReadCSV("playlists.csv");
 		try {
 			System.out.println("getting playlists from csv");
-			// auto-generated primary key for table books
+			// auto-generated primary key for table playlists
 			Integer playlistId = 1;
 			while (true) {
 				List<String> tuple = readPlaylists.next();
@@ -70,9 +70,6 @@ public class InitialData {
 				pl.setNumberSongs(Integer.parseInt(i.next()));
 				pl.setUserOwnerId(Integer.parseInt(i.next()));
 				pl.setPlaylistId(playlistId++);
-//				book.setBookId(Integer.parseInt(i.next()));
-//				pl.setPlaylistId(playlistId++);					//Restore these if playlist constructor is changed again	
-//				pl.setTitle(i.next());							//
 
 				playList.add(pl);
 			}
@@ -98,7 +95,6 @@ public class InitialData {
 				}
 				Iterator<String> i = tuple.iterator();	
 				Artist artist = new Artist();		//Create a artist object
-//				author.setAuthorId(Integer.parseInt(i.next()));
 				
 				artist.setArtistId(artistId++);
 				artist.setArtistName(i.next());	//Set song title
@@ -118,7 +114,7 @@ public class InitialData {
 			ReadCSV readGenres = new ReadCSV("genres.csv");	//Create ReadCSV object
 			try {
 				System.out.println("getting genres from csv");
-				// auto-generated primary key for authors table
+				// auto-generated primary key for genres table
 				Integer genreId = 1;
 				while (true) {
 					List<String> tuple = readGenres.next();//Tuple crap that I don't understand still
@@ -127,7 +123,6 @@ public class InitialData {
 					}
 					Iterator<String> i = tuple.iterator();	
 					Genre genre = new Genre();		//Create a artist object
-//					author.setAuthorId(Integer.parseInt(i.next()));
 					
 					genre.setGenreId(genreId++);
 					genre.setGenre(i.next());	//Set genre title
@@ -147,7 +142,7 @@ public class InitialData {
 					ReadCSV readAlbums = new ReadCSV("albums.csv");	//Create ReadCSV object
 					try {
 						System.out.println("getting albums from csv");
-						// auto-generated primary key for authors table
+						// auto-generated primary key for albums table
 						Integer albumId = 1;
 						while (true) {
 							List<String> tuple = readAlbums.next();//Tuple crap that I don't understand still
@@ -156,7 +151,6 @@ public class InitialData {
 							}
 							Iterator<String> i = tuple.iterator();	
 							Album album = new Album();		//Create a album object
-//							author.setAuthorId(Integer.parseInt(i.next()));
 							
 							album.setAlbumId(albumId++);
 							album.setTitle(i.next());	//Set genre title
@@ -176,7 +170,7 @@ public class InitialData {
 					ReadCSV readAccounts = new ReadCSV("users.csv");	//Create ReadCSV object
 					try {
 						System.out.println("getting accounts from csv");
-						// auto-generated primary key for authors table
+						// auto-generated primary key for accounts table
 						Integer accountId = 1;
 						while (true) {
 							List<String> tuple = readAccounts.next();//Tuple crap that I don't understand still
@@ -185,7 +179,6 @@ public class InitialData {
 							}
 							Iterator<String> i = tuple.iterator();	
 							Account account = new Account();		//Create a user object
-//							author.setAuthorId(Integer.parseInt(i.next()));
 							
 							account.setUsername(i.next());
 							account.setPassword(i.next());	//Set genre title
@@ -205,7 +198,7 @@ public class InitialData {
 					ReadCSV readPlayListSongs = new ReadCSV("PlayListSongs.csv");	//Create ReadCSV object
 					try {
 						System.out.println("getting playlistSongs from csv");
-						// auto-generated primary key for authors table
+						// auto-generated primary key for playlistsongs table
 						while (true) {
 							List<String> tuple = readPlayListSongs.next();//Tuple crap that I don't understand still
 							if (tuple == null) {
@@ -213,7 +206,6 @@ public class InitialData {
 							}
 							Iterator<String> i = tuple.iterator();	
 							PlayListSongs playlistsong = new PlayListSongs();		//Create a user object
-//							author.setAuthorId(Integer.parseInt(i.next()));
 							
 							playlistsong.setPlayListId(Integer.parseInt(i.next()));
 							playlistsong.setSongId(Integer.parseInt(i.next()));

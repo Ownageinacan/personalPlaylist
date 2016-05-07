@@ -1,5 +1,7 @@
 package edu.ycp.cs320.personalPlaylist.persist;
-
+//////////////////////////////////////////////////
+//CS320 Lab06 code was used for this class
+//////////////////////////////////////////////////
 public class DatabaseProvider {
 	private static IDatabase theInstance;
 	
