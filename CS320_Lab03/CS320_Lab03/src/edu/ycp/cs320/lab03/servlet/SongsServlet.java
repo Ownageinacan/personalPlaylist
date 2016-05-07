@@ -30,7 +30,9 @@ public class SongsServlet extends HttpServlet {
 		IDatabase db = DatabaseProvider.getInstance();
 		HttpSession session = req.getSession(true);
 		String user = (String) req.getSession().getAttribute("Username");
+		System.out.println("getting album name from jsp");
 		String albumName = req.getParameter("albumName");
+		System.out.println("got album name from jsp");
 		String artistName = req.getParameter("artistName");
 		
 		if (user == null) {
@@ -44,14 +46,14 @@ public class SongsServlet extends HttpServlet {
 		session.setAttribute("playlistTitle", playlistTitle);
 		
 		List<Song> songs = null; 
-		
-		if(!albumName.equals("") || !albumName.equals(null)){
+		System.out.println("checking if albumname is null or empty");
+		if(!(albumName == "") || !(albumName == null)){
+			System.out.println("calling find albumname controller");
 			songs = controller.getSongsInAlbum(albumName);
-		}else if(!artistName.equals("") || !artistName.equals(null)){
+		}else if(!(artistName == "") || !(artistName == null))
 			songs = controller.getSongsByArtist(artistName);
-		}else{
+		else
 			songs = db.findSongsByPlaylistTitle(playlistTitle);
-		}
 		
 		req.setAttribute("songs", songs);
 		req.setAttribute("playlistTitle", playlistTitle);

@@ -185,8 +185,8 @@ public class MasterController {
 	public List<Song> getSongsInAlbum(String albumName) {
 		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
-
-		List<Song> songList = db.findAllSongs();
+		
+		List<Song> songList = db.findSongByAlbumName(albumName);
 		
 		return songList;
 	}
