@@ -19,9 +19,7 @@ import edu.ycp.cs320.personalPlaylist.model.Album;
 import edu.ycp.cs320.personalPlaylist.model.Artist;
 import edu.ycp.cs320.personalPlaylist.model.Genre;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//CS320 Lab06 Derby Database code was used as a template for many of the methods in this class
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 public class DerbyDatabase implements IDatabase {
 	static {
 		try {
@@ -991,6 +989,73 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
+	@Override
+	public List<Song> findSongByAlbumName(final String title)
+	{
+		return executeTransaction(new Transaction<List<Song>>() {
+			@Override
+			public List<Song> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
+
+				ResultSet resultSet = null;
+				ResultSet resultSet2 = null;
+
+				Integer album_id = -1; //use this if method doesn't work
+
+				// try to retrieve songs based on artist name
+
+				try {
+
+					stmt2 = conn.prepareStatement(
+							"select albums.* "+
+									" from albums "+
+									" where albums.album_title = ? "
+
+							);
+
+					stmt2.setString(1, title);
+
+					resultSet2 = stmt2.executeQuery();
+
+					List<Album> albums = new ArrayList<Album>();
+					
+					while(resultSet2.next()){
+						Album album = new Album();
+						loadAlbum(album, resultSet2, 1);
+						albums.add(album);
+					}
+					
+					stmt = conn.prepareStatement(
+							"select songs.* " +
+									"  from songs " +
+									"  where songs.album = ? "
+							);
+
+					stmt.setInt(1, albums.get(0).getAlbumId());
+					
+					// establish the list of (Author, Book) Pairs to receive the result
+					List<Song> result = new ArrayList<Song>();
+
+					// execute the query, get the results, and assemble them in an ArrayLsit
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						Song song = new Song();
+						loadSong(song, resultSet, 1);	//this is at an index of 1
+						result.add(song);
+					}
+
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
+	}
+	
 	@Override
 	public List<Song> findSongsByPlaylistTitle(final String title)
 	{
