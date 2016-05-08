@@ -31,7 +31,7 @@ public class HomeServlet extends HttpServlet {
 			return;
 		}
 		controller = new MasterController();
-		System.out.println("getting all playlists");
+		System.out.println("getting all playlists by account");
 		List<Playlist> playlists = controller.getAllPlayListsbyAccount(user, pass);	
 		req.setAttribute("playlists", playlists);
 		System.out.print(playlists.get(1).getTitle());

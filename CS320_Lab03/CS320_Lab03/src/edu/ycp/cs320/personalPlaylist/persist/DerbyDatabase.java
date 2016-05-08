@@ -1160,7 +1160,7 @@ public class DerbyDatabase implements IDatabase {
 					List<Song> result = new ArrayList<Song>();
 	
 					// execute the query, get the results, and assemble them in an ArrayLsit
-					resultSet2 = stmt.executeQuery();
+					resultSet2 = stmt2.executeQuery();
 	
 					while (resultSet2.next()) {
 						Song song = new Song();

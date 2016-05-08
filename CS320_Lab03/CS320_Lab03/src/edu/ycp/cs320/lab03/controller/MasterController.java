@@ -203,7 +203,7 @@ public class MasterController {
 		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
 
-		List<Song> songList = null;
+		List<Song> songList = db.findSongByGenreTitle(genreName);
 		return songList;
 	}
 }
