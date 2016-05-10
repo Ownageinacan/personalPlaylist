@@ -12,25 +12,81 @@
 		.CreateNewSong{
 			position: absolute;
 			z-index: 2;
-			left: 400px;
-			top: 100px;
+			left: 309px;
+			top: 0px;
+			font-size: 12px;
+			font-weight: bold;
+			font-family: "Verdana", sans-serif;
+			color: white;
+			background-color: #65337E;
+			border-top-width: thick;
+			border-right-width: thick;
+			border-bottom-width: thick;
+			border-left-width: thick;
+			border-top-style: solid;
+			border-right-style: solid;
+			border-bottom-style: solid;
+			border-left-style: solid;
+			border-top-color: #FFF;
+			border-right-color: #FFF;
+			border-bottom-color: #FFF;
+			border-left-color: #FFF;
+			border-radius: 7px;
+		}
+		.backgroundImage{
+			position: fixed;
+			z-index: 0;
+			height: 100%;
+			width: 100%;
+			top: 0%;
+			left: 0%;
+			}
+			.Songs{
+			position: absolute;
+			z-index: 2;
+			left: 0px;
+			top: 0px;
+			font-size: 12px;
+			font-weight: bold;
+			font-family: "Verdana", sans-serif;
+			color: white;
+			background-color: #65337E;
+			border-top-width: thick;
+			border-right-width: thick;
+			border-bottom-width: thick;
+			border-left-width: thick;
+			border-top-style: solid;
+			border-right-style: solid;
+			border-bottom-style: solid;
+			border-left-style: solid;
+			border-top-color: #FFF;
+			border-right-color: #FFF;
+			border-bottom-color: #FFF;
+			border-left-color: #FFF;
+			border-radius: 7px;
 		}
 		</style>
 	</head>
 
-	<body>	
-		<c:out value="${playlistTitle}"/>
-		<c:forEach items="${songs}" var="song">
-			<div class ="song">
-				<input type="checkbox" name="song" value="${song.location}">${song.title}<br>
-				<audio controls>
-						<source src='${song.location}' type="audio/mpeg">
-				</audio>
-			</div>	
-		</c:forEach>	
-		<form action="${pageContext.servletContext.contextPath}/Home" method="get">
-		<input type="submit" value="Home">
+	<body>
+		<div class = "backgroundImage">
+		<img src='Assets/Pictures/Speakers.jpg'>
+		</div>
+		<div class = "Songs">
+			<c:out value="${playlistTitle}"/>
+			<c:forEach items="${songs}" var="song">
+				<div class ="song">
+					<input type="checkbox" name="song" value="${song.location}">${song.title}<br>
+					<audio controls>
+							<source src='${song.location}' type="audio/mpeg">
+					</audio>
+				</div>	
+			</c:forEach>
+			<form action="${pageContext.servletContext.contextPath}/Home" method="get">
+			<input type="submit" value="Home">
 		</form>
+		</div>			
+		
 		<div class ="CreateNewSong">
 			<form action="${pageContext.servletContext.contextPath}/Songs" method="post">
 				<table>
