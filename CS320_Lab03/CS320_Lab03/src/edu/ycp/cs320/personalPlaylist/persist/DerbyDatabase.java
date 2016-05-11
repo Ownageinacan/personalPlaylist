@@ -1802,14 +1802,16 @@ public class DerbyDatabase implements IDatabase {
 				//ResultSet resultSet2 = null; //unused
 				//ResultSet resultSet3 = null;
 
+				Integer playlistId = -1;
+				
 				try{
 
 					//get playlists to be deleted
 					//also need to get playlist id to remove it from playlistsongs
 
 					stmt1 = conn.prepareStatement(
-							"select playlists.* " +
-									"  from  playlists " +
+							"select playlist_id " +
+									"  from playlists " +
 									"  where playlists.playlist_title = ? "
 							);
 
@@ -1820,13 +1822,16 @@ public class DerbyDatabase implements IDatabase {
 
 					// assemble list of playlists
 					List<Playlist> playlists = new ArrayList<Playlist>();
-
-					while(resultSet1.next()){
-						Playlist pl = new Playlist();
-						loadPlaylist(pl, resultSet1, 1);
-						playlists.add(pl);
+					
+					if(resultSet1.next())
+					{
+						playlistId = resultSet1.getInt(1);
+						System.out.println("Playlist <"+title+"> found with ID: "+playlistId);
+						
+					}else{
+						System.out.println("Attempting to remove a non-existant playlist...");
+						System.out.println("It failed?!");
 					}
-
 					// delete entries in playlistsongs
 
 					stmt2 = conn.prepareStatement(
@@ -1835,7 +1840,7 @@ public class DerbyDatabase implements IDatabase {
 							);
 
 					// get playlist ID
-					stmt2.setInt(1, playlists.get(0).getPlaylistId());
+					stmt2.setInt(1, playlistId);
 					stmt2.executeUpdate();
 
 					System.out.println("Deleted junction table entries for playlist(s) <"+ title+" from DB");
@@ -1867,6 +1872,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+
 
 
 	@Override
