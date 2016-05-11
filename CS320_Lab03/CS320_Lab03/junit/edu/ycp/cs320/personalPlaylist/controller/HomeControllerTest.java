@@ -2,6 +2,7 @@ package edu.ycp.cs320.personalPlaylist.controller;
 
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class HomeControllerTest
 {
 	MasterController controller;
 	List<Playlist> playlists;
+	List<Account> accounts;
 	private IDatabase db = null;
 	
 	@Before
@@ -46,5 +48,72 @@ public class HomeControllerTest
 			assertTrue(playlists.get(i).getTitle().equals(listOfPlaylists.get(i).getTitle()));
 		}		
 	}
-
+	
+	@Test
+	public void usercheckTest() 
+	{
+		//If this passes then the username ben and password noodle are correct
+		//as they should be
+		assertTrue(controller.Usercheck("ben", "noodle"));
+	}
+	
+	@Test
+	public void createAccountTest() 
+	{
+		controller.CreateAccount("tim", "toodle");
+		accounts = new ArrayList<Account>();
+		accounts = db.findAllAccounts();
+		
+		Account newAccount = accounts.get(accounts.size() - 1);
+		if(newAccount.getUsername() == "tim" && newAccount.getPassword() == "toodle")
+		{
+			db.removeAccountByAccountName("tim");
+			assertTrue(true);
+		}
+		else
+		{
+			fail("The account was not created");
+		}
+	}
+	
+	@Test
+	public void createPlaylistTest() throws SQLException 
+	{
+		controller.CreatePlaylist("Durp", "ben");
+		playlists = new ArrayList<Playlist>();
+		playlists = db.findAllPlaylists();
+		int userId = controller.getAccount_id("ben");
+		
+		Playlist newPlaylist = playlists.get(playlists.size() - 1);
+		if(newPlaylist.getTitle() == "Durp" && newPlaylist.getUserOwnerId() == userId)
+		{
+			controller.deletePlaylist("Durp");
+			assertTrue(true);
+		}
+		else
+		{
+			fail("The playlist was not created");
+		}
+	}
+	
+	@Test
+	public void testgetSongsInAlbum()
+	{
+		//TODO: Implement
+		fail("TODO: Implement");
+	}
+	
+	@Test
+	public void testgetSongsbyArtist()
+	{
+		//TODO: Implement
+		fail("TODO: Implement");
+	}
+	
+	@Test
+	public void testgetSongsByGenre()
+	{
+		//TODO: Implement
+		fail("TODO: Implement");
+	}
 }
